@@ -1,0 +1,51 @@
+{{ 'career-management.css' | asset_url | stylesheet_tag }}
+
+<div class="career-management-section page-width" id="career-management-section">
+  <div class="title-bar">
+    <h2 class="section-header__title">Careers at {{ shop.name | escape }}</h2>
+  </div>
+
+  <div id="job-listings-container" class="job-listings">
+    <div class="loading-spinner" style="text-align: center; padding: 20px;">
+      <p>Loading job openings...</p>
+    </div>
+  </div>
+
+  <div id="no-jobs-message" class="no-jobs-message" style="display:none;">
+    <p>No job openings at this time. Please check back later!</p>
+  </div>
+
+  <div id="pagination-container" class="pagination-controls"></div>
+
+  <div
+    id="job-detail-modal"
+    class="modal"
+    style="display:none;"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-job-title"
+  >
+    <div class="modal-content">
+      <button type="button" class="modal-close-button" aria-label="Close dialog">&times;</button>
+      <h3 id="modal-job-title" class="modal-title"></h3>
+      <p class="modal-meta"></p>
+
+      <div class="modal-section">
+        <h4>Summary</h4>
+        <p id="modal-job-summary"></p>
+      </div>
+
+      <div class="modal-section">
+        <h4>Full Description</h4>
+        <div id="modal-job-fullDescription"></div>
+      </div>
+
+      <div class="modal-section">
+        <h4>How to Apply</h4>
+        <div id="modal-job-applicationInstructions"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'career-management.js' | asset_url }}" defer></script>

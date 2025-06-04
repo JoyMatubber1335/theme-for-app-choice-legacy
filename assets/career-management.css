@@ -1,0 +1,264 @@
+/* Styles for Career Management Page */
+.career-management-section {
+  padding: 20px 0;
+}
+.career-management-section .title-bar {
+  margin-bottom: 30px;
+}
+.career-management-section .section-header__title {
+  text-align: center;
+}
+
+.job-listings {
+  margin-bottom: 20px;
+}
+.loading-spinner {
+  text-align: center;
+  padding: 20px;
+}
+
+.job-posting {
+  border: 1px solid #e0e0e0;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.job-posting-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.5em; /* Adjust as per your theme's typography */
+  color: #333;
+}
+.job-posting-summary {
+  margin-bottom: 10px;
+  color: #555;
+  line-height: 1.6;
+}
+.job-posting-deadline {
+  font-size: 0.9em;
+  color: #777;
+  margin-bottom: 15px;
+}
+.job-posting-deadline strong {
+  color: #555;
+}
+
+.view-details-button {
+  /* Example: background-color: {{ settings.color_button | default: '#337ab7' }}; */
+  background-color: #337ab7; /* Example primary button color, adjust to your theme */
+  color: #fff;
+  padding: 10px 18px;
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  border: none;
+  font-weight: bold;
+  transition: opacity 0.2s ease-in-out;
+}
+.view-details-button:hover {
+  opacity: 0.85;
+}
+
+.no-jobs-message {
+  text-align: center;
+  padding: 20px;
+}
+.no-jobs-message p {
+  font-size: 1.2em;
+  color: #777;
+}
+
+.pagination-controls {
+  text-align: center;
+  margin-top: 30px;
+}
+.pagination-controls button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 8px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease-in-out;
+}
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+.pagination-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.pagination-controls button.active {
+  font-weight: bold;
+  /* Example: background-color: {{ settings.color_accent | default: '#555' }}; */
+  background-color: #555; /* Example active/accent color, adjust to your theme */
+  color: white;
+  border-color: #555;
+}
+.pagination-controls span {
+  /* For ellipsis */
+  margin: 0 5px;
+  display: inline-block;
+  padding: 8px 0;
+}
+
+/* Modal Styles */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1050; /* Sit on top - adjust if needed based on your theme's z-indexes */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto; /* Enable scroll if needed within the modal */
+  background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto; /* 5% from the top and centered */
+  padding: 30px;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 700px;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+.modal-close-button {
+  color: #aaa;
+  background: none;
+  border: none;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+.modal-close-button:hover,
+.modal-close-button:focus {
+  color: black;
+  text-decoration: none;
+}
+.modal-title {
+  margin-top: 0;
+  font-size: 1.8em; /* Adjust as per your theme's typography */
+  margin-bottom: 10px;
+}
+.modal-meta {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+.modal-meta .deadline-text {
+  color: #c0392b; /* A distinct color for deadline, e.g., a shade of red */
+  font-weight: bold;
+}
+.modal-section {
+  margin-bottom: 20px;
+}
+.modal-section h4 {
+  font-size: 1.2em; /* Adjust as per your theme's typography */
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #444;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+.modal-section p,
+.modal-section div {
+  /* General styling for text within sections */
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Styles for HTML content from Rich Text Editor in modal full description */
+#modal-job-fullDescription > *:first-child {
+  margin-top: 0;
+}
+#modal-job-fullDescription p {
+  margin-bottom: 1em;
+}
+#modal-job-fullDescription strong,
+#modal-job-fullDescription b {
+  font-weight: bold;
+}
+#modal-job-fullDescription em,
+#modal-job-fullDescription i {
+  font-style: italic;
+}
+#modal-job-fullDescription ul,
+#modal-job-fullDescription ol {
+  margin-left: 20px;
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+} /* Ensure lists are indented */
+#modal-job-fullDescription li {
+  margin-bottom: 0.5em;
+}
+#modal-job-fullDescription a {
+  /* Example: color: {{ settings.color_link | default: '#337ab7' }}; */
+  color: #337ab7; /* Standard link color, adjust to your theme */
+  text-decoration: underline;
+}
+#modal-job-fullDescription a:hover {
+  /* Example: color: {{ settings.color_link_hover | default: '#23527c' }}; */
+  color: #23527c;
+}
+#modal-job-fullDescription table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1em;
+}
+#modal-job-fullDescription th,
+#modal-job-fullDescription td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+#modal-job-fullDescription th {
+  background-color: #f2f2f2;
+}
+
+/* Styles for summary and application instructions in modal */
+#modal-job-summary {
+  /* Summary is now plain text */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+#modal-job-applicationInstructions p {
+  margin-bottom: 0.5em; /* Space between Apply Online and Email lines */
+}
+#modal-job-applicationInstructions .apply-online-button {
+  display: inline-block;
+  padding: 10px 20px;
+  /* Example: background-color: {{ settings.color_button_secondary | default: '#28a745' }}; */
+  background-color: #28a745; /* Green for apply button, adjust to your theme */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-bottom: 10px; /* Space if email link follows */
+  text-align: center;
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+}
+#modal-job-applicationInstructions .apply-online-button:hover {
+  background-color: #218838;
+}
+#modal-job-applicationInstructions a:not(.apply-online-button) {
+  /* Style for mailto link */
+  color: #337ab7;
+  text-decoration: underline;
+}
+#modal-job-applicationInstructions a:not(.apply-online-button):hover {
+  color: #23527c;
+}
