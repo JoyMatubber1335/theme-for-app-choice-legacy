@@ -1,0 +1,150 @@
+{% schema %}
+{
+  "name": "Collection Callout 2",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Collection callout"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Use this section to highlight one of your collections. We'll show photos of the first 5 products."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#0D0D2B"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_background",
+      "label": "Custom Background Image"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "First Button Link"
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "label": "First Button Label",
+      "default": "Shop Dresses"
+    },
+    {
+      "type": "color",
+      "id": "button_color_1",
+      "label": "First Button Color",
+      "default": "#FF6B6B"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Second Button Link"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Second Button Label",
+      "default": "Shop All"
+    },
+    {
+      "type": "color",
+      "id": "button_color_2",
+      "label": "Second Button Color",
+      "default": "#6B3BFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Callout",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}
+
+<div
+  class="collection-callout"
+  style="background: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};"
+>
+  <div class="container">
+    <h2>{{ section.settings.headline }}</h2>
+    <p>{{ section.settings.description }}</p>
+    <div class="collection-products">
+      {% if section.settings.collection.products.size > 0 %}
+        {% for product in section.settings.collection.products limit: 5 %}
+          <div class="product-item">
+            <img
+              src="{{ product.featured_image | img_url: '600x' }}"
+              alt="{{ product.title }}"
+              width="200"
+              height="500"
+              loading="lazy"
+            >
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No products found in this collection.</p>
+      {% endif %}
+    </div>
+    <div class="buttons">
+      <a
+        href="{{ section.settings.button_link_1 }}"
+        style="background: {{ section.settings.button_color_1 }};"
+        class="btn"
+      >
+        {{- section.settings.button_label_1 -}}
+      </a>
+      <a
+        href="{{ section.settings.button_link_2 }}"
+        style="background: {{ section.settings.button_color_2 }};"
+        class="btn"
+      >
+        {{- section.settings.button_label_2 -}}
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .collection-callout {
+    padding: 50px;
+    text-align: center;
+  }
+  .collection-products {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  .product-item img {
+    max-width: 150px;
+    border-radius: 10px;
+  }
+  .buttons a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+</style>

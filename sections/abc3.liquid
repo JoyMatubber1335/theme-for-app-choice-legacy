@@ -1,0 +1,517 @@
+{% schema %}
+{
+  "name": "Promotional Banners",
+  "class": "promotional-banners-section",
+  "max_blocks": 2,
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "equal",
+          "label": "Equal width"
+        },
+        {
+          "value": "left_dominant",
+          "label": "Left banner larger"
+        },
+        {
+          "value": "right_dominant",
+          "label": "Right banner larger"
+        }
+      ],
+      "default": "equal"
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Space between banners",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promotional_banner",
+      "name": "Promotional Banner",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "banner_image",
+          "label": "Main product image"
+        },
+        {
+          "type": "image_picker",
+          "id": "secondary_image",
+          "label": "Secondary image (optional)"
+        },
+        {
+          "type": "select",
+          "id": "image_layout",
+          "label": "Image layout",
+          "options": [
+            {
+              "value": "side_by_side",
+              "label": "Side by side"
+            },
+            {
+              "value": "stacked",
+              "label": "Stacked"
+            },
+            {
+              "value": "overlapping",
+              "label": "Overlapping"
+            }
+          ],
+          "default": "side_by_side"
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "discount_text",
+          "label": "Discount text",
+          "default": "40% OFF"
+        },
+        {
+          "type": "color",
+          "id": "discount_color",
+          "label": "Discount text color",
+          "default": "#FF0000"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Our Timeless Designs"
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Heading color",
+          "default": "#000000"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext",
+          "default": "Limited Time Only!"
+        },
+        {
+          "type": "color",
+          "id": "subtext_color",
+          "label": "Subtext color",
+          "default": "#000000"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Shop Now!"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "color",
+          "id": "button_bg_color",
+          "label": "Button background color",
+          "default": "#4F00BC"
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Button text color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "header",
+          "content": "Banner Style"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color",
+          "default": "#E0EEE0"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "content_position",
+          "label": "Content position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promotional Banners",
+      "blocks": [
+        {
+          "type": "promotional_banner",
+          "settings": {
+            "discount_text": "40% OFF",
+            "heading": "Our Timeless Designs",
+            "subtext": "Limited Time Only!",
+            "button_text": "Shop Now!",
+            "background_color": "#E0EEE0",
+            "content_position": "right"
+          }
+        },
+        {
+          "type": "promotional_banner",
+          "settings": {
+            "discount_text": "30% Off",
+            "heading": "On Elegant Shoes",
+            "subtext": "Don't Miss Out!",
+            "button_text": "Shop Now!",
+            "background_color": "#F0E6D6",
+            "content_position": "right"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .promotional-banners-section {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .promotional-banners-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: {{ section.settings.spacing }}px;
+    padding: 0 20px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .promotional-banners-container {
+      flex-direction: row;
+    }
+
+    .promotional-banners-container.equal .promotional-banner {
+      flex: 1 1 50%;
+    }
+
+    .promotional-banners-container.left_dominant .promotional-banner:first-child {
+      flex: 2;
+    }
+
+    .promotional-banners-container.left_dominant .promotional-banner:last-child {
+      flex: 1;
+    }
+
+    .promotional-banners-container.right_dominant .promotional-banner:first-child {
+      flex: 1;
+    }
+
+    .promotional-banners-container.right_dominant .promotional-banner:last-child {
+      flex: 2;
+    }
+  }
+
+  .promotional-banner {
+    position: relative;
+    border-radius: {{ section.settings.corner_radius }}px;
+    overflow: hidden;
+    display: flex;
+    min-height: 220px;
+  }
+
+  .promotional-banner-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+    width: 50%;
+  }
+
+  .promotional-banner-image {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Different image layouts */
+  .image-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-container.side_by_side {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .image-container.side_by_side img {
+    max-width: 48%;
+    height: auto;
+  }
+
+  .image-container.stacked {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .image-container.stacked img {
+    max-width: 80%;
+    height: auto;
+  }
+
+  .image-container.overlapping img:first-child {
+    max-width: 80%;
+    height: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .image-container.overlapping img:last-child {
+    max-width: 60%;
+    height: auto;
+    position: absolute;
+    right: 15%;
+    bottom: 15%;
+    z-index: 2;
+  }
+
+  .promotional-banner.content-left .promotional-banner-content {
+    order: 1;
+  }
+
+  .promotional-banner.content-left .promotional-banner-image {
+    order: 2;
+  }
+
+  .promotional-banner.content-right .promotional-banner-content {
+    order: 2;
+  }
+
+  .promotional-banner.content-right .promotional-banner-image {
+    order: 1;
+  }
+
+  .discount-text {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .banner-heading {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .banner-subtext {
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  .banner-button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    max-width: 150px;
+  }
+
+  .text-left {
+    text-align: left;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+
+  @media screen and (max-width: 767px) {
+    .promotional-banner {
+      flex-direction: column;
+    }
+
+    .promotional-banner-content,
+    .promotional-banner-image {
+      width: 100%;
+    }
+
+    .promotional-banner-image {
+      padding: 20px;
+    }
+
+    .promotional-banner.content-left .promotional-banner-content,
+    .promotional-banner.content-left .promotional-banner-image,
+    .promotional-banner.content-right .promotional-banner-content,
+    .promotional-banner.content-right .promotional-banner-image {
+      order: unset;
+    }
+
+    .image-container.overlapping img:last-child {
+      right: 5%;
+      bottom: 5%;
+    }
+  }
+</style>
+
+<div class="promotional-banners-section">
+  <div class="promotional-banners-container {{ section.settings.layout }}">
+    {% for block in section.blocks %}
+      {% if block.type == 'promotional_banner' %}
+        <div
+          class="promotional-banner content-{{ block.settings.content_position }} text-{{ block.settings.text_alignment }}"
+          style="background-color: {{ block.settings.background_color }};"
+          {{ block.shopify_attributes }}
+        >
+          <div class="promotional-banner-content">
+            {% if block.settings.discount_text != blank %}
+              <div class="discount-text" style="color: {{ block.settings.discount_color }};">
+                {{ block.settings.discount_text }}
+              </div>
+            {% endif %}
+
+            {% if block.settings.heading != blank %}
+              <h3 class="banner-heading" style="color: {{ block.settings.heading_color }};">
+                {{ block.settings.heading }}
+              </h3>
+            {% endif %}
+
+            {% if block.settings.subtext != blank %}
+              <div class="banner-subtext" style="color: {{ block.settings.subtext_color }};">
+                {{ block.settings.subtext }}
+              </div>
+            {% endif %}
+
+            {% if block.settings.button_text != blank and block.settings.button_link != blank %}
+              <a
+                href="{{ block.settings.button_link }}"
+                class="banner-button"
+                style="background-color: {{ block.settings.button_bg_color }}; color: {{ block.settings.button_text_color }};"
+              >
+                {{ block.settings.button_text }}
+              </a>
+            {% endif %}
+          </div>
+
+          <div class="promotional-banner-image">
+            <div class="image-container {{ block.settings.image_layout }}">
+              {% if block.settings.banner_image != blank %}
+                <img
+                  src="{{ block.settings.banner_image | img_url: '600x' }}"
+                  alt="{{ block.settings.heading }}"
+                  width="300"
+                  height="300"
+                  loading="lazy"
+                >
+              {% endif %}
+
+              {% if block.settings.secondary_image != blank %}
+                <img
+                  src="{{ block.settings.secondary_image | img_url: '600x' }}"
+                  alt="{{ block.settings.heading }} - secondary"
+                  width="300"
+                  height="300"
+                  loading="lazy"
+                >
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

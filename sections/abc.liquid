@@ -1,0 +1,396 @@
+{% schema %}
+{
+  "name": "Collection Callout",
+  "class": "collection-callout-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "BRAND NEW"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Collection callout"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Use this section to easily call attention to one of your collections. We'll show photos of the first 5 products."
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Featured collection"
+    },
+    {
+      "type": "header",
+      "content": "Button Settings"
+    },
+    {
+      "type": "text",
+      "id": "button_text_1",
+      "label": "First button text",
+      "default": "Shop Dresses"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "First button link"
+    },
+    {
+      "type": "text",
+      "id": "button_text_2",
+      "label": "Second button text",
+      "default": "Shop All"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Second button link"
+    },
+    {
+      "type": "header",
+      "content": "Style Settings"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout style",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid Layout"
+        },
+        {
+          "value": "mosaic",
+          "label": "Mosaic Layout"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel Layout"
+        }
+      ],
+      "default": "mosaic"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Maximum products to show",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_titles",
+      "label": "Show product titles",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_prices",
+      "label": "Show product prices",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_1_bg_color",
+      "label": "First button background color",
+      "default": "#FF6B6B"
+    },
+    {
+      "type": "color",
+      "id": "button_1_text_color",
+      "label": "First button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_2_bg_color",
+      "label": "Second button background color",
+      "default": "#5E3BEE"
+    },
+    {
+      "type": "color",
+      "id": "button_2_text_color",
+      "label": "Second button text color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Callout",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .collection-callout-section {
+    padding: 60px 20px;
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+  }
+
+  .collection-callout-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .collection-callout-text {
+    width: 100%;
+    padding-right: 20px;
+    box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 768px) {
+    .collection-callout-text {
+      width: 33.333%;
+      padding-right: 40px;
+    }
+  }
+
+  .collection-callout-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+
+  .collection-callout-subtitle {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .collection-callout-description {
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+
+  .collection-callout-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .collection-callout-button {
+    padding: 12px 24px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.3s ease;
+  }
+
+  .collection-callout-button:hover {
+    opacity: 0.9;
+  }
+
+  .collection-callout-button-1 {
+    background-color: {{ section.settings.button_1_bg_color }};
+    color: {{ section.settings.button_1_text_color }};
+  }
+
+  .collection-callout-button-2 {
+    background-color: {{ section.settings.button_2_bg_color }};
+    color: {{ section.settings.button_2_text_color }};
+  }
+
+  .collection-callout-images {
+    width: 100%;
+    display: grid;
+    gap: 10px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .collection-callout-images {
+      width: 66.666%;
+    }
+  }
+
+  /* Grid Layout */
+  .collection-callout-images.grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(200px, auto);
+  }
+
+  /* Mosaic Layout */
+  .collection-callout-images.mosaic {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, minmax(130px, auto));
+  }
+
+  .collection-callout-images.mosaic .product-item:nth-child(1) {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+  }
+
+  .collection-callout-images.mosaic .product-item:nth-child(2) {
+    grid-column: 2 / 4;
+    grid-row: 1 / 3;
+  }
+
+  .collection-callout-images.mosaic .product-item:nth-child(3) {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+  }
+
+  .collection-callout-images.mosaic .product-item:nth-child(4) {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+  }
+
+  .collection-callout-images.mosaic .product-item:nth-child(5) {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+  }
+
+  /* Carousel Layout */
+  @media screen and (min-width: 768px) {
+    .collection-callout-images.carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .collection-callout-images.carousel .product-item {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+      margin-right: 15px;
+    }
+  }
+
+  .product-item {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .product-item:hover img {
+    transform: scale(1.05);
+  }
+
+  .product-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .product-item:hover .product-info {
+    opacity: 1;
+  }
+
+  .product-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .product-price {
+    margin: 5px 0 0;
+    font-size: 14px;
+  }
+</style>
+
+<div class="collection-callout-section">
+  <div class="collection-callout-container">
+    <div class="collection-callout-text">
+      <h3 class="collection-callout-title">{{ section.settings.title }}</h3>
+      <h2 class="collection-callout-subtitle">{{ section.settings.subtitle }}</h2>
+      <div class="collection-callout-description">{{ section.settings.description }}</div>
+      <div class="collection-callout-buttons">
+        {% if section.settings.button_text_1 != blank and section.settings.button_link_1 != blank %}
+          <a href="{{ section.settings.button_link_1 }}" class="collection-callout-button collection-callout-button-1">
+            {{ section.settings.button_text_1 }}
+          </a>
+        {% endif %}
+        {% if section.settings.button_text_2 != blank and section.settings.button_link_2 != blank %}
+          <a href="{{ section.settings.button_link_2 }}" class="collection-callout-button collection-callout-button-2">
+            {{ section.settings.button_text_2 }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="collection-callout-images {{ section.settings.layout_style }}">
+      {% if section.settings.featured_collection != blank %}
+        {% assign featured_collection = collections[section.settings.featured_collection] %}
+        {% assign max_products = section.settings.max_products %}
+
+        {% for product in featured_collection.products limit: max_products %}
+          <div class="product-item">
+            <a href="{{ product.url }}">
+              {% if product.featured_image != blank %}
+                <img
+                  src="{{ product.featured_image | img_url: '600x' }}"
+                  alt="{{ product.title }}"
+                  width="200"
+                  height="500"
+                  loading="lazy"
+                >
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag }}
+              {% endif %}
+
+              {% if section.settings.show_product_titles or section.settings.show_product_prices %}
+                <div class="product-info">
+                  {% if section.settings.show_product_titles %}
+                    <h4 class="product-title">{{ product.title }}</h4>
+                  {% endif %}
+
+                  {% if section.settings.show_product_prices %}
+                    <p class="product-price">{{ product.price | money }}</p>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </a>
+          </div>
+        {% endfor %}
+      {% else %}
+        {% for i in (1..5) %}
+          <div class="product-item">
+            {{ 'product-' | append: i | placeholder_svg_tag }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
