@@ -79,46 +79,6 @@
     "image_quality": "1",
     "heading_type_scale": "1.3",
     "content_for_index": [],
-    "blocks": {
-      "478144830049398400": {
-        "type": "shopify://apps/storeseo/blocks/store_seo_meta/64b24496-16f9-4afc-a800-84e6acc4a36c",
-        "disabled": false,
-        "settings": {}
-      },
-      "6406956604159796213": {
-        "type": "shopify://apps/smart-seo/blocks/smartseo/7b0a6064-ca2e-4392-9a1d-8c43c942357b",
-        "disabled": false,
-        "settings": {}
-      },
-      "4976129024724438625": {
-        "type": "shopify://apps/smart-seo/blocks/brokenLinkDetection/7b0a6064-ca2e-4392-9a1d-8c43c942357b",
-        "disabled": false,
-        "settings": {}
-      },
-      "14947870889598929745": {
-        "type": "shopify://apps/smartbot/blocks/app-embed/d9407b81-7d3e-4612-91c3-2020086e2073",
-        "disabled": false,
-        "settings": {}
-      },
-      "15683396631634586217": {
-        "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
-        "disabled": false,
-        "settings": {
-          "button_color": "#000000",
-          "secondary_color": "#FFFFFF",
-          "ternary_color": "#6A6A6A",
-          "button_icon": "chat_bubble",
-          "button_text": "chat_with_us",
-          "button_horizontal_position": "bottom_right",
-          "button_vertical_position": "lowest",
-          "greeting_message": ""
-        }
-      },
-      "13768625480086291342": {
-        "type": "shopify://apps/forms/blocks/forms/8744a304-fcb1-4347-b211-bb6b4759a76a",
-        "disabled": false,
-        "settings": {}
-      }
-    }
+    "blocks": {}
   }
 }

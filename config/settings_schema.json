@@ -2198,129 +2198,129 @@
   //     }
   //   ]
   // },
-  // {
-  //   "name": "Social media",
-  //   "settings": [
-  //     {
-  //       "type": "text",
-  //       "id": "social_facebook_url",
-  //       "label": "Facebook",
-  //       "info": "https://facebook.com/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_youtube_url",
-  //       "label": "YouTube",
-  //       "info": "https://youtube.com/user/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_instagram_url",
-  //       "label": "Instagram",
-  //       "info": "https://instagram.com/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_whatsapp_url",
-  //       "label": "WhatsApp",
-  //       "info": "https://api.whatsapp.com/send?phone=1234"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_tiktok_url",
-  //       "label": "TikTok",
-  //       "info": "https://tiktok.com/@shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_snapchat_url",
-  //       "label": "Snapchat",
-  //       "info": "https://www.snapchat.com/add/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_pinterest_url",
-  //       "label": "Pinterest",
-  //       "info": "https://pinterest.com/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_twitter_url",
-  //       "label": "X (formerly Twitter)",
-  //       "info": "https://x.com/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_linkedin_url",
-  //       "label": "LinkedIn",
-  //       "info": "https://linkedin.com/company/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_wechat_url",
-  //       "label": "WeChat",
-  //       "info": "weixin://dl/chat?shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_vimeo_url",
-  //       "label": "Vimeo",
-  //       "info": "https://vimeo.com/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_tumblr_url",
-  //       "label": "Tumblr",
-  //       "info": "https://shopify.tumblr.com"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_twitch_url",
-  //       "label": "Twitch",
-  //       "info": "https://www.twitch.tv/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_spotify_url",
-  //       "label": "Spotify",
-  //       "info": "https://open.spotify.com/artist/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_discord_url",
-  //       "label": "Discord",
-  //       "info": "https://discord.com/servers/shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_mastodon_url",
-  //       "label": "Mastodon",
-  //       "info": "https://mastodon.social/@shopify"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_threads_url",
-  //       "label": "Threads",
-  //       "info": "https://threads.net/user"
-  //     },
-  //     {
-  //       "type": "header",
-  //       "content": "Custom link",
-  //       "info": "Upload a custom icon for your favorite social network."
-  //     },
-  //     {
-  //       "type": "image_picker",
-  //       "id": "social_custom_icon",
-  //       "label": "Icon"
-  //     },
-  //     {
-  //       "type": "text",
-  //       "id": "social_custom_url",
-  //       "label": "URL",
-  //       "info": "https://socialnetwork.com/shopify"
-  //     }
-  //   ]
-  // },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_facebook_url",
+        "label": "Facebook",
+        "info": "https://facebook.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_url",
+        "label": "YouTube",
+        "info": "https://youtube.com/user/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_url",
+        "label": "Instagram",
+        "info": "https://instagram.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_whatsapp_url",
+        "label": "WhatsApp",
+        "info": "https://api.whatsapp.com/send?phone=1234"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_url",
+        "label": "TikTok",
+        "info": "https://tiktok.com/@shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_url",
+        "label": "Snapchat",
+        "info": "https://www.snapchat.com/add/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_url",
+        "label": "Pinterest",
+        "info": "https://pinterest.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_url",
+        "label": "X (formerly Twitter)",
+        "info": "https://x.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_linkedin_url",
+        "label": "LinkedIn",
+        "info": "https://linkedin.com/company/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_wechat_url",
+        "label": "WeChat",
+        "info": "weixin://dl/chat?shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_url",
+        "label": "Vimeo",
+        "info": "https://vimeo.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_url",
+        "label": "Tumblr",
+        "info": "https://shopify.tumblr.com"
+      },
+      {
+        "type": "text",
+        "id": "social_twitch_url",
+        "label": "Twitch",
+        "info": "https://www.twitch.tv/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_spotify_url",
+        "label": "Spotify",
+        "info": "https://open.spotify.com/artist/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_discord_url",
+        "label": "Discord",
+        "info": "https://discord.com/servers/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_mastodon_url",
+        "label": "Mastodon",
+        "info": "https://mastodon.social/@shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_threads_url",
+        "label": "Threads",
+        "info": "https://threads.net/user"
+      },
+      {
+        "type": "header",
+        "content": "Custom link",
+        "info": "Upload a custom icon for your favorite social network."
+      },
+      {
+        "type": "image_picker",
+        "id": "social_custom_icon",
+        "label": "Icon"
+      },
+      {
+        "type": "text",
+        "id": "social_custom_url",
+        "label": "URL",
+        "info": "https://socialnetwork.com/shopify"
+      }
+    ]
+  },
   {
     "name": "Cart",
     "settings": [
