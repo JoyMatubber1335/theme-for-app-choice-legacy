@@ -309,32 +309,6 @@
   {%- sections 'header-group' -%}
 
   <main id="main-content">
-    {%- liquid
-      assign show_breadcrumbs = false
-      if settings.show_breadcrumbs_product and request.page_type == 'product'
-        assign show_breadcrumbs = true
-      elsif settings.show_breadcrumbs_collection and request.page_type == 'collection'
-        assign show_breadcrumbs = true
-      elsif settings.show_breadcrumbs_collection_list and request.page_type == 'list-collections'
-        assign show_breadcrumbs = true
-      elsif settings.show_breadcrumbs_article and request.page_type == 'article'
-        assign show_breadcrumbs = true
-      elsif settings.show_breadcrumbs_blog and request.page_type == 'blog'
-        assign show_breadcrumbs = true
-      endif
-    -%}
-    {%- if show_breadcrumbs -%}
-      <div class="container{% if request.page_type == 'product' %} product-breadcrumbs{% endif %}">
-        {%- liquid
-          assign show_rss_link = false
-          if template.name == 'blog'
-            assign show_rss_link = settings.show_breadcrumbs_blog_rss
-          endif
-        -%}
-        {% render 'breadcrumbs', show_rss_link: show_rss_link %}
-      </div>
-    {%- endif -%}
-
     {{ content_for_layout }}
   </main>
 
@@ -342,13 +316,6 @@
   {%- sections 'footer-group' -%}
 
   {%- liquid
-    if request.page_type == 'collection' or request.page_type == 'search'
-      if settings.enable_compare
-        echo 'compare-toggle.css' | asset_url | stylesheet_tag
-        render 'product-compare'
-      endif
-    endif
-
     if settings.enable_quick_add
       render 'quick-add-drawer'
     endif
@@ -442,21 +409,6 @@
         shippingCalculator: '{{ "shipping-calculator.js" | asset_url }}'
       }
     };
-
-    // Save product ID to localStorage, for use in the 'Recently viewed products' section.
-    {%- if request.page_type == 'product' %}
-      try {
-        const items = JSON.parse(localStorage.getItem('cc-recently-viewed') || '[]');
-
-        // If product ID is not already in the recently viewed list, add it to the beginning.
-        if (!items.includes({{ product.id | json }})) {
-          items.unshift({{ product.id | json }});
-        }
-
-        // Set recently viewed list and limit to 12 products.
-        localStorage.setItem('cc-recently-viewed', JSON.stringify(items.slice(0, 12)));
-      } catch (e) {}
-    {%- endif %}
   </script>
 
   {%- if request.design_mode == false and settings.preload_links -%}
