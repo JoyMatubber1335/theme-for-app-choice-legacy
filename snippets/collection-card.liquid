@@ -49,7 +49,7 @@
   {%- endif -%}
 
   <div class="card__media relative{% if circle_image %} card__media--circle{% endif %}">
-    <a href="{{ collection.url }}" aria-label="{{ collection.title | escape }}" class="media block relative{% if settings.blend_collection_images %} image-blend{% endif %}" tabindex="-1" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+    <a href="{{ collection.url }}" aria-label="{{ collection.title | escape }}" class="media block relative" tabindex="-1" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
       {%- if collection != empty and image != blank -%}
         {%- capture sizes %}{% render 'sizes-attribute', grid: true, min: 1, sm: 2, lg: 3, xl: 4 %}{% endcapture -%}
         {%- liquid

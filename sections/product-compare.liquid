@@ -6,7 +6,7 @@
           <div data-compare-key="compare-{{ block.type }}" class="compare-col compare-col--{{ settings.compare_column_width }} compare-col--{{ product.id }}{% if block.settings.show_line %} border-bottom{% endif %}" {{ block.shopify_attributes }}>
             {%- if product.featured_media -%}
               {%- assign img = product.featured_media.preview_image -%}
-              <div class="media relative{% if settings.blend_product_images %} image-blend{% endif %}" style="padding-top: {{ 1 | divided_by: img.aspect_ratio | times: 100 }}%;">
+              <div class="media relative" style="padding-top: {{ 1 | divided_by: img.aspect_ratio | times: 100 }}%;">
                 <img data-srcset="{%- if img.width < 400 %}{{ img | image_url }} {{ img.width }}w{% endif -%}
                                   {%- if img.width >= 640 %}{{ img | image_url: width: 640 }} 640w{% endif -%}
                                   {%- if img.width >= 800 %}, {{ img | image_url: width: 800 }} 800w{% endif -%}"

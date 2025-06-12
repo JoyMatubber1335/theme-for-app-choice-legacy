@@ -78,148 +78,6 @@
       },
       {
         "type": "header",
-        "content": "Section color scheme 1"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_1_bg",
-        "label": "Background",
-        "default": "#eeeeee"
-      },
-      {
-        "type": "color_background",
-        "id": "color_scheme_1_bg_grad",
-        "label": "Background gradient",
-        "info": "If set, replaces the background color."
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_1_heading",
-        "label": "Headings",
-        "default": "#333333"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_1_text",
-        "label": "Text",
-        "default": "#333333"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_1_btn_bg",
-        "label": "Button background",
-        "default": "#333333"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_1_btn_text",
-        "label": "Button text",
-        "default": "#ffffff"
-      },
-      {
-        "type": "header",
-        "content": "Section color scheme 2"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_2_bg",
-        "label": "Background",
-        "default": "#FF580D"
-      },
-      {
-        "type": "color_background",
-        "id": "color_scheme_2_bg_grad",
-        "label": "Background gradient",
-        "info": "If set, replaces the background color."
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_2_heading",
-        "label": "Headings",
-        "default": "#ffffff"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_2_text",
-        "label": "Text",
-        "default": "#ffffff"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_2_btn_bg",
-        "label": "Button background",
-        "default": "#292F36"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_2_btn_text",
-        "label": "Button text",
-        "default": "#ffffff"
-      },
-      {
-        "type": "header",
-        "content": "Section color scheme 3"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_3_bg",
-        "label": "Background",
-        "default": "#1a66d2"
-      },
-      {
-        "type": "color_background",
-        "id": "color_scheme_3_bg_grad",
-        "label": "Background gradient",
-        "info": "If set, replaces the background color."
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_3_heading",
-        "label": "Headings",
-        "default": "#ffffff"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_3_text",
-        "label": "Text",
-        "default": "#ffffff"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_3_btn_bg",
-        "label": "Button background",
-        "default": "#333333"
-      },
-      {
-        "type": "color",
-        "id": "color_scheme_3_btn_text",
-        "label": "Button text",
-        "default": "#ffffff"
-      },
-      {
-        "type": "header",
-        "content": "Content panels"
-      },
-      {
-        "type": "color",
-        "id": "panel_bg_color",
-        "label": "Background",
-        "default": "#f6f7f7"
-      },
-      {
-        "type": "color",
-        "id": "panel_heading_color",
-        "label": "Headings",
-        "default": "#333333"
-      },
-      {
-        "type": "color",
-        "id": "panel_text_color",
-        "label": "Text",
-        "default": "#555555"
-      },
-      {
-        "type": "header",
         "content": "Drawers"
       },
       {
@@ -273,33 +131,6 @@
         "id": "info_text_color",
         "label": "Info text",
         "default": "#1A66D2"
-      },
-      {
-        "type": "header",
-        "content": "Color blending"
-      },
-      {
-        "type": "paragraph",
-        "content": "If all collection or product images are set on a very light background, this can blend that background into a light color. [Read more](https://cleancanvas.co.uk/support/enterprise/settings/product-image-blend)"
-      },
-      {
-        "type": "checkbox",
-        "id": "blend_product_images",
-        "label": "Blend product images",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "blend_collection_images",
-        "label": "Blend collection images",
-        "default": false
-      },
-      {
-        "type": "color",
-        "id": "blend_bg_color",
-        "label": "Blend background color",
-        "info": "Choose a very light color",
-        "default": "#fefefe"
       }
     ]
   },
@@ -535,7 +366,7 @@
       },
       {
         "type": "range",
-          "id": "overlay_border_radius",
+        "id": "overlay_border_radius",
         "label": "Corner radius",
         "min": 0,
         "max": 26,
@@ -2403,7 +2234,7 @@
         "type": "text",
         "id": "social_whatsapp_url",
         "label": "WhatsApp",
-        "info": "https:\/\/api.whatsapp.com\/send?phone=1234"
+        "info": "https://api.whatsapp.com/send?phone=1234"
       },
       {
         "type": "text",
@@ -2457,13 +2288,13 @@
         "type": "text",
         "id": "social_twitch_url",
         "label": "Twitch",
-        "info": "https:\/\/www.twitch.tv\/shopify"
+        "info": "https://www.twitch.tv/shopify"
       },
       {
         "type": "text",
         "id": "social_spotify_url",
         "label": "Spotify",
-        "info": "https:\/\/open.spotify.com\/artist\/shopify"
+        "info": "https://open.spotify.com/artist/shopify"
       },
       {
         "type": "text",

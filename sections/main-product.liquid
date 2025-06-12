@@ -842,7 +842,7 @@
   <sticky-atc-panel class="sticky-atc-panel sticky-atc-panel--out fixed bottom-0 {{ section.settings.sticky_atc_position }} invisible{% if section.settings.sticky_atc_mobile == false %} hidden md:block{% endif %}">
     <div class="card card--row card--related card--sticky-atc relative flex items-center">
       {%- if featured_media -%}
-        <div class="card__media{% if settings.blend_product_images %} image-blend{% endif %}">
+        <div class="card__media">
           {%- liquid
             assign image_width = 44
             if featured_media.preview_image.aspect_ratio >= 1

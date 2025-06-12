@@ -12,7 +12,7 @@
               endif
             -%}
             {%- if img != blank -%}
-              <div class="predictive-result__media media relative{% if settings.blend_product_images and type == 'products' %} image-blend{% elsif settings.blend_collection_images and type == 'collections' %} image-blend{% endif %}">
+              <div class="predictive-result__media media relative">
                 {{ img | image_url: width: 112 | image_tag: loading: 'eager', class: 'predictive-result__media' }}
               </div>
             {%- else -%}

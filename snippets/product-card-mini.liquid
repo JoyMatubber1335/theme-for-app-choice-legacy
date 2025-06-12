@@ -35,7 +35,6 @@
 
 <div class="card card--row card--related {{ classes }} relative flex"{% if id %} id="{{ id }}"{% endif %}>
   <div class="card__media">
-    {% if settings.blend_product_images %}<div class="image-blend">{% endif %}
       {%- if product.featured_media -%}
         <div class="media relative" style="padding-top: {{ 1 | divided_by: product.featured_media.preview_image.aspect_ratio | times: 100 }}%;">
           {% render 'image', image: product.featured_media.preview_image, src_width: 88, srcset_2x: true, class: 'img-fit' %}
@@ -45,7 +44,6 @@
           {{ 'image' | placeholder_svg_tag: 'media__placeholder dark' }}
         </div>
       {%- endif -%}
-    {% if settings.blend_product_images %}</div>{% endif %}
   </div>
 
   <div class="card__info">

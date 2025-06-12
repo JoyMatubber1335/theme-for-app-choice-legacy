@@ -32,7 +32,7 @@
         endif
       %}
 
-      <li class="custom-select__option quick-nav__option text-start flex items-center js-option{% if display contains "image" and is_collection and settings.blend_collection_images %} image-blend{% elsif display contains "image" and link.type == "product_link" and settings.blend_product_images %} image-blend{% endif %}"
+      <li class="custom-select__option quick-nav__option text-start flex items-center js-option"
           id="{{ id }}-opt-{{ counter }}" role="option"
           data-value="{{ link.handle }}"
           data-url="{{ link.url }}"
@@ -128,7 +128,7 @@
                 assign is_collection = false
               endif
             %}
-            <li class="custom-select__option quick-nav__option flex items-center js-option{% if display contains "image" and is_collection and settings.blend_collection_images %} image-blend{% elsif display contains "image" and grandchild_link.type == "product_link" and settings.blend_product_images %} image-blend{% endif %}"
+            <li class="custom-select__option quick-nav__option flex items-center js-option"
                 id="{{ id }}-opt-{{ counter }}" role="option"
                 data-value="{{ grandchild_link.handle }}"
                 data-parent-handle="{{ link.handle }}_{{ child_link.handle }}"
