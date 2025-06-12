@@ -2465,67 +2465,6 @@
         "max": 15,
         "step": 1,
         "default": 5
-      },
-      {
-        "type": "header",
-        "content": "Free shipping bar"
-      },
-      {
-        "type": "paragraph",
-        "content": "Shows a bar on the cart page and cart drawer which indicates how far the user is away from free shipping. [Read more](https://cleancanvas.co.uk/support/enterprise/shipping-bar)"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_free_shipping_notice",
-        "label": "Show free shipping bar",
-        "default": false
-      },
-      {
-        "type": "textarea",
-        "id": "free_shipping_minimum",
-        "label": "Minimum order amount",
-        "placeholder": "EC:USD:100\nUSD:50\nCAD:80",
-        "info": "Enter minimum order amount(s) to qualify for free shipping (one per line)."
-      },
-      {
-        "type": "paragraph",
-        "content": "EC:USD:120 = $120 USD for Ecuador."
-      },
-      {
-        "type": "paragraph",
-        "content": "USD:50 = $50 USD for all countries using USD as their currency."
-      },
-      {
-        "type": "paragraph",
-        "content": "Country specific amounts MUST COME BEFORE general currency amounts."
-      },
-      {
-        "type": "paragraph",
-        "content": "[Read more](https://cleancanvas.co.uk/support/enterprise/shipping-bar)"
-      },
-      {
-        "type": "select",
-        "id": "free_shipping_color_scheme",
-        "label": "Color scheme",
-        "options": [
-          {
-            "value": "none",
-            "label": "Default"
-          },
-          {
-            "value": "1",
-            "label": "Scheme 1"
-          },
-          {
-            "value": "2",
-            "label": "Scheme 2"
-          },
-          {
-            "value": "3",
-            "label": "Scheme 3"
-          }
-        ],
-        "default": "none"
       }
     ]
   },

@@ -31,11 +31,10 @@
 
   assign cart_total_price = cart.total_price
   assign free_shipping_minimum = minimum_value | times: 100
-  assign color_scheme = settings.free_shipping_color_scheme
 -%}
 <div id="free-shipping-notice" class="free-shipping-notice">
   {%- if show_notice and cart != empty -%}
-    <div class="free-shipping-container{% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
+    <div class="free-shipping-container">
       <div class="block{% unless align_start %} mx-auto{% endunless %} text-theme-heading" data-minimum="{{ free_shipping_minimum }}">
         {%- if bar_position == 'top' -%}
           <div class="free-shipping-notice__bar mb-3" style="--progress: {{ cart_total_price | times: 1.0 | divided_by: minimum_value | at_most: 100 }}%"></div>

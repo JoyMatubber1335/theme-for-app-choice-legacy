@@ -16,10 +16,6 @@
         <h1 class="h2 mb-10{% if cart != empty %} {{ section.settings.heading_align }}{% else %} text-center{% endif %} js-cart-title">{{ 'cart.general.title' | t }}</h1>
       {%- endif -%}
 
-      {%- if settings.show_free_shipping_notice and cart != empty -%}
-        {% render 'free-shipping-notice' %}
-      {%- endif -%}
-
       <div class="alert mt-6 mb-6 bg-error-bg text-error-text" id="cart-errors" role="alert" hidden></div>
 
       {% render 'cart-items' %}
