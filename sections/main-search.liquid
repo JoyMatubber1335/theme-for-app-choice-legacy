@@ -17,12 +17,6 @@
   <script src="{{ 'custom-pagination.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
-{%- if settings.enable_predictive_search -%}
-  <link rel="stylesheet" href="{{ 'predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">
-  <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'tabs.js' | asset_url }}" defer="defer"></script>
-{%- endif -%}
-
 {%- liquid
   if search.results_count > 0
     if section.settings.card_size == 'small'
