@@ -8,7 +8,7 @@
               <h3 class="predictive-result__title h6 tablist__scroller font-body regular-text font-bold mt-3">{{ 'general.search.queries' | t }}</h3>
               {%- for suggestion in predictive_search.resources.queries -%}
                 <li class="predictive-search__item" role="option">
-                  <a class="predictive-result predictive-result--suggestion block focus-inset" href="{{ suggestion.url }}"{% if settings.preload_links %} data-instant{% endif %}>
+                  <a class="predictive-result predictive-result--suggestion block focus-inset" href="{{ suggestion.url }}">
                     {{ suggestion.styled_text }}
                   </a>
                 </li>

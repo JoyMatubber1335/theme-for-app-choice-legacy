@@ -28,7 +28,7 @@
       <span class="price__from">{{ 'products.product.from' | t }}</span>
     {%- endif %}
     <strong class="price__current">{%- render 'price-as-money', price: price -%}</strong>
-    <s class="price__was{% if settings.superscript_decimals %} price__was--supercents{% endif %}">
+    <s class="price__was">
       {%- if compare_at_price and compare_at_price > price -%}
         {%- render 'price-as-money', price: compare_at_price, show_money_with_currency: false -%}
       {%- endif -%}

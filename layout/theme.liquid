@@ -32,7 +32,6 @@
     {{- body_font_italic | font_face: font_display: 'swap' -}}
     {{- body_font_bold_italic | font_face: font_display: 'swap' -}}
     {{- settings.heading_font | font_face: font_display: 'swap' -}}
-    {{- settings.navigation_font | font_face: font_display: 'swap' -}}
 
     :root {
       --bg-color: {{ settings.bg_color.rgba }};
@@ -76,10 +75,6 @@
       --heading-font-style: {{ settings.heading_font.style }};
       --heading-font-weight: {{ settings.heading_font.weight }};
       --heading-scale-start: {{ settings.heading_scale_start }};
-
-      --navigation-font-family: {{ settings.navigation_font.family }}, {{ settings.navigation_font.fallback_families }};
-      --navigation-font-style: {{ settings.navigation_font.style }};
-      --navigation-font-weight: {{ settings.navigation_font.weight }};
       {%- if settings.heading_uppercase %}
       --heading-text-transform: uppercase;
       {%- else -%}
@@ -248,10 +243,6 @@
     <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer" data-contact="{{ shop.email | escape }}"></script>
   {%- endif -%}
 
-  {%- if settings.show_blur_messages -%}
-    <script src="{{ 'blur-messages.js' | asset_url }}" defer="defer"></script>
-  {%- endif -%}
-
   {% if settings.animations_enabled != "disabled" %}
     <script src="{{ 'animate-on-scroll.js' | asset_url }}" defer="defer"></script>
     <link rel="stylesheet" href="{{ 'animate-on-scroll.css' | asset_url }}">
@@ -319,15 +310,8 @@
         pSearchIncludeSkus: {{ settings.predictive_search_include_skus | json }},
         pSearchIncludeTags: {{ settings.predictive_search_include_tags | json }},
         sliderItemsPerNav: '{{ settings.slider_items_per_nav }}',
-        {% if settings.show_blur_messages %}
-          blurMessage1: {{ settings.blur_message_1 | json }},
-          blurMessage2: {{ settings.blur_message_2 | json }},
-          blurMessageDelay: {{ settings.blur_message_delay }},
-        {% endif %}
-        vibrateOnATC: {{ settings.vibrate_on_atc | json }},
         compareToggle: {{ settings.compare_toggle | json }},
         compareShowEmptyMetafields: {{ settings.compare_show_empty_metafields | json }},
-        externalLinksNewTab: {{ settings.external_links_new_tab | json }},
         afterAtc: {{ settings.after_add_to_cart | json }},
         cartType: {{ settings.cart_type | json }}
       },
@@ -374,9 +358,5 @@
       }
     };
   </script>
-
-  {%- if request.design_mode == false and settings.preload_links -%}
-    <script src="{{ 'instant-page.js' | asset_url }}" type="module" defer="defer"></script>
-  {%- endif -%}
 </body>
 </html>

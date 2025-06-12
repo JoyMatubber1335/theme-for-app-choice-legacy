@@ -103,9 +103,9 @@
                     </dt>
                     <dd class="inline m-0">
                       {%- if variant_price_reduced -%}
-                        <s class="price__was{% if settings.superscript_decimals %} price__was--supercents{% endif %}">{%- render 'price-as-money', price: item.variant.compare_at_price, show_money_with_currency: false -%}</s>
+                        <s class="price__was">{%- render 'price-as-money', price: item.variant.compare_at_price, show_money_with_currency: false -%}</s>
                       {%- else -%}
-                        <s class="price__was{% if settings.superscript_decimals %} price__was--supercents{% endif %}">{%- render 'price-as-money', price: item.original_price, show_money_with_currency: false -%}</s>
+                        <s class="price__was">{%- render 'price-as-money', price: item.original_price, show_money_with_currency: false -%}</s>
                       {%- endif -%}
                     </dd>
                   </dl>
@@ -221,14 +221,14 @@
                   </dt>
                   <dd class="m-0">
                     {%- if variant_price_reduced -%}
-                      <s class="price__was{% if settings.superscript_decimals %} price__was--supercents{% endif %}">
+                      <s class="price__was">
                         {%- liquid
                           assign compare_at_total_price = item.variant.compare_at_price | times: item.quantity
                           render 'price-as-money', price: compare_at_total_price, show_money_with_currency: false
                         -%}
                       </s>
                     {%- else -%}
-                      <s class="price__was{% if settings.superscript_decimals %} price__was--supercents{% endif %}">{%- render 'price-as-money', price: item.original_line_price, show_money_with_currency: false -%}</s>
+                      <s class="price__was">{%- render 'price-as-money', price: item.original_line_price, show_money_with_currency: false -%}</s>
                     {%- endif -%}
                   </dd>
                 </dl>
