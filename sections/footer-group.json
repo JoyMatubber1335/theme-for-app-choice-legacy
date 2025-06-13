@@ -1,18 +1,6 @@
 {
   "type": "footer",
   "name": "Footer Group",
-  "sections": {
-    "footer": {
-      "type": "footer",
-      "blocks": {
-        "text": { "type": "text", "settings": {} },
-        "link-list-1": { "type": "link_list", "settings": {} },
-        "link-list-2": { "type": "link_list", "settings": {} },
-        "newsletter": { "type": "newsletter", "settings": {} }
-      },
-      "block_order": ["text", "link-list-1", "link-list-2", "newsletter"],
-      "settings": {}
-    }
-  },
-  "order": ["footer"]
+  "sections": {},
+  "order": []
 }
