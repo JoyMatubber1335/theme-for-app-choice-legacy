@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const rewardButton = document.getElementById("rewardButton");
   const pointsInput = document.getElementById("pointsInput");
   const currentPointsSpan = document.getElementById("currentPoints");
+  const discountCodeSection = document.getElementById("discountCodeSection");
+  const discountCodeSpan = document.getElementById("discountCode");
+  const applyToCartButton = document.getElementById("applyToCartButton");
 
   const API_URLS = {
     REDEEM: "/apps/generic-name/reward-point-system/redeem",
@@ -20,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateCustomerData = (apiResponse) => {
     const currentPoints = apiResponse.remainingPoints || 0;
     currentPointsSpan.textContent = currentPoints;
-    console.log("History data:", apiResponse.data);
+    console.log("History data:", apiResponse);
   };
 
   const validatePointsInput = (pointsToRedeem) => {
@@ -30,18 +33,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!Number.isInteger(Number(pointsToRedeem))) {
       throw new Error("Points must be a whole number.");
     }
-
     return Number(pointsToRedeem);
   };
 
   const handleRedeem = async () => {
     try {
       const pointsToRedeem = validatePointsInput(pointsInput.value);
-
       rewardButton.disabled = true;
       rewardButton.textContent = "Redeeming...";
 
-      await apiCall(API_URLS.REDEEM, {
+      const redeemResponse = await apiCall(API_URLS.REDEEM, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ points: pointsToRedeem }),
@@ -49,9 +50,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       alert("Points redeemed successfully!");
 
+      // Show discount code
+      if (redeemResponse.discountCode) {
+        discountCodeSpan.textContent = redeemResponse.discountCode;
+        discountCodeSection.style.display = "block";
+      }
+
       const latestData = await apiCall(API_URLS.HISTORY);
       updateCustomerData(latestData);
-
       pointsInput.value = "";
     } catch (error) {
       console.error("Redemption failed:", error);
@@ -62,7 +68,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  const handleApplyToCart = () => {
+    const discountCode = discountCodeSpan?.textContent?.trim();
+
+    if (!discountCode) {
+      console.error("No discount code provided.");
+      return;
+    }
+
+    // Clean up any previous iframe if it exists
+    const oldIframe = document.getElementById("discount-iframe");
+    if (oldIframe) oldIframe.remove();
+
+    // Create a hidden iframe to apply the discount
+    const iframe = document.createElement("iframe");
+    iframe.style.display = "none";
+    iframe.id = "discount-iframe";
+    iframe.src = `/discount/${discountCode}?redirect=/cart`;
+
+    // Append to body
+    document.body.appendChild(iframe);
+
+    // Optional: wait for it to load and then remove
+    iframe.onload = () => {
+      setTimeout(() => iframe.remove(), 2000);
+    };
+  };
+
   rewardButton?.addEventListener("click", handleRedeem);
+  applyToCartButton?.addEventListener("click", handleApplyToCart);
 
   pointsInput?.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
