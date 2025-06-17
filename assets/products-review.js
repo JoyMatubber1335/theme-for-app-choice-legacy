@@ -8,7 +8,7 @@
     const shopDomain = container.dataset.shopDomain; // Make sure this is used if API needs it
     const customerId = container.dataset.customerId;
     const customerName = container.dataset.customerName || "Anonymous";
-    // const customerEmail = container.dataset.customerEmail || ""; // Not used in addReview currently
+    const customerEmail = container.dataset.customerEmail || "";
     const starColorFilled = container.dataset.starFilledColor || "#FFD700";
     const starColorEmpty = container.dataset.starEmptyColor || "#CCCCCC";
     const showEmptyReviewsSetting = container.dataset.showEmpty === "true";
@@ -105,6 +105,7 @@
         reviewData.rating = parseInt(reviewData.rating);
         reviewData.productId = productId;
         reviewData.customerName = customerName;
+        renderReviews.customerEmail = customerEmail;
         // Add shopDomain and customerId if your API requires them in the body
         // reviewData.shopDomain = shopDomain;
         // reviewData.customerId = customerId;
