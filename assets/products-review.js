@@ -105,7 +105,7 @@
         reviewData.rating = parseInt(reviewData.rating);
         reviewData.productId = productId;
         reviewData.customerName = customerName;
-        renderReviews.customerEmail = customerEmail;
+        reviewData.customerEmail = customerEmail;
         // Add shopDomain and customerId if your API requires them in the body
         // reviewData.shopDomain = shopDomain;
         // reviewData.customerId = customerId;
