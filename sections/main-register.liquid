@@ -24,10 +24,10 @@
     {%- endif -%}
 
     <div class="form__field">
-      <label class="label" for="register-first-name">{{ 'customer.register.first_name' | t }}</label>
+      <label class="label" for="register-full-name">{{ 'customer.register.full_name' | t }}</label>
       <input type="text"
              class="input w-full"
-             id="register-first-name"
+             id="register-full-name"
              name="customer[first_name]"
              {%- if form.first_name %}
                value="{{ form.first_name }}"
@@ -35,7 +35,7 @@
              autocomplete="given-name">
     </div>
 
-    <div class="form__field">
+    {% comment %} <div class="form__field">
       <label class="label" for="register-last-name">{{ 'customer.register.last_name' | t }}</label>
       <input type="text"
              class="input w-full"
@@ -45,9 +45,9 @@
                value="{{ form.last_name }}"
              {%- endif %}
              autocomplete="family-name">
-    </div>
+    </div> {% endcomment %}
 
-    <div class="form__field required">
+    <div class="form__field required" style="display: none;">
       <label class="label" for="register-email">{{ 'customer.register.email' | t }}</label>
       <input type="email"
              class="input w-full"
@@ -67,6 +67,30 @@
         <p class="form__field-error" id="register-email-error">
           {{ form.errors.translated_fields['email'] | capitalize }}
           {{ form.errors.messages['email'] }}.
+        </p>
+      {%- endif -%}
+    </div>
+
+    <div class="form__field required">
+      <label class="label" for="register-phone">{{ 'customer.register.phone' | t }}</label>
+      <input type="tel"
+             class="input w-full"
+             id="register-phone"
+             name="customer[phone]"
+             {%- if form.phone %}
+               value="{{ form.phone }}"
+             {%- endif %}
+             autocomplete="phone"
+             {%- if form.errors contains 'phone' %}
+               aria-invalid="true"
+               aria-describedby="register-phone-error"
+             {%- endif %}
+             aria-required="true"
+             required>
+      {%- if form.errors contains 'phone' -%}
+        <p class="form__field-error" id="register-phone-error">
+          {{ form.errors.translated_fields['phone'] | capitalize }}
+          {{ form.errors.messages['phone'] }}.
         </p>
       {%- endif -%}
     </div>
@@ -102,6 +126,32 @@
     </p>
   {%- endform -%}
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const phoneInput = document.getElementById('register-phone');
+    const emailInput = document.getElementById('register-email');
+
+    // Function to update hidden email field when phone number changes
+    function updateEmailFromPhone() {
+      const phoneValue = phoneInput.value.trim();
+      if (phoneValue) {
+        // Remove any non-numeric characters for cleaner email format
+        const cleanPhone = phoneValue.replace(/\D/g, '');
+        const generatedEmail = cleanPhone + '@gmail.com';
+        
+        // Update the hidden email field
+        if (emailInput) emailInput.value = generatedEmail;
+      }
+    }
+
+    // Listen for phone input changes
+    if (phoneInput) {
+      phoneInput.addEventListener('input', updateEmailFromPhone);
+      phoneInput.addEventListener('blur', updateEmailFromPhone);
+    }
+  });
+</script>
 
 {% schema %}
 {

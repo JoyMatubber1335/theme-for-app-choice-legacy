@@ -449,6 +449,7 @@
     "login": {
       "title": "Login",
       "email": "Email",
+      "phone": "Phone",
       "password": "Password",
       "forgot_password": "Forgot password",
       "sign_in": "Sign in",
@@ -501,7 +502,9 @@
       "title": "Create account",
       "first_name": "First name",
       "last_name": "Last name",
+      "full_name": "Full name",
       "email": "Email",
+      "phone": "Phone",
       "password": "Password",
       "submit": "Create account",
       "have_account": "Already have an account?",

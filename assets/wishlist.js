@@ -1,5 +1,5 @@
 let wishlistConfig = {
-  apiUrl: "/apps/choice-legacy-app",
+  apiUrl: "/apps/generic-name", // TODO:
   shopDomain: window.shopDomain,
   customerId: null,
 };
@@ -288,7 +288,7 @@ function showMessage(message) {
 
 document.addEventListener("DOMContentLoaded", function () {
   initWishlist({
-    apiUrl: `/apps/choice-legacy-app`,
+    apiUrl: `/apps/generic-name`,
   });
 });
 
