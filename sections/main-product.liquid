@@ -359,6 +359,9 @@
                   ></div>
 
                   <input type="hidden" name="id" value="{{ current_variant.id }}" disabled>
+                  {% if product.tags contains 'no-points' %}
+                    <input type="hidden" name="properties[no_point_tag]" value="true" />
+                  {% endif %}
                   <div class="product-info__add-to-cart flex{% if enable_dynamic_checkout %} qty-input--secondary-btn{% endif %}">
                     {%- if block.settings.show_qty_selector -%}
                       {% render 'quantity-input', layout_style: 'combined' %}

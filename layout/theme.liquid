@@ -353,6 +353,16 @@
         shippingCalculator: '{{ "shipping-calculator.js" | asset_url }}'
       }
     };
+
+    {% if customer %}
+      window.customerLoggedIn = true;
+      window.customerId = {{ customer.id }};
+    {% else %}
+      window.customerLoggedIn = false;
+      window.customerId = null;
+    {% endif %}
+    window.shopDomain = '{{ shop.domain }}';
   </script>
+  <script src="{{ 'wishlist.js' | asset_url }}" defer></script>
 </body>
 </html>
