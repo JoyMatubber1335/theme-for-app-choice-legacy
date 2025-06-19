@@ -1,10 +1,8 @@
 {{ 'career-management.css' | asset_url | stylesheet_tag }}
 
 <div class="career-management-section page-width" id="career-management-section">
-  <div class="title-bar">
-    <h2 class="section-header__title">Careers at {{ shop.name | escape }}</h2>
-  </div>
-
+  <div>{{ page.content }}</div>
+  <h3>Available jobs</h3>
   <div id="job-listings-container" class="job-listings">
     <div class="loading-spinner" style="text-align: center; padding: 20px;">
       <p>Loading job openings...</p>
