@@ -1,27 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
   // If this file is named 'career-management.js.liquid', you can use:
   // const API_BASE_URL = "{{ routes.root_url | append: 'apps/choice-legacy-app/career-management' }}";
-  const API_BASE_URL = "/apps/generic-name/career-management"; // Using hardcoded path as per your last JS version
+  const API_BASE_URL = "/apps/generic-name/customer-career-management"; // Using hardcoded path as per your last JS version
 
-  const careerManagementSection = document.getElementById("career-management-section");
+  const careerManagementSection = document.getElementById(
+    "career-management-section"
+  );
 
   if (!careerManagementSection) {
     return;
   }
 
-  const jobListingsContainer = careerManagementSection.querySelector("#job-listings-container");
-  const noJobsMessageEl = careerManagementSection.querySelector("#no-jobs-message");
-  const paginationContainerEl = careerManagementSection.querySelector("#pagination-container");
-  const jobDetailModalEl = careerManagementSection.querySelector("#job-detail-modal");
-  const modalCloseButton = jobDetailModalEl ? jobDetailModalEl.querySelector(".modal-close-button") : null;
-  const loadingSpinner = jobListingsContainer ? jobListingsContainer.querySelector(".loading-spinner") : null;
+  const jobListingsContainer = careerManagementSection.querySelector(
+    "#job-listings-container"
+  );
+  const noJobsMessageEl =
+    careerManagementSection.querySelector("#no-jobs-message");
+  const paginationContainerEl = careerManagementSection.querySelector(
+    "#pagination-container"
+  );
+  const jobDetailModalEl =
+    careerManagementSection.querySelector("#job-detail-modal");
+  const modalCloseButton = jobDetailModalEl
+    ? jobDetailModalEl.querySelector(".modal-close-button")
+    : null;
+  const loadingSpinner = jobListingsContainer
+    ? jobListingsContainer.querySelector(".loading-spinner")
+    : null;
 
   if (!jobListingsContainer || !noJobsMessageEl || !paginationContainerEl) {
     console.error("Essential career management HTML elements are missing.");
     return;
   }
   if (!jobDetailModalEl || !modalCloseButton) {
-    console.warn("Job detail modal elements are missing. Detail view might not work.");
+    console.warn(
+      "Job detail modal elements are missing. Detail view might not work."
+    );
   }
 
   let allFetchedJobsData = [];
@@ -71,13 +85,18 @@ document.addEventListener("DOMContentLoaded", () => {
     paginationContainerEl.innerHTML = "";
 
     try {
-      const response = await fetch(`${API_BASE_URL}/active-jobs?page=${page}&limit=${limit}`, {
-        method: "GET",
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/active-jobs?page=${page}&limit=${limit}`,
+        {
+          method: "GET",
+        }
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`HTTP error! Status: ${response.status} - ${errorText}`);
+        throw new Error(
+          `HTTP error! Status: ${response.status} - ${errorText}`
+        );
       }
       const data = await response.json();
 
@@ -108,28 +127,37 @@ document.addEventListener("DOMContentLoaded", () => {
     jobs.forEach((job, index) => {
       const jobElement = document.createElement("article");
       jobElement.classList.add("job-posting");
-      jobElement.setAttribute("aria-labelledby", `job-title-${job._id || index}`);
+      jobElement.setAttribute(
+        "aria-labelledby",
+        `job-title-${job._id || index}`
+      );
 
       const summary = createSummaryFromHtml(job.fullJobDescription, 200);
 
       let deadlineHtml = "";
       if (job.deadlineDate) {
-        deadlineHtml = `<p class="job-posting-deadline"><strong>Deadline:</strong> ${formatDate(job.deadlineDate)}</p>`;
+        deadlineHtml = `<p class="job-posting-deadline"><strong>Deadline:</strong> ${formatDate(
+          job.deadlineDate
+        )}</p>`;
       }
 
       jobElement.innerHTML = `
-          <h3 class="job-posting-title" id="job-title-${job._id || index}">${escapeHtml(
-        job.jobTitle || "Untitled Job"
-      )}</h3>
+          <h3 class="job-posting-title" id="job-title-${
+            job._id || index
+          }">${escapeHtml(job.jobTitle || "Untitled Job")}</h3>
           <p class="job-posting-summary">${summary}</p>
           ${deadlineHtml}
           <button type="button" class="view-details-button" data-job-index="${index}" aria-expanded="false" aria-controls="job-detail-modal">View Details</button>
         `;
 
-      const viewDetailsButton = jobElement.querySelector(".view-details-button");
+      const viewDetailsButton = jobElement.querySelector(
+        ".view-details-button"
+      );
       if (viewDetailsButton) {
         viewDetailsButton.addEventListener("click", (event) => {
-          const jobIndex = parseInt(event.currentTarget.getAttribute("data-job-index"));
+          const jobIndex = parseInt(
+            event.currentTarget.getAttribute("data-job-index")
+          );
           if (allFetchedJobsData[jobIndex]) {
             displayJobDetails(allFetchedJobsData[jobIndex]);
             event.currentTarget.setAttribute("aria-expanded", "true");
@@ -152,13 +180,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const prevButton = document.createElement("button");
     prevButton.textContent = "Previous";
     prevButton.disabled = Pcurrent === 1;
-    prevButton.addEventListener("click", () => fetchActiveJobs(Pcurrent - 1, Plimit));
+    prevButton.addEventListener("click", () =>
+      fetchActiveJobs(Pcurrent - 1, Plimit)
+    );
     paginationContainerEl.appendChild(prevButton);
 
     const maxPageButtons = 5;
     let startPage = Math.max(1, Pcurrent - Math.floor(maxPageButtons / 2));
     let endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
-    if (totalPages > maxPageButtons && endPage - startPage + 1 < maxPageButtons) {
+    if (
+      totalPages > maxPageButtons &&
+      endPage - startPage + 1 < maxPageButtons
+    ) {
       startPage = Math.max(1, endPage - maxPageButtons + 1);
     }
 
@@ -194,33 +227,46 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const lastButton = document.createElement("button");
       lastButton.textContent = totalPages;
-      lastButton.addEventListener("click", () => fetchActiveJobs(totalPages, Plimit));
+      lastButton.addEventListener("click", () =>
+        fetchActiveJobs(totalPages, Plimit)
+      );
       paginationContainerEl.appendChild(lastButton);
     }
 
     const nextButton = document.createElement("button");
     nextButton.textContent = "Next";
     nextButton.disabled = Pcurrent === totalPages;
-    nextButton.addEventListener("click", () => fetchActiveJobs(Pcurrent + 1, Plimit));
+    nextButton.addEventListener("click", () =>
+      fetchActiveJobs(Pcurrent + 1, Plimit)
+    );
     paginationContainerEl.appendChild(nextButton);
   }
 
   function displayJobDetails(job) {
     if (!job || !jobDetailModalEl) {
-      console.error("Job data or modal element is missing for displaying details.");
+      console.error(
+        "Job data or modal element is missing for displaying details."
+      );
       return;
     }
 
-    jobDetailModalEl.querySelector("#modal-job-title").textContent = escapeHtml(job.jobTitle || "N/A");
+    jobDetailModalEl.querySelector("#modal-job-title").textContent = escapeHtml(
+      job.jobTitle || "N/A"
+    );
 
-    let postingMeta = `<strong>Posted on:</strong> ${formatDate(job.postingDate || job.createdAt)}`;
+    let postingMeta = `<strong>Posted on:</strong> ${formatDate(
+      job.postingDate || job.createdAt
+    )}`;
     if (job.deadlineDate) {
-      postingMeta += ` | <strong class="deadline-text">Deadline:</strong> ${formatDate(job.deadlineDate)}`;
+      postingMeta += ` | <strong class="deadline-text">Deadline:</strong> ${formatDate(
+        job.deadlineDate
+      )}`;
     }
     jobDetailModalEl.querySelector(".modal-meta").innerHTML = postingMeta;
 
     const modalSummaryText = createSummaryFromHtml(job.fullJobDescription, 250);
-    jobDetailModalEl.querySelector("#modal-job-summary").innerHTML = modalSummaryText;
+    jobDetailModalEl.querySelector("#modal-job-summary").innerHTML =
+      modalSummaryText;
 
     // SECURITY NOTE: Trust the source of job.fullJobDescription if rendering as HTML
     jobDetailModalEl.querySelector("#modal-job-fullDescription").innerHTML =
@@ -237,15 +283,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (job.applicationEmailAddress) {
       applicationInfoHtml += `<p>${
         job.applicationUrl ? "Or, s" : "S"
-      }end your application to: <a href="mailto:${escapeHtml(job.applicationEmailAddress)}">${escapeHtml(
+      }end your application to: <a href="mailto:${escapeHtml(
         job.applicationEmailAddress
-      )}</a></p>`;
+      )}">${escapeHtml(job.applicationEmailAddress)}</a></p>`;
     }
 
     if (!applicationInfoHtml) {
       applicationInfoHtml = "<p>Application instructions not specified.</p>";
     }
-    jobDetailModalEl.querySelector("#modal-job-applicationInstructions").innerHTML = applicationInfoHtml;
+    jobDetailModalEl.querySelector(
+      "#modal-job-applicationInstructions"
+    ).innerHTML = applicationInfoHtml;
 
     jobDetailModalEl.style.display = "block";
     document.body.style.overflow = "hidden";
@@ -257,8 +305,12 @@ document.addEventListener("DOMContentLoaded", () => {
     jobDetailModalEl.style.display = "none";
     document.body.style.overflow = "";
 
-    const allViewDetailsButtons = jobListingsContainer.querySelectorAll('.view-details-button[aria-expanded="true"]');
-    allViewDetailsButtons.forEach((btn) => btn.setAttribute("aria-expanded", "false"));
+    const allViewDetailsButtons = jobListingsContainer.querySelectorAll(
+      '.view-details-button[aria-expanded="true"]'
+    );
+    allViewDetailsButtons.forEach((btn) =>
+      btn.setAttribute("aria-expanded", "false")
+    );
   }
 
   if (modalCloseButton) {
@@ -272,7 +324,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && jobDetailModalEl && jobDetailModalEl.style.display === "block") {
+    if (
+      event.key === "Escape" &&
+      jobDetailModalEl &&
+      jobDetailModalEl.style.display === "block"
+    ) {
       closeModal();
     }
   });
