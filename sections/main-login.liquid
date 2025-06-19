@@ -21,13 +21,27 @@
         </div>
       {%- endif -%}
 
-      <div class="form__field required">
+      <div class="form__field required" style="display: none;">
         <label class="label" for="customer-email">{{ 'customer.login.email' | t }}</label>
         <input type="email"
                class="input w-full"
                id="customer-email"
                name="customer[email]"
                autocomplete="email"
+               {%- if form.errors contains 'form' %}
+                 aria-invalid="true"
+               {%- endif %}
+               aria-required="true"
+               required>
+      </div>
+
+      <div class="form__field required">
+        <label class="label" for="customer-phone">{{ 'customer.login.phone' | t }}</label>
+        <input type="tel"
+               class="input w-full"
+               id="customer-phone"
+               name="customer[phone]"
+               autocomplete="phone"
                {%- if form.errors contains 'form' %}
                  aria-invalid="true"
                {%- endif %}
@@ -82,7 +96,7 @@
         </div>
       {%- endif -%}
 
-      <div class="form__field required">
+      <div class="form__field required" style="display: none;">
         <label class="label" for="recover-email">{{ 'customer.login.email' | t }}</label>
         <input type="email"
                class="input w-full"
@@ -99,6 +113,27 @@
         {%- if form.errors -%}
           <p class="form__field-error" id="recover-email-error">
             {{ form.errors.messages['form'] }}
+          </p>
+        {%- endif -%}
+      </div>
+
+      <div class="form__field required">
+        <label class="label" for="recover-phone">{{ 'customer.login.phone' | t }}</label>
+        <input type="tel"
+               class="input w-full"
+               id="recover-phone"
+               name="phone"
+               autocomplete="phone"
+               {%- if form.errors %}
+                 aria-invalid="true"
+                 aria-describedby="recover-phone-error"
+                 autofocus
+               {%- endif %}
+               aria-required="true"
+               required>
+        {%- if form.errors -%}
+          <p class="form__field-error" id="recover-phone-error">
+            Incorrect phone or password
           </p>
         {%- endif -%}
       </div>
@@ -126,6 +161,35 @@
   document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login');
     const recoverForm = document.getElementById('recover');
+    const phoneInput = document.getElementById('customer-phone');
+    const emailInput = document.getElementById('customer-email');
+    const recoverPhoneInput = document.getElementById('recover-phone');
+    const recoverEmailInput = document.getElementById('recover-email');
+
+    // Function to update hidden email field when phone number changes
+    function updateEmailFromPhone(phoneField, emailField) {
+      const phoneValue = phoneField.value.trim();
+      if (phoneValue) {
+        // Remove any non-numeric characters for cleaner email format
+        const cleanPhone = phoneValue.replace(/\D/g, '');
+        const generatedEmail = cleanPhone + '@gmail.com';
+        
+        // Update the hidden email field
+        if (emailField) emailField.value = generatedEmail;
+      }
+    }
+
+    // Listen for phone input changes on login form
+    if (phoneInput && emailInput) {
+      phoneInput.addEventListener('input', () => updateEmailFromPhone(phoneInput, emailInput));
+      phoneInput.addEventListener('blur', () => updateEmailFromPhone(phoneInput, emailInput));
+    }
+
+    // Listen for phone input changes on recover form
+    if (recoverPhoneInput && recoverEmailInput) {
+      recoverPhoneInput.addEventListener('input', () => updateEmailFromPhone(recoverPhoneInput, recoverEmailInput));
+      recoverPhoneInput.addEventListener('blur', () => updateEmailFromPhone(recoverPhoneInput, recoverEmailInput));
+    }
 
     function toggleContent(recover) {
       loginForm.classList.toggle('js-hidden', recover);

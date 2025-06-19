@@ -359,6 +359,9 @@
                   ></div>
 
                   <input type="hidden" name="id" value="{{ current_variant.id }}" disabled>
+                  {% if product.tags contains 'no-points' %}
+                    <input type="hidden" name="properties[no_point_tag]" value="true" />
+                  {% endif %}
                   <div class="product-info__add-to-cart flex{% if enable_dynamic_checkout %} qty-input--secondary-btn{% endif %}">
                     {%- if block.settings.show_qty_selector -%}
                       {% render 'quantity-input', layout_style: 'combined' %}
@@ -1316,7 +1319,7 @@
           "id": "show_pickup_availability",
           "label": "Show pickup availability",
           "info": "Show customers where they can pick up the product. [Learn more](https://help.shopify.com/en/manual/shipping/setting-up-and-managing-your-shipping/local-methods/local-pickup)",
-          "default": true
+          "default": false
         },
         {
           "type": "checkbox",
