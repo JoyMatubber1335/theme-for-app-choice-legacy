@@ -1,3 +1,4 @@
+// products-review.js
 (function () {
   const reviewAppContainers = document.querySelectorAll(
     ".review-extension-container"
@@ -5,7 +6,7 @@
   reviewAppContainers.forEach((container) => {
     const sectionId = container.dataset.sectionId;
     const productId = container.dataset.productId;
-    const shopDomain = container.dataset.shopDomain; // Make sure this is used if API needs it
+    const shopDomain = container.dataset.shopDomain;
     const customerId = container.dataset.customerId;
     const customerName = container.dataset.customerName || "Anonymous";
     const customerEmail = container.dataset.customerEmail || "";
@@ -14,6 +15,7 @@
     const showEmptyReviewsSetting = container.dataset.showEmpty === "true";
 
     const API_BASE_URL = "/apps/generic-name/customer/product-review";
+    // const IMAGE_UPLOAD_URL = "/apps/generic-name/image-upload"; // New API endpoint for image upload
 
     const reviewForm = container.querySelector(
       `#review-submission-form-${sectionId}`
@@ -36,9 +38,15 @@
     );
     const reviewSummaryContainer = container.querySelector(
       `#review-summary-${sectionId}`
-    ); // Get the new summary container
+    );
+    const reviewImageInput = container.querySelector(
+      `#reviewImage-${sectionId}`
+    ); // Get the image input
+
     let currentRating = 0;
-    let allProductReviews = []; // Store all fetched reviews for a product
+    let uploadedImageUrl = null; // Variable to store the S3 URL after upload
+    let isUploadingImage = false; // Flag to prevent multiple uploads or early submission
+    let allProductReviews = [];
 
     if (ratingStarsContainer) {
       ratingStarsContainer
@@ -80,14 +88,81 @@
       });
     }
 
+    if (reviewImageInput) {
+      reviewImageInput.addEventListener("change", async function () {
+        const file = this.files[0];
+        if (!file) {
+          uploadedImageUrl = null;
+          return;
+        }
+        console.log("Selected file:", file);
+
+        // ... (validation and UI updates) ...
+
+        const imageFormData = new FormData();
+        imageFormData.append("reviewImage", file);
+        console.log("Image FormData prepared:", imageFormData);
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/image-upload`, {
+            // This is the call
+            method: "POST",
+            body: imageFormData,
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({
+              message: "Image upload failed with status: " + response.status,
+            }));
+            throw new Error(
+              errorData.message || `HTTP error! status: ${response.status}`
+            );
+          }
+
+          const result = await response.json();
+          uploadedImageUrl = result.reviewImage; // Store the URL returned by the backend
+          if (formMessage) {
+            formMessage.textContent = "Image uploaded successfully!";
+            formMessage.style.color = "green";
+            setTimeout(() => {
+              if (formMessage) formMessage.style.display = "none";
+            }, 3000);
+          }
+          console.log("Dummy Image URL:", uploadedImageUrl); // Console log the dummy URL
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          if (formMessage) {
+            formMessage.style.display = "block";
+            formMessage.textContent = `Image upload failed: ${error.message}`;
+            formMessage.style.color = "red";
+          }
+          uploadedImageUrl = null;
+        } finally {
+          isUploadingImage = false;
+          if (submitButton) submitButton.disabled = false;
+        }
+      });
+    }
+
     // Handle Review Submission
     if (reviewForm) {
       reviewForm.addEventListener("submit", async function (event) {
         event.preventDefault();
+
+        if (isUploadingImage) {
+          if (formMessage) {
+            formMessage.style.display = "block";
+            formMessage.textContent =
+              "Please wait, image is still uploading...";
+            formMessage.style.color = "orange";
+          }
+          return; // Prevent submission while image is uploading
+        }
+
         if (submitButton) submitButton.disabled = true;
         if (formMessage) {
           formMessage.style.display = "block";
-          formMessage.textContent = "Submitting...";
+          formMessage.textContent = "Submitting review...";
           formMessage.style.color = "blue";
         }
 
@@ -100,19 +175,36 @@
           return;
         }
 
-        const formData = new FormData(this);
-        const reviewData = Object.fromEntries(formData.entries());
-        reviewData.rating = parseInt(reviewData.rating);
-        reviewData.productId = productId;
-        reviewData.customerName = customerName;
-        reviewData.customerEmail = customerEmail;
+        // Prepare data for the main review submission
+        const reviewData = {
+          reviewText: this.querySelector(`#reviewText-${sectionId}`).value,
+          rating: currentRating,
+          productId: productId,
+          customerName: customerName,
+          customerEmail: customerEmail,
+          reviewImage: uploadedImageUrl, // Include the S3 URL here
+        };
+
+        // Validate if image is required and uploaded
+        if (
+          reviewImageInput &&
+          reviewImageInput.hasAttribute("required") &&
+          !uploadedImageUrl
+        ) {
+          if (formMessage) {
+            formMessage.textContent =
+              "Please upload an image before submitting.";
+            formMessage.style.color = "red";
+          }
+          if (submitButton) submitButton.disabled = false;
+          return;
+        }
 
         try {
           const response = await fetch(`${API_BASE_URL}/add`, {
-            // Added queryParams
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json", // Send as JSON for the main review data
             },
             body: JSON.stringify(reviewData),
           });
@@ -134,6 +226,7 @@
           }
           this.reset();
           currentRating = 0;
+          uploadedImageUrl = null; // Clear the uploaded URL after successful submission
           if (ratingValueInput) ratingValueInput.value = "";
           if (ratingStarsContainer) {
             ratingStarsContainer.querySelectorAll(".star").forEach((s) => {
@@ -163,7 +256,7 @@
     async function fetchReviews() {
       if (!reviewListContainer || !productId) return;
       if (reviewsSpinner) reviewsSpinner.style.display = "flex";
-      if (reviewListContainer) reviewListContainer.innerHTML = ""; // Clear before fetch
+      if (reviewListContainer) reviewListContainer.innerHTML = "";
 
       try {
         const response = await fetch(`${API_BASE_URL}/list/${productId}`, {
@@ -180,29 +273,23 @@
             errorData.message || `HTTP error! status: ${response.status}`
           );
         }
-        const reviewResponse = await response?.json(); // Renamed to avoid conflict
+        const reviewResponse = await response?.json();
         console.log("Product review data:", reviewResponse?.data);
-        allProductReviews = reviewResponse?.data || []; // Store fetched reviews
-        renderReviews(allProductReviews); // Pass the array of reviews
-        calculateAndRenderSummary(allProductReviews); // Calculate and render summary
+        allProductReviews = reviewResponse?.data || [];
+        renderReviews(allProductReviews);
+        calculateAndRenderSummary(allProductReviews);
       } catch (error) {
         console.error("Error fetching reviews:", error);
-        allProductReviews = []; // Clear on error
+        allProductReviews = [];
         if (reviewListContainer) {
           reviewListContainer.innerHTML = `<p class="reviews-message">Could not load reviews. ${error.message}</p>`;
         }
-        calculateAndRenderSummary(allProductReviews); // Still call to potentially show "0 reviews"
+        calculateAndRenderSummary(allProductReviews);
       } finally {
         if (reviewsSpinner) reviewsSpinner.style.display = "none";
       }
     }
 
-    // New function to calculate and render the summary
-    // In products_review.js
-
-    // ... (other parts of your IIFE and forEach loop) ...
-
-    // New function to calculate and render the summary
     function calculateAndRenderSummary(reviewsArray) {
       if (!reviewSummaryContainer) return;
 
@@ -223,41 +310,34 @@
       const hasHalfStar = decimalPart >= 0.25 && decimalPart < 0.75;
       const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-      const starColorFilled = "#FFD700"; // gold
-      const starColorEmpty = "#CCCCCC"; // light gray
-      const starColorHalf = "#FFD700"; // or a custom gradient/half star
+      const starColorFilled = "#FFD700";
+      const starColorEmpty = "#CCCCCC";
 
       let starsHTML = "";
 
-      // Full stars
       for (let i = 0; i < fullStars; i++) {
         starsHTML += `<span class="star" style="color:${starColorFilled}; font-size: 1.2em;">&#9733;</span>`;
       }
 
-      // Half star
       if (hasHalfStar) {
         starsHTML += `<span class="star half-star" style="position: relative; display: inline-block; font-size: 1.2em;">
-              <span style="color:${starColorEmpty};">&#9734;</span>
-              <span style="color:${starColorFilled}; position: absolute; overflow: hidden; width: 50%; top: 0; left: 0;">&#9733;</span>
-            </span>`;
+                    <span style="color:${starColorEmpty};">&#9734;</span>
+                    <span style="color:${starColorFilled}; position: absolute; overflow: hidden; width: 50%; top: 0; left: 0;">&#9733;</span>
+                </span>`;
       }
 
-      // Empty stars
       for (let i = 0; i < emptyStars; i++) {
         starsHTML += `<span class="star" style="color:${starColorEmpty}; font-size: 1.2em;">&#9734;</span>`;
       }
 
       reviewSummaryContainer.innerHTML = `
-            <div class="summary-average-rating">
-              ${starsHTML} (${totalReviews})
-              
-            </div>
-           
-          `;
+                <div class="summary-average-rating">
+                  ${starsHTML} (${totalReviews})
+                </div>
+            `;
     }
 
     function renderReviews(reviewsArray) {
-      // Changed parameter name
       if (!reviewListContainer) return;
       reviewListContainer.innerHTML = "";
 
@@ -272,7 +352,6 @@
       }
 
       reviewsArray.forEach((review) => {
-        // Iterate over the passed array
         const reviewItem = document.createElement("div");
         reviewItem.className = "review-item";
 
@@ -290,16 +369,32 @@
           ? new Date(review.reviewPlacedAt).toLocaleDateString()
           : "N/A";
 
+        // Add image display if imageUrl exists
+        const reviewImageHTML = review.imageUrl
+          ? `<img src="${escapeHTML(
+              review.imageUrl
+            )}" alt="Review Image" class="review-uploaded-image">`
+          : "";
+
         reviewItem.innerHTML = `
-              <div class="review-header">
-                <span class="reviewer-name">${escapeHTML(
-                  review.customerName || "Anonymous"
-                )}</span>
-                <span class="review-date">${reviewDate}</span>
-              </div>
-              <div class="review-rating">${ratingStarsHTML}</div>
-              <p class="review-text">${escapeHTML(review.reviewText || "")}</p>
-            `;
+                    <div class="review-header">
+                        <span class="reviewer-name">${escapeHTML(
+                          review.customerName || "Anonymous"
+                        )}</span>
+                        <span class="review-date">${reviewDate}</span>
+                    </div>
+                    <div class="review-rating">${ratingStarsHTML}</div>
+                    ${reviewImageHTML} <p class="review-text">${escapeHTML(
+          review.reviewText || ""
+        )}</p>
+                    ${
+                      review.reviewImage
+                        ? `<p class="review-image"><img src="${escapeHTML(
+                            review.reviewImage
+                          )}" alt="Review Image" class="review-uploaded-image"></p>`
+                        : ""
+                    }
+                `;
         reviewListContainer.appendChild(reviewItem);
       });
     }
@@ -325,7 +420,6 @@
         reviewListContainer.innerHTML =
           '<p class="reviews-message">Configuration error (missing product/store data).</p>';
       if (reviewSummaryContainer)
-        // Also handle summary container in case of config error
         reviewSummaryContainer.innerHTML =
           "<p>Could not load review summary due to configuration error.</p>";
       if (reviewsSpinner) reviewsSpinner.style.display = "none";
