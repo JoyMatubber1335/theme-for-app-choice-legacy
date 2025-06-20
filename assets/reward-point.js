@@ -7,13 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const applyToCartButton = document.getElementById("applyToCartButton");
 
   const API_URLS = {
-    REDEEM: "/apps/generic-name/reward-point-system/redeem",
-    HISTORY: "/apps/generic-name/reward-point-system/get-history",
+    REDEEM: "/apps/generic-name/customer-reward-point-system/redeem",
+    HISTORY: "/apps/generic-name/customer-reward-point-system/get-history",
   };
 
   const apiCall = async (url, options = {}) => {
     const response = await fetch(url, options);
     const data = await response.json();
+
     if (!response.ok) {
       throw new Error(data.message || `API Error: ${response.status}`);
     }
@@ -21,9 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const updateCustomerData = (apiResponse) => {
-    const currentPoints = apiResponse.remainingPoints || 0;
-    currentPointsSpan.textContent = currentPoints;
-    console.log("History data:", apiResponse);
+    if (!apiResponse?.success) {
+      document.querySelector(".reward-container").style.display = "none";
+    } else {
+      const currentPoints = apiResponse.remainingPoints || 0;
+      currentPointsSpan.textContent = currentPoints;
+    }
   };
 
   const validatePointsInput = (pointsToRedeem) => {
@@ -48,7 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ points: pointsToRedeem }),
       });
 
-      alert("Points redeemed successfully!");
+      if (redeemResponse.discountCode) {
+        alert("Points redeemed successfully!");
+      }
 
       // Show discount code
       if (redeemResponse.discountCode) {
@@ -57,7 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const latestData = await apiCall(API_URLS.HISTORY);
+
       updateCustomerData(latestData);
+
       pointsInput.value = "";
     } catch (error) {
       console.error("Redemption failed:", error);

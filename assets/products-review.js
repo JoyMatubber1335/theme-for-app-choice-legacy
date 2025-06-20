@@ -1,5 +1,7 @@
 (function () {
-  const reviewAppContainers = document.querySelectorAll(".review-extension-container");
+  const reviewAppContainers = document.querySelectorAll(
+    ".review-extension-container"
+  );
   reviewAppContainers.forEach((container) => {
     const sectionId = container.dataset.sectionId;
     const productId = container.dataset.productId;
@@ -13,19 +15,35 @@
 
     const API_BASE_URL = "/apps/generic-name/customer/product-review";
 
-    const reviewForm = container.querySelector(`#review-submission-form-${sectionId}`);
-    const reviewListContainer = container.querySelector(`#reviews-list-${sectionId}`);
+    const reviewForm = container.querySelector(
+      `#review-submission-form-${sectionId}`
+    );
+    const reviewListContainer = container.querySelector(
+      `#reviews-list-${sectionId}`
+    );
     const formMessage = container.querySelector(`#form-message-${sectionId}`);
-    const submitButton = container.querySelector(`#submit-review-btn-${sectionId}`);
-    const ratingStarsContainer = container.querySelector(`#form-star-rating-${sectionId}`);
-    const ratingValueInput = container.querySelector(`#rating-value-${sectionId}`);
-    const reviewsSpinner = container.querySelector(`#reviews-spinner-${sectionId}`);
-    const reviewSummaryContainer = container.querySelector(`#review-summary-${sectionId}`); // Get the new summary container
+    const submitButton = container.querySelector(
+      `#submit-review-btn-${sectionId}`
+    );
+    const ratingStarsContainer = container.querySelector(
+      `#form-star-rating-${sectionId}`
+    );
+    const ratingValueInput = container.querySelector(
+      `#rating-value-${sectionId}`
+    );
+    const reviewsSpinner = container.querySelector(
+      `#reviews-spinner-${sectionId}`
+    );
+    const reviewSummaryContainer = container.querySelector(
+      `#review-summary-${sectionId}`
+    ); // Get the new summary container
     let currentRating = 0;
     let allProductReviews = []; // Store all fetched reviews for a product
 
     if (ratingStarsContainer) {
-      ratingStarsContainer.querySelectorAll(".star").forEach((s) => (s.style.color = starColorEmpty));
+      ratingStarsContainer
+        .querySelectorAll(".star")
+        .forEach((s) => (s.style.color = starColorEmpty));
     }
 
     // Star Rating Logic for Form
@@ -38,7 +56,8 @@
           stars.forEach((s) => {
             const sValue = parseInt(s.dataset.value);
             s.innerHTML = sValue <= currentRating ? "&#9733;" : "&#9734;";
-            s.style.color = sValue <= currentRating ? starColorFilled : starColorEmpty;
+            s.style.color =
+              sValue <= currentRating ? starColorFilled : starColorEmpty;
           });
         });
         star.addEventListener("mouseover", function () {
@@ -46,7 +65,8 @@
           stars.forEach((s) => {
             const sValue = parseInt(s.dataset.value);
             s.innerHTML = sValue <= hoverValue ? "&#9733;" : "&#9734;";
-            s.style.color = sValue <= hoverValue ? starColorFilled : starColorEmpty;
+            s.style.color =
+              sValue <= hoverValue ? starColorFilled : starColorEmpty;
           });
         });
       });
@@ -54,7 +74,8 @@
         stars.forEach((s) => {
           const sValue = parseInt(s.dataset.value);
           s.innerHTML = sValue <= currentRating ? "&#9733;" : "&#9734;";
-          s.style.color = sValue <= currentRating ? starColorFilled : starColorEmpty;
+          s.style.color =
+            sValue <= currentRating ? starColorFilled : starColorEmpty;
         });
       });
     }
@@ -100,12 +121,15 @@
             const errorData = await response.json().catch(() => ({
               message: "Submission failed with status: " + response.status,
             }));
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            throw new Error(
+              errorData.message || `HTTP error! status: ${response.status}`
+            );
           }
 
           const result = await response.json();
           if (formMessage) {
-            formMessage.textContent = result.message || "Review submitted successfully!";
+            formMessage.textContent =
+              result.message || "Review submitted successfully!";
             formMessage.style.color = "green";
           }
           this.reset();
@@ -121,7 +145,9 @@
         } catch (error) {
           console.error("Error submitting review:", error);
           if (formMessage) {
-            formMessage.textContent = `Error: ${error.message || "Could not submit review."}`;
+            formMessage.textContent = `Error: ${
+              error.message || "Could not submit review."
+            }`;
             formMessage.style.color = "red";
           }
         } finally {
@@ -139,7 +165,6 @@
       if (reviewsSpinner) reviewsSpinner.style.display = "flex";
       if (reviewListContainer) reviewListContainer.innerHTML = ""; // Clear before fetch
 
-  
       try {
         const response = await fetch(`${API_BASE_URL}/list/${productId}`, {
           method: "GET",
@@ -151,7 +176,9 @@
           const errorData = await response.json().catch(() => ({
             message: "Failed to fetch reviews with status: " + response.status,
           }));
-          throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+          throw new Error(
+            errorData.message || `HTTP error! status: ${response.status}`
+          );
         }
         const reviewResponse = await response?.json(); // Renamed to avoid conflict
         console.log("Product review data:", reviewResponse?.data);
@@ -185,7 +212,10 @@
       }
 
       const totalReviews = reviewsArray.length;
-      const sumOfRatings = reviewsArray.reduce((sum, review) => sum + (review.rating || 0), 0);
+      const sumOfRatings = reviewsArray.reduce(
+        (sum, review) => sum + (review.rating || 0),
+        0
+      );
       const averageRating = totalReviews > 0 ? sumOfRatings / totalReviews : 0;
 
       const fullStars = Math.floor(averageRating);
@@ -233,7 +263,8 @@
 
       if (!reviewsArray || reviewsArray.length === 0) {
         if (showEmptyReviewsSetting) {
-          reviewListContainer.innerHTML = '<p class="no-reviews">Be the first to review this product!</p>';
+          reviewListContainer.innerHTML =
+            '<p class="no-reviews">Be the first to review this product!</p>';
         } else {
           reviewListContainer.innerHTML = "";
         }
@@ -249,17 +280,21 @@
           .fill(0)
           .map((_, i) => {
             const isFilled = i < review.rating;
-            return `<span class="star" style="color:${isFilled ? starColorFilled : starColorEmpty};">${
-              isFilled ? "&#9733;" : "&#9734;"
-            }</span>`;
+            return `<span class="star" style="color:${
+              isFilled ? starColorFilled : starColorEmpty
+            };">${isFilled ? "&#9733;" : "&#9734;"}</span>`;
           })
           .join("");
 
-        const reviewDate = review.reviewPlacedAt ? new Date(review.reviewPlacedAt).toLocaleDateString() : "N/A";
+        const reviewDate = review.reviewPlacedAt
+          ? new Date(review.reviewPlacedAt).toLocaleDateString()
+          : "N/A";
 
         reviewItem.innerHTML = `
               <div class="review-header">
-                <span class="reviewer-name">${escapeHTML(review.customerName || "Anonymous")}</span>
+                <span class="reviewer-name">${escapeHTML(
+                  review.customerName || "Anonymous"
+                )}</span>
                 <span class="review-date">${reviewDate}</span>
               </div>
               <div class="review-rating">${ratingStarsHTML}</div>
@@ -283,13 +318,16 @@
     if (productId && shopDomain) {
       fetchReviews();
     } else {
-      console.warn(`[Product Reviews App ${sectionId}]: Missing productId or shopDomain. Cannot fetch reviews.`);
+      console.warn(
+        `[Product Reviews App ${sectionId}]: Missing productId or shopDomain. Cannot fetch reviews.`
+      );
       if (reviewListContainer)
         reviewListContainer.innerHTML =
           '<p class="reviews-message">Configuration error (missing product/store data).</p>';
       if (reviewSummaryContainer)
         // Also handle summary container in case of config error
-        reviewSummaryContainer.innerHTML = "<p>Could not load review summary due to configuration error.</p>";
+        reviewSummaryContainer.innerHTML =
+          "<p>Could not load review summary due to configuration error.</p>";
       if (reviewsSpinner) reviewsSpinner.style.display = "none";
     }
   });
