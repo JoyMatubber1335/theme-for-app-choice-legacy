@@ -1,0 +1,15 @@
+<div>
+  <h1>Customer Service Management</h1>
+
+  <form id="support-form">
+    <div id="editor" style="height: 150px; border: 1px solid #ccc;"></div>
+    <input type="hidden" name="message" id="message">
+    
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="confirmation-message"></p>
+</div>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="{{ 'customer-service-management.js' | asset_url }}" defer></script>
