@@ -493,10 +493,10 @@
     },
     "recover_password": {
       "title": "Reset your password",
-      "subtext": "We will send you an email to reset your password.",
+      "subtext": "We will send you an OTP to reset your password.",
       "submit": "Submit",
       "cancel": "Cancel",
-      "success": "We've sent you an email with a link to update your password."
+      "success": "We've sent you an OTP to update your password."
     },
     "register": {
       "title": "Create account",
