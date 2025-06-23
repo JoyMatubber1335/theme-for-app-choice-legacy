@@ -64,9 +64,9 @@
         <span style="color:red">*</span>
       </label>
       <div class="input-with-icon-and-button">
+        <span class="input-icon">+880</span>
         <input
-          type="number"
-          min="11"
+          type="text"
           class="input w-full"
           id="register-phone"
           name="customer[phone]"
@@ -197,6 +197,32 @@
 
     submitButton.disabled = true; // initially disable external button
 
+    // Function to clean phone number (remove spaces and dashes) and ensure +880 prefix
+    function cleanPhoneNumber(phone) {
+      if (!phone || phone.trim() === '') {
+        return '';
+      }
+      
+      // Remove spaces and dashes
+      let cleanedPhone = phone.replace(/[\s-]/g, '');
+      
+      // Always prepend +880 to whatever the user typed
+      return '+880' + cleanedPhone;
+    }
+
+    // Function to validate phone number (user portion should be exactly 10 digits)
+    function validatePhoneNumber(phone) {
+      if (!phone || phone.trim() === '') {
+        return false;
+      }
+      
+      // Remove spaces and dashes
+      let cleanedPhone = phone.replace(/[\s-]/g, '');
+      
+      // Check if it's exactly 10 digits
+      return /^\d{10}$/.test(cleanedPhone);
+    }
+
     if (sendOtpButton && phoneInput && otpFieldContainer && otpInput) {
       sendOtpButton.addEventListener('click', async () => {
         const phoneNumber = phoneInput.value.trim();
@@ -205,6 +231,13 @@
           alert('Please enter a phone number first.');
           return;
         }
+
+        if (!validatePhoneNumber(phoneNumber)) {
+          alert('Please enter a valid 10-digit phone number.');
+          return;
+        }
+
+        const cleanedPhoneNumber = cleanPhoneNumber(phoneNumber);
 
         phoneInput.disabled = true;
         sendOtpButton.disabled = true;
@@ -218,7 +251,7 @@
           const response = await fetch(`${API_BASE_URL}/send-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: phoneNumber }),
+            body: JSON.stringify({ phone: cleanedPhoneNumber }),
           });
           const data = await response.json();
 
@@ -274,10 +307,15 @@
           return;
         }
 
+        if (!validatePhoneNumber(phoneInput.value.trim())) {
+          alert('Please enter a valid 10-digit phone number.');
+          return;
+        }
+
         const formData = {
           first_name: firstNameInput.value,
           last_name: lastNameInput.value,
-          phone: phoneInput.value,
+          phone: cleanPhoneNumber(phoneInput.value),
           email: emailInput.value,
           password: passwordInput.value,
         };
