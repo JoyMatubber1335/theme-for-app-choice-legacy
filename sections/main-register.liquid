@@ -82,6 +82,7 @@
         >
         <button type="button" id="send-otp-button" class="btn btn--secondary btn--small">Send OTP</button>
       </div>
+      <p id="otp-message-send-fail" class="form__field-message"></p>
       {%- if form.errors contains 'phone' -%}
         <p class="form__field-error" id="register-phone-error">
           {{ form.errors.translated_fields.phone | capitalize }}
@@ -187,6 +188,7 @@
     const otpFieldContainer = document.getElementById('otp-field-container');
     const otpInput = document.getElementById('register-otp');
     const otpMessage = document.getElementById('otp-message');
+    const otpMessageSendFail = document.getElementById('otp-message-send-fail');
     const submitButton = document.getElementById('register-submit-button');
     const API_BASE_URL = '/apps/generic-name/customer-account';
 
@@ -226,9 +228,16 @@
             sendOtpButton.textContent = 'Resend OTP';
             otpMessage.textContent = 'OTP was sent to your phone.';
             otpMessage.classList.add('text-success-text');
+            otpMessageSendFail.textContent = '';
+            otpMessageSendFail.classList.remove('text-error-text');
             if (data.code) correctOtpCode = String(data.code);
           } else {
-            alert(data.message || 'Failed to send OTP. Please try again.');
+            sendOtpButton.textContent = 'Send OTP';
+            otpMessageSendFail.textContent = data.message || 'Failed to send OTP. Please try again.';
+            otpMessageSendFail.classList.add('text-error-text');
+            phoneInput.disabled = false;
+            sendOtpButton.disabled = false;
+            sendOtpButton.textContent = 'Send OTP';
           }
         } catch (error) {
           alert('An error occurred while trying to send OTP.');

@@ -7,260 +7,30 @@
   "location": [],
   "market": [],
   "order": [],
-  "page": [],
-  "product": [
+  "page": [
     {
-      "key": "rating",
-      "namespace": "reviews",
-      "name": "Product rating",
-      "description": "Average rating from customers",
-      "type": {
-        "name": "rating",
-        "category": "RATING"
-      }
-    },
-    {
-      "key": "rating_count",
-      "namespace": "reviews",
-      "name": "Product rating count",
-      "description": "Total number of ratings from customers",
-      "type": {
-        "name": "number_integer",
-        "category": "NUMBER"
-      }
-    },
-    {
-      "key": "care_guide",
-      "namespace": "descriptors",
-      "name": "Care guide",
-      "description": "Instructions for taking care of a product or apparel",
-      "type": {
-        "name": "multi_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
-      "key": "material",
+      "key": "product_desctiption",
       "namespace": "custom",
-      "name": "Material",
-      "description": "Materials used in the product",
-      "type": {
-        "name": "multi_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
-      "key": "subtitle",
-      "namespace": "descriptors",
-      "name": "Product subtitle",
-      "description": "Used as a shorthand for a product name",
-      "type": {
-        "name": "single_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
-      "key": "productLabel",
-      "namespace": "product-label",
-      "name": "Product Label",
-      "description": null,
-      "type": {
-        "name": "multi_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
-      "key": "json-ld",
-      "namespace": "bs-23-seo-app",
-      "name": "SEO app metafield",
-      "description": "Metafield for generating json-ld for SEO",
-      "type": {
-        "name": "json",
-        "category": "JSON"
-      }
-    },
-    {
-      "key": "sleeve-length-type",
-      "namespace": "shopify",
-      "name": "Sleeve length type",
-      "description": "Specifies the style of sleeves on clothing items, such as short or sleeveless",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "meat-type",
-      "namespace": "shopify",
-      "name": "Meat type",
-      "description": "Identifies the source of meat items, e.g. plant-based, chicken",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "color-pattern",
-      "namespace": "shopify",
-      "name": "Color",
-      "description": "Defines the primary color or pattern, such as blue or striped",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "material",
-      "namespace": "shopify",
-      "name": "Material",
-      "description": "Defines a product's primary material, such as cotton or wool",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "food-product-form",
-      "namespace": "shopify",
-      "name": "Food product form",
-      "description": "Specifies the form in which the food product is presented, such as dried or frozen",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "allergen-information",
-      "namespace": "shopify",
-      "name": "Allergen information",
-      "description": "Indicates potential allergens present in food or beverages, such as wheat or peanuts",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "dietary-preferences",
-      "namespace": "shopify",
-      "name": "Dietary preferences",
-      "description": "Helps identify products suitable for specific diets, e.g. vegan, nut free",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "fabric",
-      "namespace": "shopify",
-      "name": "Fabric",
-      "description": "Identifies the type of fabric used in a product, for example, cotton or denim",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "age-group",
-      "namespace": "shopify",
-      "name": "Age group",
-      "description": "Defines the target age range for a product, such as adults or kids",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "target-gender",
-      "namespace": "shopify",
-      "name": "Target gender",
-      "description": "Identifies the intended gender for a product, such as female, male or unisex",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "care-instructions",
-      "namespace": "shopify",
-      "name": "Care instructions",
-      "description": "Provides guidance for product upkeep, such as hand wash or dry clean only",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "skirt-dress-length-type",
-      "namespace": "shopify",
-      "name": "Skirt/Dress length type",
-      "description": "Defines the length of skirts or dresses, such as mini or maxi",
-      "type": {
-        "name": "list.metaobject_reference",
-        "category": "REFERENCE"
-      }
-    },
-    {
-      "key": "movie",
-      "namespace": "custom",
-      "name": "Movie",
+      "name": "product desctiption",
       "description": "",
       "type": {
-        "name": "date_time",
-        "category": "DATE_TIME"
+        "name": "rich_text_field",
+        "category": "TEXT"
+      }
+    }
+  ],
+  "product": [
+    {
+      "key": "description",
+      "namespace": "custom",
+      "name": "description",
+      "description": "",
+      "type": {
+        "name": "rich_text_field",
+        "category": "TEXT"
       }
     }
   ],
   "variant": [],
-  "shop": [
-    {
-      "key": "database",
-      "namespace": "bs-23-mystery-box",
-      "name": "Mystery Box Database",
-      "description": "A custom JSON database for Mystery Box app",
-      "type": {
-        "name": "json",
-        "category": "JSON"
-      }
-    },
-    {
-      "key": "json-ld-saved-history",
-      "namespace": "bs-23-seo-app",
-      "name": "SEO app metafield",
-      "description": "Metafield to save code snippets of the original theme file before adding json-ld snippets",
-      "type": {
-        "name": "json",
-        "category": "JSON"
-      }
-    },
-    {
-      "key": "subscription_tier",
-      "namespace": "bs-23-mystery-box",
-      "name": "Mystery Box App subscription status",
-      "description": "A single line text depicting is the shop has subscribed to the app or not and the tier of subscription",
-      "type": {
-        "name": "single_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
-      "key": "image-optimizer",
-      "namespace": "bs-23-seo-app",
-      "name": "SEO app metafield",
-      "description": "Metafield for storing image optimizer settings",
-      "type": {
-        "name": "json",
-        "category": "JSON"
-      }
-    },
-    {
-      "key": "json-ld",
-      "namespace": "bs-23-seo-app",
-      "name": "SEO app metafield",
-      "description": "Metafield for generating json-ld for SEO",
-      "type": {
-        "name": "json",
-        "category": "JSON"
-      }
-    }
-  ]
+  "shop": []
 }
