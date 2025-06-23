@@ -82,5 +82,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Initial message history load
-  if (customerId) await loadMessages(customerId);
+  if (customerId) {
+    await loadMessages(customerId);
+
+    // Poll for new messages every 10 seconds
+    setInterval(() => {
+      loadMessages(customerId);
+    }, 10000);
+  }
 });
