@@ -196,10 +196,11 @@
         console.log('External login button clicked');
         const phone = phoneInput ? phoneInput.value.trim() : '';
           try {
-            const response = await fetch(`${API_BASE_URL}/login`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ phone: `+88${phone}` }),
+            const params = new URLSearchParams({
+              phone: `+88${phone}`
+            });
+            const response = await fetch(`${API_BASE_URL}/login?${params} `, {
+              method: 'GET',
             });
             const data = await response.json();
             if (!response.ok) {
