@@ -125,32 +125,38 @@ async function handleWishlistClick(button) {
 }
 
 async function addToWishlist(productData) {
-  const response = await fetch(`${wishlistConfig.apiUrl}/wishlist/add`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      ...productData,
-    }),
-  });
+  const response = await fetch(
+    `${wishlistConfig.apiUrl}/customer/wishlist/add`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...productData,
+      }),
+    }
+  );
 
   return await response.json();
 }
 
 async function removeFromWishlist(productId, variantId = null) {
-  const response = await fetch(`${wishlistConfig.apiUrl}/wishlist/remove`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      customerId: wishlistConfig.customerId,
-      shopDomain: wishlistConfig.shopDomain,
-      productId,
-      variantId,
-    }),
-  });
+  const response = await fetch(
+    `${wishlistConfig.apiUrl}/customer/wishlist/remove`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        customerId: wishlistConfig.customerId,
+        shopDomain: wishlistConfig.shopDomain,
+        productId,
+        variantId,
+      }),
+    }
+  );
 
   return await response.json();
 }
@@ -158,7 +164,7 @@ async function removeFromWishlist(productId, variantId = null) {
 async function loadWishlist() {
   console.log("Loading wishlist for customer:", window.customerId);
   try {
-    const response = await fetch(`${wishlistConfig.apiUrl}/wishlist`);
+    const response = await fetch(`${wishlistConfig.apiUrl}/customer/wishlist`);
     const data = await response.json();
 
     const loadingEl = document.getElementById("wishlist-loading");
@@ -186,7 +192,7 @@ async function loadWishlist() {
 async function isInWishlist(productId, variantId = null) {
   if (!wishlistConfig.customerId) return false;
 
-  const url = `${wishlistConfig.apiUrl}/wishlist/check/${
+  const url = `${wishlistConfig.apiUrl}/customer/wishlist/check/${
     wishlistConfig.customerId
   }/${wishlistConfig.shopDomain}/${productId}${
     variantId ? `?variantId=${variantId}` : ""
@@ -233,7 +239,7 @@ async function updateWishlistCount() {
 
   try {
     const response = await fetch(
-      `${wishlistConfig.apiUrl}/wishlist/count/${wishlistConfig.customerId}/${wishlistConfig.shopDomain}`
+      `${wishlistConfig.apiUrl}/customer/wishlist/count/${wishlistConfig.customerId}/${wishlistConfig.shopDomain}`
     );
     const result = await response.json();
 

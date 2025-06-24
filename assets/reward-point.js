@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const applyToCartButton = document.getElementById("applyToCartButton");
 
   const API_URLS = {
-    REDEEM: "/apps/generic-name/customer-reward-point-system/redeem",
-    HISTORY: "/apps/generic-name/customer-reward-point-system/get-history",
+    REDEEM: "/apps/generic-name/customer/reward-point-system/redeem",
+    HISTORY: "/apps/generic-name/customer/reward-point-system/get-history",
   };
 
   const apiCall = async (url, options = {}) => {

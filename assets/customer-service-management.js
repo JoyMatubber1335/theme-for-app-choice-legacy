@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const confirmation = document.getElementById("confirmation-message");
   const historyContainer = document.getElementById("message-history");
   const customerId = historyContainer?.dataset?.customerId;
-  const apiUrl = "/apps/choice-legacy-app/customer-service-management/message";
+  const apiUrl =
+    "/apps/generic-name/customer/customer-service-management/message";
 
   // Initialize Quill
   const quill = new Quill("#editor", { theme: "snow" });
