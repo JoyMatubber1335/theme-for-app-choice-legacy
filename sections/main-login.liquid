@@ -102,68 +102,68 @@
       <p>{{ 'customer.recover_password.subtext' | t }}</p>
     </div>
 
-      {%- assign recover_success = form.posted_successfully? -%}
+    {%- assign recover_success = form.posted_successfully? -%}
 
-      {%- if recover_success == true -%}
-        <div class="alert reading-width mb-8 mx-auto bg-success-bg text-success-text" tabindex="-1" autofocus>
-          {{ 'customer.recover_password.success' | t }}
-        </div>
-      {%- endif -%}
-
-      <div class="form__field required">
-        <label class="label" for="recover-phone">{{ 'customer.login.phone' | t }}</label>
-        <input
-          type="number"
-          class="input w-full"
-          id="recover-phone"
-          name="phone"
-          autocomplete="phone"
-          aria-required="true"
-          required
-        >
+    {%- if recover_success == true -%}
+      <div class="alert reading-width mb-8 mx-auto bg-success-bg text-success-text" tabindex="-1" autofocus>
+        {{ 'customer.recover_password.success' | t }}
       </div>
+    {%- endif -%}
 
-      <div class="form__field required js-otp-field" style="display: none;">
-        <label class="label" for="recover-otp">Enter OTP</label>
-        <input
-          type="text"
-          class="input w-full"
-          id="recover-otp"
-          name="otp"
-          maxlength="6"
-          autocomplete="one-time-code"
-          aria-required="true"
-          required
-        >
-      </div>
+    <div class="form__field required">
+      <label class="label" for="recover-phone">{{ 'customer.login.phone' | t }}</label>
+      <input
+        type="number"
+        class="input w-full"
+        id="recover-phone"
+        name="phone"
+        autocomplete="phone"
+        aria-required="true"
+        required
+      >
+    </div>
 
-      <div class="form__field required js-password-fields" style="display: none;">
-        <label class="label" for="new-password">New Password</label>
-        <input type="password" id="new-password" class="input w-full" name="new_password" required>
-      </div>
+    <div class="form__field required js-otp-field" style="display: none;">
+      <label class="label" for="recover-otp">Enter OTP</label>
+      <input
+        type="text"
+        class="input w-full"
+        id="recover-otp"
+        name="otp"
+        maxlength="6"
+        autocomplete="one-time-code"
+        aria-required="true"
+        required
+      >
+    </div>
 
-      <div class="form__field required js-password-fields" style="display: none;">
-        <label class="label" for="confirm-password">Confirm Password</label>
-        <input type="password" id="confirm-password" class="input w-full" name="confirm_password" required>
-      </div>
+    <div class="form__field required js-password-fields" style="display: none;">
+      <label class="label" for="new-password">New Password</label>
+      <input type="password" id="new-password" class="input w-full" name="new_password" required>
+    </div>
 
-      <div class="mt-6">
-        <button id="recover-submit-button" type="button" class="btn btn--primary w-full">
-          {{ 'customer.recover_password.submit' | t }}
-        </button>
-      </div>
+    <div class="form__field required js-password-fields" style="display: none;">
+      <label class="label" for="confirm-password">Confirm Password</label>
+      <input type="password" id="confirm-password" class="input w-full" name="confirm_password" required>
+    </div>
 
-      <div class="mt-4 js-verify-otp-wrapper" style="display: none;">
-        <button id="verify-otp-button" type="button" class="btn btn--primary w-full">Verify OTP</button>
-      </div>
+    <div class="mt-6">
+      <button id="recover-submit-button" type="button" class="btn btn--primary w-full">
+        {{ 'customer.recover_password.submit' | t }}
+      </button>
+    </div>
 
-      <div class="mt-4 js-password-fields" style="display: none;">
-        <button id="reset-password-button" type="button" class="btn btn--primary w-full">Reset Password</button>
-      </div>
+    <div class="mt-4 js-verify-otp-wrapper" style="display: none;">
+      <button id="verify-otp-button" type="button" class="btn btn--primary w-full">Verify OTP</button>
+    </div>
 
-      <p class="mt-8 text-center">
-        <a class="link js-login" href="#login">{{ 'customer.recover_password.cancel' | t }}</a>
-      </p>
+    <div class="mt-4 js-password-fields" style="display: none;">
+      <button id="reset-password-button" type="button" class="btn btn--primary w-full">Reset Password</button>
+    </div>
+
+    <p class="mt-8 text-center">
+      <a class="link js-login" href="#login">{{ 'customer.recover_password.cancel' | t }}</a>
+    </p>
   </div>
 
   {%- if shop.checkout.guest_login -%}
@@ -262,7 +262,7 @@
           const response = await fetch(`${API_BASE_URL}/send-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: cleanedPhoneNumber }),
+            body: JSON.stringify({ phone: cleanedPhoneNumber, register:false }),
           });
 
           const data = await response.json();
@@ -337,6 +337,7 @@
             body: JSON.stringify({
               phone: `+88${phone}`,
               password,
+             
             }),
           });
 
