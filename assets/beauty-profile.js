@@ -133,10 +133,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         payload.skinCare = {
           ageRange,
-          skinConcerns: answers[2] || [],
+          skinConcerns: answers[1] || [],
           currentSkinCareProducts: answers[3] || [],
           productTypePreference: answers[4] || [],
-          skinType: answers[5] || "",
+          skinType: answers[2] || "",
           skinIssueCondition: answers[5] || "",
           acneIrritation: answers[6] || "",
           acneType: answers[7] || "",
