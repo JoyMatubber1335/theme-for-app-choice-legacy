@@ -60,8 +60,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (tabs.length > 0) tabs[0].click();
 
-  // renderSkincare, renderGeneric etc. remain unchanged below this line
-
+  // --- renderSkincare function ---
   function renderSkincare(questions) {
     container.innerHTML = "";
     const form = document.createElement("form");
@@ -171,6 +170,15 @@ document.addEventListener("DOMContentLoaded", async function () {
               : input.value;
           handleConditionals();
 
+          // Show or hide file upload for face photo question (order 9)
+          if (q.order === 9) {
+            if (input.value === "yes" && input.checked) {
+              showFileInput(wrapper);
+            } else if (input.value === "no" && input.checked) {
+              removeFileInput(wrapper);
+            }
+          }
+
           if (opt.sub_category && input.checked) {
             showSubCategory(opt, wrapper, q.order);
           } else if (opt.sub_category) {
@@ -184,6 +192,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       form.appendChild(wrapper);
       renderedOrders.add(q.order);
+
+      // If face photo question was answered "yes" previously, show the file input on load
+      if (q.order === 9 && answers[9] === "yes") {
+        showFileInput(wrapper);
+      }
     };
 
     const showSubCategory = (opt, wrapper, order) => {
@@ -208,6 +221,31 @@ document.addEventListener("DOMContentLoaded", async function () {
     const removeSubCategory = (wrapper) => {
       const existing = wrapper.querySelector(".subcategory-block");
       if (existing) existing.remove();
+    };
+
+    const showFileInput = (wrapper) => {
+      removeFileInput(wrapper);
+      const fileInputWrapper = document.createElement("div");
+      fileInputWrapper.className = "file-input-wrapper";
+
+      const fileLabel = document.createElement("label");
+      fileLabel.textContent = "Upload your face photo:";
+      fileLabel.htmlFor = "face-photo-upload";
+
+      const fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.accept = "image/*";
+      fileInput.id = "face-photo-upload";
+      fileInput.name = "face_photo";
+
+      fileInputWrapper.appendChild(fileLabel);
+      fileInputWrapper.appendChild(fileInput);
+      wrapper.appendChild(fileInputWrapper);
+    };
+
+    const removeFileInput = (wrapper) => {
+      const existingInput = wrapper.querySelector(".file-input-wrapper");
+      if (existingInput) existingInput.remove();
     };
 
     const handleConditionals = () => {
@@ -270,12 +308,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     container.appendChild(form);
   }
 
+  // --- helper function to get checked values ---
   function getCheckedValues(form, name) {
     return Array.from(
       form.querySelectorAll(`input[name="${name}"]:checked`)
     ).map((input) => input.value);
   }
 
+  // --- renderGeneric function ---
   function renderGeneric(questions) {
     container.innerHTML = "";
     const form = document.createElement("form");
