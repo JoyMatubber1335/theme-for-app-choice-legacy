@@ -1,16 +1,31 @@
 <div id="beauty-profile">
   <h2>Beauty Profile</h2>
 
-  <div id="beauty-tabs">
-    <button data-type="skincare">Skin Care</button>
-    <button data-type="haircare">Hair Care</button>
-    <button data-type="makeup">Makeup</button>
+  <div>
+    <label for="customer-age">Enter your age:</label>
+    <input id="customer-age" type="number" />
   </div>
+
+  <div id="beauty-tabs"></div>
 
   <div id="questions-container">
     <p>Select a tab to load questions.</p>
   </div>
+
+  <!-- Add Save button here -->
+  <button id="save-answers" style="
+    display:none;
+    margin-top: 20px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  ">Save</button>
+
+  <div id="suggestion-output" style="margin-top: 1rem; font-weight: bold;"></div>
 </div>
 
 <script src="{{ 'beauty-profile.js' | asset_url }}" defer></script>
-

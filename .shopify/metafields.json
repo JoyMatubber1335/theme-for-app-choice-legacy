@@ -7,30 +7,59 @@
   "location": [],
   "market": [],
   "order": [],
-  "page": [
-    {
-      "key": "product_desctiption",
-      "namespace": "custom",
-      "name": "product desctiption",
-      "description": "",
-      "type": {
-        "name": "rich_text_field",
-        "category": "TEXT"
-      }
-    }
-  ],
-  "product": [
-    {
-      "key": "description",
-      "namespace": "custom",
-      "name": "description",
-      "description": "",
-      "type": {
-        "name": "rich_text_field",
-        "category": "TEXT"
-      }
-    }
-  ],
+  "page": [],
+  "product": [],
   "variant": [],
-  "shop": []
+  "shop": [
+    {
+      "key": "database",
+      "namespace": "bs-23-mystery-box",
+      "name": "Mystery Box Database",
+      "description": "A custom JSON database for Mystery Box app",
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "json-ld-saved-history",
+      "namespace": "bs-23-seo-app",
+      "name": "SEO app metafield",
+      "description": "Metafield to save code snippets of the original theme file before adding json-ld snippets",
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "subscription_tier",
+      "namespace": "bs-23-mystery-box",
+      "name": "Mystery Box App subscription status",
+      "description": "A single line text depicting is the shop has subscribed to the app or not and the tier of subscription",
+      "type": {
+        "name": "single_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "image-optimizer",
+      "namespace": "bs-23-seo-app",
+      "name": "SEO app metafield",
+      "description": "Metafield for storing image optimizer settings",
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "json-ld",
+      "namespace": "bs-23-seo-app",
+      "name": "SEO app metafield",
+      "description": "Metafield for generating json-ld for SEO",
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    }
+  ]
 }
