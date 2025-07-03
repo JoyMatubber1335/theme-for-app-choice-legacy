@@ -86,6 +86,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
       }
 
+      // Update conditional questions display
+      handleConditionals();
+
       const val5 = answers[5];
       const val6 = answers[6];
 
@@ -168,6 +171,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             input.type === "checkbox"
               ? getCheckedValues(form, q._id)
               : input.value;
+
           handleConditionals();
 
           // Show or hide file upload for face photo question (order 9)
@@ -258,14 +262,15 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
       });
 
-      suggestionBlock.innerHTML = "";
+      // Removed clearing suggestionBlock here to keep last suggestion until save click
+      // suggestionBlock.innerHTML = "";  <-- removed
 
       const q5Val = answers[5];
       const q6Val = answers[6];
       const getQ = (order) => questions.find((q) => q.order === order);
 
       if (q5Val === "neither_acne_allergy") {
-        showSuggestion("Suggested products");
+        // No suggestion shown here
         return;
       }
 
@@ -276,8 +281,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           const q = getQ(order);
           if (q) renderQuestion(q);
         });
-        showSuggestion("No suggestion");
-        return;
+        return; // no suggestion here
       }
 
       if (q5Val === "only_acne" || q5Val === "both_acne_allergy") {
@@ -289,13 +293,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             const q = getQ(order);
             if (q) renderQuestion(q);
           });
-          showSuggestion("No suggestion");
+          return; // no suggestion here
         } else if (q6Val === "no_itch_pain") {
           [7, 8, 9, 10, 11].forEach((order) => {
             const q = getQ(order);
             if (q) renderQuestion(q);
           });
-          showSuggestion("Suggested products");
+          return; // no suggestion here
         }
       }
     };
