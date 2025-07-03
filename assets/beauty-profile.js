@@ -2,6 +2,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   const container = document.getElementById("questions-container");
   const tabsWrapper = document.getElementById("beauty-tabs");
   const apiURL = "/apps/choice-legacy-app/customer/beauty-profile";
+  const ageInput = document.getElementById("customer-age");
+  let activeTab = null;
+  const tabAnswers = {
+    skincare: {},
+    haircare: {},
+    makeup: {},
+  };
 
   const skippedOrders = [6, 7, 8, 9, 10, 11];
   let allQuestions = [];
@@ -39,13 +46,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   tabs.forEach((button) => {
     button.addEventListener("click", () => {
-      const type = button.getAttribute("data-type");
+      activeTab = button.getAttribute("data-type");
       container.innerHTML = "<p>Loading...</p>";
 
-      const filteredQuestions = allQuestions.filter((q) => q.key === type);
+      const filteredQuestions = allQuestions.filter((q) => q.key === activeTab);
 
       if (filteredQuestions.length > 0) {
-        if (type === "skincare") {
+        if (activeTab === "skincare") {
           renderSkincare(filteredQuestions);
         } else {
           renderGeneric(filteredQuestions);
@@ -65,7 +72,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     container.innerHTML = "";
     const form = document.createElement("form");
     form.id = "skincare-form";
-    const answers = {};
+
+    // Fix here: assign answers to tabAnswers.skincare to sync with validation
+    const answers = (tabAnswers.skincare = {});
     const renderedOrders = new Set();
     const suggestionBlock = document.getElementById("suggestion-output");
     suggestionBlock.innerHTML = "";
@@ -73,49 +82,118 @@ document.addEventListener("DOMContentLoaded", async function () {
     const saveButton = document.getElementById("save-answers");
     saveButton.style.display = "inline-block";
 
-    saveButton.onclick = () => {
-      const requiredQuestions = questions.filter(
-        (q) => q.isRequired && renderedOrders.has(q.order)
+    saveButton.onclick = async () => {
+      const ageValue = ageInput.value.trim();
+      if (!ageValue) {
+        alert("Please enter your age.");
+        return;
+      }
+
+      const requiredQuestions = allQuestions.filter(
+        (q) => q.isRequired && activeTab === q.key
       );
 
+      const answers = tabAnswers[activeTab] || {};
+
       for (const q of requiredQuestions) {
-        const val = answers[q.order];
+        // For skincare questions, answers use q.order as key
+        const key = activeTab === "skincare" ? q.order : q._id;
+        const val = answers[key];
         if (!val || (Array.isArray(val) && val.length === 0)) {
           alert(`Please answer: ${q.title}`);
           return;
         }
       }
 
-      // Update conditional questions display
-      handleConditionals();
+      if (activeTab === "skincare") {
+        const val5 = answers[5];
+        const val6 = answers[6];
 
-      const val5 = answers[5];
-      const val6 = answers[6];
-
-      if (val5 === "neither_acne_allergy") {
-        showSuggestion("Suggested products");
-        return;
-      }
-
-      if (val5 === "only_allergy") {
-        showSuggestion("No suggestion");
-        return;
-      }
-
-      if (val5 === "only_acne" || val5 === "both_acne_allergy") {
-        if (val6 === "no_itch_pain") {
-          showSuggestion("Suggested products");
-        } else {
-          showSuggestion("No suggestion");
+        let suggestion = "Suggested products";
+        if (val5 === "only_allergy") {
+          suggestion = "No suggestion";
+        } else if (
+          (val5 === "only_acne" || val5 === "both_acne_allergy") &&
+          val6 !== "no_itch_pain"
+        ) {
+          suggestion = "No suggestion";
         }
-        return;
+
+        suggestionBlock.innerHTML = `<p><strong>${suggestion}</strong></p>`;
+      } else {
+        suggestionBlock.innerHTML = "";
       }
 
-      showSuggestion("Suggested products"); // fallback
-    };
+      const payload = {
+        customerAge: Number(ageValue),
+      };
 
-    const showSuggestion = (text) => {
-      suggestionBlock.innerHTML = `<p><strong>${text}</strong></p>`;
+      if (activeTab === "skincare") {
+        const ageRange = getAgeRange(Number(ageValue)); // 👈 maps age to text range
+
+        payload.skinCare = {
+          ageRange,
+          skinConcerns: answers[2] || [],
+          currentSkinCareProducts: answers[3] || [],
+          productTypePreference: answers[4] || [],
+          skinType: answers[5] || "",
+          skinIssueCondition: answers[5] || "",
+          acneIrritation: answers[6] || "",
+          acneType: answers[7] || "",
+          usedWhiteningProduct: answers[8] || "",
+          faceImageUploaded: answers[9] === "yes",
+          isCompleted: true,
+        };
+      }
+
+      if (
+        activeTab === "haircare" &&
+        tabAnswers.haircare &&
+        Object.keys(tabAnswers.haircare).length > 0
+      ) {
+        payload.hairCare = {
+          concern: tabAnswers.haircare.concern || "",
+          isCompleted: true,
+        };
+      }
+
+      if (
+        activeTab === "makeup" &&
+        tabAnswers.makeup &&
+        Object.keys(tabAnswers.makeup).length > 0
+      ) {
+        const skinToneType = tabAnswers.makeup["skinTone.type"];
+        const skinToneGroup = tabAnswers.makeup["skinTone.group"];
+        payload.makeup = {
+          categories: tabAnswers.makeup.categories || "",
+          subCategories: tabAnswers.makeup.subCategories || "",
+          skinType: tabAnswers.makeup.skinType || "",
+          skinTone: {
+            type: skinToneType || "",
+            group: skinToneGroup || "",
+          },
+          skinUnderTone: tabAnswers.makeup.skinUnderTone || "",
+          isCompleted: true,
+        };
+      }
+
+      try {
+        const res = await fetch(`${apiURL}/create`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.message || "Submission failed");
+
+        alert("Profile submitted successfully!");
+      } catch (err) {
+        console.error(err);
+        alert("Failed to submit profile.");
+      }
     };
 
     const renderQuestion = (q) => {
@@ -174,7 +252,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
           handleConditionals();
 
-          // Show or hide file upload for face photo question (order 9)
           if (q.order === 9) {
             if (input.value === "yes" && input.checked) {
               showFileInput(wrapper);
@@ -197,7 +274,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       form.appendChild(wrapper);
       renderedOrders.add(q.order);
 
-      // If face photo question was answered "yes" previously, show the file input on load
       if (q.order === 9 && answers[9] === "yes") {
         showFileInput(wrapper);
       }
@@ -253,7 +329,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
 
     const handleConditionals = () => {
-      // Clear skipped orders
       skippedOrders.forEach((order) => {
         const el = form.querySelector(`.question-block[data-order='${order}']`);
         if (el) {
@@ -262,26 +337,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
       });
 
-      // Removed clearing suggestionBlock here to keep last suggestion until save click
-      // suggestionBlock.innerHTML = "";  <-- removed
-
       const q5Val = answers[5];
       const q6Val = answers[6];
       const getQ = (order) => questions.find((q) => q.order === order);
 
       if (q5Val === "neither_acne_allergy") {
-        // No suggestion shown here
         return;
       }
 
       if (q5Val === "only_allergy") {
-        // Skip Q6
-        // Show Q7–11
         [7, 8, 9, 10, 11].forEach((order) => {
           const q = getQ(order);
           if (q) renderQuestion(q);
         });
-        return; // no suggestion here
+        return;
       }
 
       if (q5Val === "only_acne" || q5Val === "both_acne_allergy") {
@@ -293,13 +362,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             const q = getQ(order);
             if (q) renderQuestion(q);
           });
-          return; // no suggestion here
+          return;
         } else if (q6Val === "no_itch_pain") {
           [7, 8, 9, 10, 11].forEach((order) => {
             const q = getQ(order);
             if (q) renderQuestion(q);
           });
-          return; // no suggestion here
+          return;
         }
       }
     };
@@ -317,6 +386,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     return Array.from(
       form.querySelectorAll(`input[name="${name}"]:checked`)
     ).map((input) => input.value);
+  }
+
+  function getAgeRange(age) {
+    if (age >= 0 && age <= 0.5) return "Newborn – 6 months";
+    if (age > 0.5 && age <= 9) return "6 months- 9 years";
+    if (age >= 10 && age <= 17) return "10–17 years";
+    if (age >= 18 && age <= 25) return "18–25 years";
+    return "25+ years";
   }
 
   // --- renderGeneric function ---
