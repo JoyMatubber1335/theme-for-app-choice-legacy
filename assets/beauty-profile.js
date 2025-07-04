@@ -419,11 +419,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         input.value = opt.value;
         input.className = "group1-option";
 
-        // Preselect based on existing answers
+        // Preselect checkboxes - only if the saved value is actually from the first group
         if (
           answers[q.order] &&
           Array.isArray(answers[q.order]) &&
-          answers[q.order].includes(opt.value)
+          answers[q.order].includes(opt.value) &&
+          firstGroup.some((option) => option.value === opt.value)
         ) {
           input.checked = true;
         }
@@ -446,12 +447,22 @@ document.addEventListener("DOMContentLoaded", async function () {
         input.value = opt.value;
         input.className = "group2-option";
 
-        // Preselect based on existing answers
-        if (
-          answers[q.order] &&
-          !Array.isArray(answers[q.order]) &&
-          answers[q.order] === opt.value
-        ) {
+        // Preselect radio button - handle both string and array cases
+        let shouldCheck = false;
+
+        if (answers[q.order]) {
+          if (Array.isArray(answers[q.order])) {
+            // If it's an array, check if this option is in the array AND belongs to second group
+            shouldCheck =
+              answers[q.order].includes(opt.value) &&
+              secondGroup.some((option) => option.value === opt.value);
+          } else {
+            // If it's a string, check direct match
+            shouldCheck = answers[q.order] === opt.value;
+          }
+        }
+
+        if (shouldCheck) {
           input.checked = true;
         }
 
@@ -509,7 +520,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
       });
 
-      // Set initial state based on preloaded data
+      // FIXED: Set initial state based on preloaded data
       const anyGroup1Selected = Array.from(group1Inputs).some(
         (inp) => inp.checked
       );
