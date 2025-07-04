@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async function () {
+  const apiURL = "/apps/choice-legacy-app/customer/beauty-profile";
   const container = document.getElementById("questions-container");
   const tabsWrapper = document.getElementById("beauty-tabs");
-  const apiURL = "/apps/choice-legacy-app/customer/beauty-profile";
   const ageInput = document.getElementById("customer-age");
   let activeTab = null;
   const tabAnswers = {
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     haircare: {},
     makeup: {},
   };
-
+  let preloadedProfile = null;
   const skippedOrders = [6, 7, 8, 9, 10, 11];
   let allQuestions = [];
   let productTypes = [];
@@ -32,6 +32,90 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.error("Error fetching questions:", error);
     container.innerHTML = "<p>Failed to load questions.</p>";
     return;
+  }
+
+  try {
+    const profileRes = await fetch(`${apiURL}`);
+    const profileData = await profileRes.json();
+    if (profileData.success && profileData.data) {
+      preloadedProfile = profileData.data;
+
+      // Pre-fill age
+      if (preloadedProfile.customerAge) {
+        ageInput.value = preloadedProfile.customerAge;
+      }
+
+      // Pre-fill skincare answers
+      if (preloadedProfile.skinCare) {
+        const s = preloadedProfile.skinCare;
+        tabAnswers.skincare = {
+          1: s.skinConcerns || [],
+          2: s.skinType || "",
+          3: s.currentSkinCareProducts || [],
+          4: s.productTypePreference || [],
+          5: s.skinIssueCondition || "",
+          6: s.acneIrritation || "",
+          7: s.acneType || "",
+          8: s.usedWhiteningProduct || "",
+          9: s.faceImageUploaded ? "yes" : "no",
+          10: "", // optional if no value
+          11: "", // optional if no value
+        };
+      }
+
+      // Pre-fill haircare answers
+      if (preloadedProfile.hairCare) {
+        const h = preloadedProfile.hairCare;
+        const hairQuestions = allQuestions.filter((q) => q.key === "haircare");
+        const hairConcernQ = hairQuestions.find(
+          (q) =>
+            q.title.toLowerCase().includes("hair concern") ||
+            q.title.toLowerCase().includes("concern")
+        );
+        if (hairConcernQ) {
+          // Handle both array and string formats
+          tabAnswers.haircare[hairConcernQ._id] = Array.isArray(h.concern)
+            ? h.concern
+            : [h.concern];
+        }
+      }
+
+      // Pre-fill makeup answers
+      if (preloadedProfile.makeup) {
+        const m = preloadedProfile.makeup;
+        const makeupQuestions = allQuestions.filter((q) => q.key === "makeup");
+        const catQ = makeupQuestions.find(
+          (q) =>
+            q.title.toLowerCase().includes("makeup category") ||
+            q.title.toLowerCase().includes("category")
+        );
+        const skinTypeQ = makeupQuestions.find((q) =>
+          q.title.toLowerCase().includes("skin type")
+        );
+        const skinToneQ = makeupQuestions.find((q) =>
+          q.title.toLowerCase().includes("skin tone")
+        );
+        const undertoneQ = makeupQuestions.find((q) =>
+          q.title.toLowerCase().includes("undertone")
+        );
+
+        if (catQ) {
+          tabAnswers.makeup[catQ._id] = m.categories || "";
+          tabAnswers.makeup[`sub_${catQ._id}`] = m.subCategories || [];
+        }
+        if (skinTypeQ) {
+          tabAnswers.makeup[skinTypeQ._id] = m.skinType || "";
+        }
+        if (skinToneQ) {
+          tabAnswers.makeup[skinToneQ._id] = m.skinTone?.type || "";
+        }
+        if (undertoneQ) {
+          tabAnswers.makeup[undertoneQ._id] = m.skinUnderTone || "";
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error fetching profile on load:", err);
   }
 
   tabsWrapper.innerHTML = "";
@@ -75,8 +159,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     const form = document.createElement("form");
     form.id = "skincare-form";
 
-    // Fix here: assign answers to tabAnswers.skincare to sync with validation
-    const answers = (tabAnswers.skincare = {});
+    // Use existing answers or initialize empty
+    const answers = tabAnswers.skincare || {};
+    tabAnswers.skincare = answers;
+
     const renderedOrders = new Set();
     const suggestionBlock = document.getElementById("suggestion-output");
     suggestionBlock.innerHTML = "";
@@ -98,7 +184,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       const answers = tabAnswers[activeTab] || {};
 
       for (const q of requiredQuestions) {
-        // For skincare questions, answers use q.order as key
         const key = activeTab === "skincare" ? q.order : q._id;
         const val = answers[key];
         if (!val || (Array.isArray(val) && val.length === 0)) {
@@ -151,12 +236,14 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (activeTab === "haircare") {
         const ageRange = getAgeRange(Number(ageValue));
         const hairQuestions = allQuestions.filter((q) => q.key === "haircare");
-        const hairConcernQuestion = hairQuestions.find((q) =>
-          q.title.includes("hair concern")
+        const hairConcernQuestion = hairQuestions.find(
+          (q) =>
+            q.title.toLowerCase().includes("hair concern") ||
+            q.title.toLowerCase().includes("concern")
         );
 
         payload.hairCare = {
-          concern: tabAnswers.haircare[hairConcernQuestion?._id] || "",
+          concern: tabAnswers.haircare[hairConcernQuestion?._id] || [],
           ageRange: ageRange,
           isCompleted: true,
         };
@@ -166,28 +253,28 @@ document.addEventListener("DOMContentLoaded", async function () {
         const makeupAnswers = tabAnswers.makeup;
         const makeupQuestions = allQuestions.filter((q) => q.key === "makeup");
 
-        // Find the questions by their content
-        const categoryQuestion = makeupQuestions.find((q) =>
-          q.title.includes("makeup category")
+        const categoryQuestion = makeupQuestions.find(
+          (q) =>
+            q.title.toLowerCase().includes("makeup category") ||
+            q.title.toLowerCase().includes("category")
         );
         const skinTypeQuestion = makeupQuestions.find((q) =>
-          q.title.includes("skin type")
+          q.title.toLowerCase().includes("skin type")
         );
         const skinToneQuestion = makeupQuestions.find((q) =>
-          q.title.includes("skin tone")
+          q.title.toLowerCase().includes("skin tone")
         );
         const skinUndertoneQuestion = makeupQuestions.find((q) =>
-          q.title.includes("undertone")
+          q.title.toLowerCase().includes("undertone")
         );
 
-        // Get the selected skin tone option to extract the group
         const selectedSkinTone = skinToneQuestion?.options.find(
           (opt) => opt.value === makeupAnswers[skinToneQuestion?._id]
         );
 
         payload.makeup = {
           categories: makeupAnswers[categoryQuestion?._id] || "",
-          subCategories: makeupAnswers[`sub_${categoryQuestion?._id}`] || "",
+          subCategories: makeupAnswers[`sub_${categoryQuestion?._id}`] || [],
           skinType: makeupAnswers[skinTypeQuestion?._id] || "",
           skinTone: {
             type: makeupAnswers[skinToneQuestion?._id] || "",
@@ -229,11 +316,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       }`;
       wrapper.appendChild(title);
 
-      // Special handling for question order 4 (skincare product preference)
       if (q.order === 4) {
         renderGroupedQuestion4(q, wrapper, answers);
       } else {
-        // Regular rendering for other questions
         q.options.forEach((opt) => {
           const label = document.createElement("label");
           const input = document.createElement("input");
@@ -242,6 +327,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           input.name = q._id;
           input.value = opt.value;
 
+          // Preselect based on existing answers
           if (answers[q.order]) {
             if (input.type === "checkbox") {
               if (
@@ -271,10 +357,15 @@ document.addEventListener("DOMContentLoaded", async function () {
           }
 
           input.addEventListener("change", () => {
-            answers[q.order] =
-              input.type === "checkbox"
-                ? getCheckedValues(form, q._id)
-                : input.value;
+            if (q.order === 3) {
+              // For question 3, combine checkbox values with text field value
+              updateQuestion3Answers(wrapper, answers, q);
+            } else {
+              answers[q.order] =
+                input.type === "checkbox"
+                  ? getCheckedValues(form, q._id)
+                  : input.value;
+            }
 
             handleConditionals();
 
@@ -301,17 +392,20 @@ document.addEventListener("DOMContentLoaded", async function () {
       form.appendChild(wrapper);
       renderedOrders.add(q.order);
 
+      // Add text field for question 3 (current skincare products)
+      if (q.order === 3) {
+        addTextFieldForQuestion3(wrapper, answers, q);
+      }
+
       if (q.order === 9 && answers[9] === "yes") {
         showFileInput(wrapper);
       }
     };
 
-    // New function to render grouped question 4
     const renderGroupedQuestion4 = (q, wrapper, answers) => {
-      const firstGroup = q.options.slice(0, 8); // First 8 options
-      const secondGroup = q.options.slice(8); // Last 2 options
+      const firstGroup = q.options.slice(0, 8);
+      const secondGroup = q.options.slice(8);
 
-      // Create first group (multi-select)
       const firstGroupDiv = document.createElement("div");
       firstGroupDiv.className = "question-group";
       firstGroupDiv.innerHTML =
@@ -325,7 +419,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         input.value = opt.value;
         input.className = "group1-option";
 
-        // Check if this option is selected
+        // Preselect based on existing answers
         if (
           answers[q.order] &&
           Array.isArray(answers[q.order]) &&
@@ -340,7 +434,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         firstGroupDiv.appendChild(document.createElement("br"));
       });
 
-      // Create second group (radio)
       const secondGroupDiv = document.createElement("div");
       secondGroupDiv.className = "question-group";
       secondGroupDiv.innerHTML = "<p><strong>Or choose a routine:</strong></p>";
@@ -353,7 +446,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         input.value = opt.value;
         input.className = "group2-option";
 
-        // Check if this option is selected
+        // Preselect based on existing answers
         if (
           answers[q.order] &&
           !Array.isArray(answers[q.order]) &&
@@ -371,20 +464,17 @@ document.addEventListener("DOMContentLoaded", async function () {
       wrapper.appendChild(firstGroupDiv);
       wrapper.appendChild(secondGroupDiv);
 
-      // Add event listeners for group interactions
       const group1Inputs = wrapper.querySelectorAll(".group1-option");
       const group2Inputs = wrapper.querySelectorAll(".group2-option");
 
       group1Inputs.forEach((input) => {
         input.addEventListener("change", () => {
           if (input.checked) {
-            // If any from group 1 is selected, disable group 2
             group2Inputs.forEach((g2Input) => {
               g2Input.checked = false;
               g2Input.disabled = true;
             });
           } else {
-            // If no group 1 options are selected, enable group 2
             const anyGroup1Selected = Array.from(group1Inputs).some(
               (inp) => inp.checked
             );
@@ -394,8 +484,6 @@ document.addEventListener("DOMContentLoaded", async function () {
               });
             }
           }
-
-          // Update answers
           updateQuestion4Answers(wrapper, answers, q.order);
         });
       });
@@ -403,13 +491,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       group2Inputs.forEach((input) => {
         input.addEventListener("change", () => {
           if (input.checked) {
-            // If any from group 2 is selected, disable group 1
             group1Inputs.forEach((g1Input) => {
               g1Input.checked = false;
               g1Input.disabled = true;
             });
           } else {
-            // If no group 2 options are selected, enable group 1
             const anyGroup2Selected = Array.from(group2Inputs).some(
               (inp) => inp.checked
             );
@@ -419,13 +505,11 @@ document.addEventListener("DOMContentLoaded", async function () {
               });
             }
           }
-
-          // Update answers
           updateQuestion4Answers(wrapper, answers, q.order);
         });
       });
 
-      // Initial state check
+      // Set initial state based on preloaded data
       const anyGroup1Selected = Array.from(group1Inputs).some(
         (inp) => inp.checked
       );
@@ -444,21 +528,75 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     };
 
-    // Function to update answers for question 4
     const updateQuestion4Answers = (wrapper, answers, order) => {
       const group1Inputs = wrapper.querySelectorAll(".group1-option:checked");
       const group2Inputs = wrapper.querySelectorAll(".group2-option:checked");
 
       if (group1Inputs.length > 0) {
-        // Store as array for group 1 (multi-select)
         answers[order] = Array.from(group1Inputs).map((inp) => inp.value);
       } else if (group2Inputs.length > 0) {
-        // Store as single value for group 2 (radio)
         answers[order] = group2Inputs[0].value;
       } else {
-        // No selection
         answers[order] = [];
       }
+    };
+
+    const addTextFieldForQuestion3 = (wrapper, answers, q) => {
+      const textFieldWrapper = document.createElement("div");
+      textFieldWrapper.className = "text-field-wrapper";
+      textFieldWrapper.style.marginTop = "10px";
+
+      const textLabel = document.createElement("label");
+      textLabel.textContent = "Other products (please specify):";
+      textLabel.style.fontWeight = "bold";
+      textLabel.style.display = "block";
+      textLabel.style.marginBottom = "5px";
+
+      const textInput = document.createElement("input");
+      textInput.type = "text";
+      textInput.name = `${q._id}_other`;
+      textInput.placeholder = "Enter other skincare products...";
+      textInput.style.width = "100%";
+      textInput.style.padding = "8px";
+      textInput.style.border = "1px solid #ccc";
+      textInput.style.borderRadius = "4px";
+
+      // Pre-fill text field if there are custom values in answers
+      if (answers[q.order] && Array.isArray(answers[q.order])) {
+        const customValues = answers[q.order].filter((val) => {
+          return !q.options.some((opt) => opt.value === val);
+        });
+        if (customValues.length > 0) {
+          textInput.value = customValues.join(", ");
+        }
+      }
+
+      textInput.addEventListener("input", () => {
+        updateQuestion3Answers(wrapper, answers, q);
+      });
+
+      textFieldWrapper.appendChild(textLabel);
+      textFieldWrapper.appendChild(textInput);
+      wrapper.appendChild(textFieldWrapper);
+    };
+
+    const updateQuestion3Answers = (wrapper, answers, q) => {
+      const checkboxValues = getCheckedValues(wrapper, q._id);
+      const textInput = wrapper.querySelector(`input[name="${q._id}_other"]`);
+      const textValue = textInput ? textInput.value.trim() : "";
+
+      let combinedValues = [...checkboxValues];
+
+      if (textValue) {
+        // Split by comma and clean up each value
+        const textValues = textValue
+          .split(",")
+          .map((val) => val.trim())
+          .filter((val) => val);
+        combinedValues = combinedValues.concat(textValues);
+      }
+
+      answers[q.order] = combinedValues;
     };
 
     const showSubCategory = (opt, wrapper, order) => {
@@ -560,10 +698,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       .sort((a, b) => a.order - b.order)
       .forEach((q) => renderQuestion(q));
 
+    // Handle conditional questions based on preloaded data
+    handleConditionals();
+
     container.appendChild(form);
   }
 
-  // --- helper function to get checked values ---
   function getCheckedValues(form, name) {
     return Array.from(
       form.querySelectorAll(`input[name="${name}"]:checked`)
@@ -578,13 +718,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     return "25+ years";
   }
 
-  // --- renderGeneric function ---
   function renderGeneric(questions) {
     container.innerHTML = "";
     const form = document.createElement("form");
 
-    // Initialize answers for the current tab
-    const answers = (tabAnswers[activeTab] = {});
+    // Use existing answers or initialize empty
+    const answers = tabAnswers[activeTab] || {};
+    tabAnswers[activeTab] = answers;
 
     questions.forEach((q) => {
       const wrapper = document.createElement("div");
@@ -604,6 +744,22 @@ document.addEventListener("DOMContentLoaded", async function () {
         input.name = q._id;
         input.value = opt.value;
 
+        // Preselect based on existing answers
+        if (answers[q._id]) {
+          if (input.type === "checkbox") {
+            if (
+              Array.isArray(answers[q._id]) &&
+              answers[q._id].includes(opt.value)
+            ) {
+              input.checked = true;
+            }
+          } else {
+            if (answers[q._id] === opt.value) {
+              input.checked = true;
+            }
+          }
+        }
+
         if (q.type === "picture_choice") {
           const img = document.createElement("img");
           img.src = opt.imageUrl;
@@ -618,7 +774,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         input.addEventListener("change", () => {
-          // Store answer using question ID as key
           answers[q._id] =
             input.type === "checkbox"
               ? getCheckedValues(form, q._id)
@@ -635,11 +790,41 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
 
       form.appendChild(wrapper);
+
+      // Handle preloaded subcategories
+      if (answers[`sub_${q._id}`] && Array.isArray(answers[`sub_${q._id}`])) {
+        const selectedOption = q.options.find((opt) => {
+          if (q.type === "multi_choice") {
+            return (
+              Array.isArray(answers[q._id]) &&
+              answers[q._id].includes(opt.value)
+            );
+          } else {
+            return answers[q._id] === opt.value;
+          }
+        });
+
+        if (selectedOption && selectedOption.sub_category) {
+          showSubCategory(selectedOption, wrapper, q._id);
+          // Preselect subcategory options
+          setTimeout(() => {
+            const subInputs = wrapper.querySelectorAll(
+              `input[name="sub_${q._id}"]`
+            );
+            subInputs.forEach((subInput) => {
+              if (answers[`sub_${q._id}`].includes(subInput.value)) {
+                subInput.checked = true;
+              }
+            });
+          }, 0);
+        }
+      }
     });
 
     container.appendChild(form);
 
     function showSubCategory(opt, wrapper, name) {
+      removeSubCategory(wrapper);
       const subWrapper = document.createElement("div");
       subWrapper.className = "subcategory-block";
       opt.sub_category.forEach((sub) => {
@@ -650,7 +835,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         subInput.value = sub.value;
 
         subInput.addEventListener("change", () => {
-          // Store subcategory answers
           answers[`sub_${name}`] = getCheckedValues(form, `sub_${name}`);
         });
 
