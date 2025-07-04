@@ -56,7 +56,9 @@ document.addEventListener("DOMContentLoaded", async function () {
           renderSkincare(filteredQuestions);
         } else {
           renderGeneric(filteredQuestions);
-          document.getElementById("save-answers").style.display = "none";
+          // Show save button for haircare and makeup
+          document.getElementById("save-answers").style.display =
+            "inline-block";
         }
       } else {
         container.innerHTML = "<p>No questions available.</p>";
@@ -129,7 +131,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       };
 
       if (activeTab === "skincare") {
-        const ageRange = getAgeRange(Number(ageValue)); // 👈 maps age to text range
+        const ageRange = getAgeRange(Number(ageValue));
 
         payload.skinCare = {
           ageRange,
@@ -146,33 +148,52 @@ document.addEventListener("DOMContentLoaded", async function () {
         };
       }
 
-      if (
-        activeTab === "haircare" &&
-        tabAnswers.haircare &&
-        Object.keys(tabAnswers.haircare).length > 0
-      ) {
+      if (activeTab === "haircare") {
+        const ageRange = getAgeRange(Number(ageValue));
+        const hairQuestions = allQuestions.filter((q) => q.key === "haircare");
+        const hairConcernQuestion = hairQuestions.find((q) =>
+          q.title.includes("hair concern")
+        );
+
         payload.hairCare = {
-          concern: tabAnswers.haircare.concern || "",
+          concern: tabAnswers.haircare[hairConcernQuestion?._id] || "",
+          ageRange: ageRange,
           isCompleted: true,
         };
       }
 
-      if (
-        activeTab === "makeup" &&
-        tabAnswers.makeup &&
-        Object.keys(tabAnswers.makeup).length > 0
-      ) {
-        const skinToneType = tabAnswers.makeup["skinTone.type"];
-        const skinToneGroup = tabAnswers.makeup["skinTone.group"];
+      if (activeTab === "makeup") {
+        const makeupAnswers = tabAnswers.makeup;
+        const makeupQuestions = allQuestions.filter((q) => q.key === "makeup");
+
+        // Find the questions by their content
+        const categoryQuestion = makeupQuestions.find((q) =>
+          q.title.includes("makeup category")
+        );
+        const skinTypeQuestion = makeupQuestions.find((q) =>
+          q.title.includes("skin type")
+        );
+        const skinToneQuestion = makeupQuestions.find((q) =>
+          q.title.includes("skin tone")
+        );
+        const skinUndertoneQuestion = makeupQuestions.find((q) =>
+          q.title.includes("undertone")
+        );
+
+        // Get the selected skin tone option to extract the group
+        const selectedSkinTone = skinToneQuestion?.options.find(
+          (opt) => opt.value === makeupAnswers[skinToneQuestion?._id]
+        );
+
         payload.makeup = {
-          categories: tabAnswers.makeup.categories || "",
-          subCategories: tabAnswers.makeup.subCategories || "",
-          skinType: tabAnswers.makeup.skinType || "",
+          categories: makeupAnswers[categoryQuestion?._id] || "",
+          subCategories: makeupAnswers[`sub_${categoryQuestion?._id}`] || "",
+          skinType: makeupAnswers[skinTypeQuestion?._id] || "",
           skinTone: {
-            type: skinToneType || "",
-            group: skinToneGroup || "",
+            type: makeupAnswers[skinToneQuestion?._id] || "",
+            group: selectedSkinTone?.group?.toLowerCase() || "",
           },
-          skinUnderTone: tabAnswers.makeup.skinUnderTone || "",
+          skinUnderTone: makeupAnswers[skinUndertoneQuestion?._id] || "",
           isCompleted: true,
         };
       }
@@ -562,6 +583,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     container.innerHTML = "";
     const form = document.createElement("form");
 
+    // Initialize answers for the current tab
+    const answers = (tabAnswers[activeTab] = {});
+
     questions.forEach((q) => {
       const wrapper = document.createElement("div");
       wrapper.className = "question-block";
@@ -594,14 +618,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         input.addEventListener("change", () => {
+          // Store answer using question ID as key
+          answers[q._id] =
+            input.type === "checkbox"
+              ? getCheckedValues(form, q._id)
+              : input.value;
+
           removeSubCategory(wrapper);
           if (opt.sub_category && input.checked) {
             showSubCategory(opt, wrapper, q._id);
           }
         });
 
-        label.appendChild(document.createElement("br"));
         wrapper.appendChild(label);
+        wrapper.appendChild(document.createElement("br"));
       });
 
       form.appendChild(wrapper);
@@ -618,6 +648,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         subInput.type = "checkbox";
         subInput.name = `sub_${name}`;
         subInput.value = sub.value;
+
+        subInput.addEventListener("change", () => {
+          // Store subcategory answers
+          answers[`sub_${name}`] = getCheckedValues(form, `sub_${name}`);
+        });
+
         subLabel.appendChild(subInput);
         subLabel.append(` ${sub.label}`);
         subWrapper.appendChild(subLabel);
