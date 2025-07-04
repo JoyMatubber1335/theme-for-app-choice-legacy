@@ -208,74 +208,235 @@ document.addEventListener("DOMContentLoaded", async function () {
       }`;
       wrapper.appendChild(title);
 
-      q.options.forEach((opt) => {
-        const label = document.createElement("label");
-        const input = document.createElement("input");
+      // Special handling for question order 4 (skincare product preference)
+      if (q.order === 4) {
+        renderGroupedQuestion4(q, wrapper, answers);
+      } else {
+        // Regular rendering for other questions
+        q.options.forEach((opt) => {
+          const label = document.createElement("label");
+          const input = document.createElement("input");
 
-        input.type = q.type === "multi_choice" ? "checkbox" : "radio";
-        input.name = q._id;
-        input.value = opt.value;
+          input.type = q.type === "multi_choice" ? "checkbox" : "radio";
+          input.name = q._id;
+          input.value = opt.value;
 
-        if (answers[q.order]) {
-          if (input.type === "checkbox") {
-            if (
-              Array.isArray(answers[q.order]) &&
-              answers[q.order].includes(opt.value)
-            ) {
-              input.checked = true;
+          if (answers[q.order]) {
+            if (input.type === "checkbox") {
+              if (
+                Array.isArray(answers[q.order]) &&
+                answers[q.order].includes(opt.value)
+              ) {
+                input.checked = true;
+              }
+            } else {
+              if (answers[q.order] === opt.value) {
+                input.checked = true;
+              }
             }
+          }
+
+          if (q.type === "picture_choice") {
+            const img = document.createElement("img");
+            img.src = opt.imageUrl;
+            img.alt = opt.label;
+            img.width = 80;
+            img.height = 80;
+            label.appendChild(input);
+            label.appendChild(img);
           } else {
-            if (answers[q.order] === opt.value) {
-              input.checked = true;
+            label.appendChild(input);
+            label.append(` ${opt.label}`);
+          }
+
+          input.addEventListener("change", () => {
+            answers[q.order] =
+              input.type === "checkbox"
+                ? getCheckedValues(form, q._id)
+                : input.value;
+
+            handleConditionals();
+
+            if (q.order === 9) {
+              if (input.value === "yes" && input.checked) {
+                showFileInput(wrapper);
+              } else if (input.value === "no" && input.checked) {
+                removeFileInput(wrapper);
+              }
             }
-          }
-        }
 
-        if (q.type === "picture_choice") {
-          const img = document.createElement("img");
-          img.src = opt.imageUrl;
-          img.alt = opt.label;
-          img.width = 80;
-          img.height = 80;
-          label.appendChild(input);
-          label.appendChild(img);
-        } else {
-          label.appendChild(input);
-          label.append(` ${opt.label}`);
-        }
-
-        input.addEventListener("change", () => {
-          answers[q.order] =
-            input.type === "checkbox"
-              ? getCheckedValues(form, q._id)
-              : input.value;
-
-          handleConditionals();
-
-          if (q.order === 9) {
-            if (input.value === "yes" && input.checked) {
-              showFileInput(wrapper);
-            } else if (input.value === "no" && input.checked) {
-              removeFileInput(wrapper);
+            if (opt.sub_category && input.checked) {
+              showSubCategory(opt, wrapper, q.order);
+            } else if (opt.sub_category) {
+              removeSubCategory(wrapper);
             }
-          }
+          });
 
-          if (opt.sub_category && input.checked) {
-            showSubCategory(opt, wrapper, q.order);
-          } else if (opt.sub_category) {
-            removeSubCategory(wrapper);
-          }
+          wrapper.appendChild(label);
+          wrapper.appendChild(document.createElement("br"));
         });
-
-        wrapper.appendChild(label);
-        wrapper.appendChild(document.createElement("br"));
-      });
+      }
 
       form.appendChild(wrapper);
       renderedOrders.add(q.order);
 
       if (q.order === 9 && answers[9] === "yes") {
         showFileInput(wrapper);
+      }
+    };
+
+    // New function to render grouped question 4
+    const renderGroupedQuestion4 = (q, wrapper, answers) => {
+      const firstGroup = q.options.slice(0, 8); // First 8 options
+      const secondGroup = q.options.slice(8); // Last 2 options
+
+      // Create first group (multi-select)
+      const firstGroupDiv = document.createElement("div");
+      firstGroupDiv.className = "question-group";
+      firstGroupDiv.innerHTML =
+        "<p><strong>Select specific products:</strong></p>";
+
+      firstGroup.forEach((opt) => {
+        const label = document.createElement("label");
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.name = `${q._id}_group1`;
+        input.value = opt.value;
+        input.className = "group1-option";
+
+        // Check if this option is selected
+        if (
+          answers[q.order] &&
+          Array.isArray(answers[q.order]) &&
+          answers[q.order].includes(opt.value)
+        ) {
+          input.checked = true;
+        }
+
+        label.appendChild(input);
+        label.append(` ${opt.label}`);
+        firstGroupDiv.appendChild(label);
+        firstGroupDiv.appendChild(document.createElement("br"));
+      });
+
+      // Create second group (radio)
+      const secondGroupDiv = document.createElement("div");
+      secondGroupDiv.className = "question-group";
+      secondGroupDiv.innerHTML = "<p><strong>Or choose a routine:</strong></p>";
+
+      secondGroup.forEach((opt) => {
+        const label = document.createElement("label");
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `${q._id}_group2`;
+        input.value = opt.value;
+        input.className = "group2-option";
+
+        // Check if this option is selected
+        if (
+          answers[q.order] &&
+          !Array.isArray(answers[q.order]) &&
+          answers[q.order] === opt.value
+        ) {
+          input.checked = true;
+        }
+
+        label.appendChild(input);
+        label.append(` ${opt.label}`);
+        secondGroupDiv.appendChild(label);
+        secondGroupDiv.appendChild(document.createElement("br"));
+      });
+
+      wrapper.appendChild(firstGroupDiv);
+      wrapper.appendChild(secondGroupDiv);
+
+      // Add event listeners for group interactions
+      const group1Inputs = wrapper.querySelectorAll(".group1-option");
+      const group2Inputs = wrapper.querySelectorAll(".group2-option");
+
+      group1Inputs.forEach((input) => {
+        input.addEventListener("change", () => {
+          if (input.checked) {
+            // If any from group 1 is selected, disable group 2
+            group2Inputs.forEach((g2Input) => {
+              g2Input.checked = false;
+              g2Input.disabled = true;
+            });
+          } else {
+            // If no group 1 options are selected, enable group 2
+            const anyGroup1Selected = Array.from(group1Inputs).some(
+              (inp) => inp.checked
+            );
+            if (!anyGroup1Selected) {
+              group2Inputs.forEach((g2Input) => {
+                g2Input.disabled = false;
+              });
+            }
+          }
+
+          // Update answers
+          updateQuestion4Answers(wrapper, answers, q.order);
+        });
+      });
+
+      group2Inputs.forEach((input) => {
+        input.addEventListener("change", () => {
+          if (input.checked) {
+            // If any from group 2 is selected, disable group 1
+            group1Inputs.forEach((g1Input) => {
+              g1Input.checked = false;
+              g1Input.disabled = true;
+            });
+          } else {
+            // If no group 2 options are selected, enable group 1
+            const anyGroup2Selected = Array.from(group2Inputs).some(
+              (inp) => inp.checked
+            );
+            if (!anyGroup2Selected) {
+              group1Inputs.forEach((g1Input) => {
+                g1Input.disabled = false;
+              });
+            }
+          }
+
+          // Update answers
+          updateQuestion4Answers(wrapper, answers, q.order);
+        });
+      });
+
+      // Initial state check
+      const anyGroup1Selected = Array.from(group1Inputs).some(
+        (inp) => inp.checked
+      );
+      const anyGroup2Selected = Array.from(group2Inputs).some(
+        (inp) => inp.checked
+      );
+
+      if (anyGroup1Selected) {
+        group2Inputs.forEach((g2Input) => {
+          g2Input.disabled = true;
+        });
+      } else if (anyGroup2Selected) {
+        group1Inputs.forEach((g1Input) => {
+          g1Input.disabled = true;
+        });
+      }
+    };
+
+    // Function to update answers for question 4
+    const updateQuestion4Answers = (wrapper, answers, order) => {
+      const group1Inputs = wrapper.querySelectorAll(".group1-option:checked");
+      const group2Inputs = wrapper.querySelectorAll(".group2-option:checked");
+
+      if (group1Inputs.length > 0) {
+        // Store as array for group 1 (multi-select)
+        answers[order] = Array.from(group1Inputs).map((inp) => inp.value);
+      } else if (group2Inputs.length > 0) {
+        // Store as single value for group 2 (radio)
+        answers[order] = group2Inputs[0].value;
+      } else {
+        // No selection
+        answers[order] = [];
       }
     };
 
