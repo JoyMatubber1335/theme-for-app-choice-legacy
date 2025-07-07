@@ -46,8 +46,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       // Pre-fill skincare answers
-      if (preloadedProfile.skinCare) {
-        const s = preloadedProfile.skinCare;
+      if (preloadedProfile.skincare) {
+        const s = preloadedProfile.skincare;
         tabAnswers.skincare = {
           1: s.skinConcerns || [],
           2: s.skinType || "",
@@ -64,8 +64,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       // Pre-fill haircare answers
-      if (preloadedProfile.hairCare) {
-        const h = preloadedProfile.hairCare;
+      if (preloadedProfile.haircare) {
+        const h = preloadedProfile.haircare;
         const hairQuestions = allQuestions.filter((q) => q.key === "haircare");
         const hairConcernQ = hairQuestions.find(
           (q) =>
