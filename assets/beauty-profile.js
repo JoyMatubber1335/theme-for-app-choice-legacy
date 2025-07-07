@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       };
 
       if (activeTab === "skincare") {
-        const ageRange = getAgeRange(Number(ageValue));
+        const ageRange = getAgeRangeForSkinCare(Number(ageValue));
 
         payload.skinCare = {
           ageRange,
@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       if (activeTab === "haircare") {
-        const ageRange = getAgeRange(Number(ageValue));
+        const ageRange = getAgeRangeForHairCare(Number(ageValue));
         const hairQuestions = allQuestions.filter((q) => q.key === "haircare");
         const hairConcernQuestion = hairQuestions.find(
           (q) =>
@@ -721,12 +721,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     ).map((input) => input.value);
   }
 
-  function getAgeRange(age) {
-    if (age >= 0 && age <= 0.5) return "Newborn – 6 months";
-    if (age > 0.5 && age <= 9) return "6 months- 9 years";
-    if (age >= 10 && age <= 17) return "10–17 years";
-    if (age >= 18 && age <= 25) return "18–25 years";
-    return "25+ years";
+  function getAgeRangeForSkinCare(age) {
+    if (age >= 0 && age <= 0.5) return "Newborn_6_months";
+    if (age > 0.5 && age <= 9) return "6_months_9 years";
+    if (age >= 10 && age <= 17) return "10_17_years";
+    if (age >= 18 && age <= 25) return "18_25_years";
+    return "25_years";
+  }
+
+  function getAgeRangeForHairCare(age) {
+    if (age >= 0 && age <= 11) return "Newborn_11_years";
+    if (age > 11 && age <= 17) return "12–17_years";
+    return "18_years";
   }
 
   function renderGeneric(questions) {
