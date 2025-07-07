@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (activeTab === "skincare") {
         const ageRange = getAgeRangeForSkinCare(Number(ageValue));
 
-        payload.skinCare = {
+        payload.skincare = {
           ageRange,
           skinConcerns: answers[1] || [],
           currentSkinCareProducts: answers[3] || [],
@@ -242,7 +242,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             q.title.toLowerCase().includes("concern")
         );
 
-        payload.hairCare = {
+        payload.haircare = {
           concern: tabAnswers.haircare[hairConcernQuestion?._id] || [],
           ageRange: ageRange,
           isCompleted: true,
