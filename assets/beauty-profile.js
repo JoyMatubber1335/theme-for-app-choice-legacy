@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  const apiURL = "/apps/choice-legacy-app/customer/beauty-profile";
+  const apiURL = "/apps/generic-name/customer/beauty-profile";
   const container = document.getElementById("questions-container");
   const tabsWrapper = document.getElementById("beauty-tabs");
   const ageInput = document.getElementById("customer-age");
