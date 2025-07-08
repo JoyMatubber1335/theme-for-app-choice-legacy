@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  const apiURL = "/apps/choice-legacy-app/customer/beauty-profile";
+  const apiURL = "/apps/generic-name/customer/beauty-profile";
   const container = document.getElementById("questions-container");
   const tabsWrapper = document.getElementById("beauty-tabs");
   const ageInput = document.getElementById("customer-age");
@@ -19,9 +19,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const data = await response.json();
     if (Array.isArray(data.questions)) {
       allQuestions = data.questions;
-      const productTypeQuestion = allQuestions.find(
-        (q) => q.key === "product_type"
-      );
+      const productTypeQuestion = allQuestions.find((q) => q.key === "product_type");
       if (productTypeQuestion) {
         productTypes = productTypeQuestion.options;
       }
@@ -46,8 +44,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       // Pre-fill skincare answers
-      if (preloadedProfile.skinCare) {
-        const s = preloadedProfile.skinCare;
+      if (preloadedProfile.skincare) {
+        const s = preloadedProfile.skincare;
         tabAnswers.skincare = {
           1: s.skinConcerns || [],
           2: s.skinType || "",
@@ -58,25 +56,22 @@ document.addEventListener("DOMContentLoaded", async function () {
           7: s.acneType || "",
           8: s.usedWhiteningProduct || "",
           9: s.faceImageUploaded ? "yes" : "no",
-          10: "", // optional if no value
+          10: "",
           11: "", // optional if no value
+          faceImageUrl: s.faceImageUrl || "",
         };
       }
 
       // Pre-fill haircare answers
-      if (preloadedProfile.hairCare) {
-        const h = preloadedProfile.hairCare;
+      if (preloadedProfile.haircare) {
+        const h = preloadedProfile.haircare;
         const hairQuestions = allQuestions.filter((q) => q.key === "haircare");
         const hairConcernQ = hairQuestions.find(
-          (q) =>
-            q.title.toLowerCase().includes("hair concern") ||
-            q.title.toLowerCase().includes("concern")
+          (q) => q.title.toLowerCase().includes("hair concern") || q.title.toLowerCase().includes("concern")
         );
         if (hairConcernQ) {
           // Handle both array and string formats
-          tabAnswers.haircare[hairConcernQ._id] = Array.isArray(h.concern)
-            ? h.concern
-            : [h.concern];
+          tabAnswers.haircare[hairConcernQ._id] = Array.isArray(h.concern) ? h.concern : [h.concern];
         }
       }
 
@@ -85,19 +80,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         const m = preloadedProfile.makeup;
         const makeupQuestions = allQuestions.filter((q) => q.key === "makeup");
         const catQ = makeupQuestions.find(
-          (q) =>
-            q.title.toLowerCase().includes("makeup category") ||
-            q.title.toLowerCase().includes("category")
+          (q) => q.title.toLowerCase().includes("makeup category") || q.title.toLowerCase().includes("category")
         );
-        const skinTypeQ = makeupQuestions.find((q) =>
-          q.title.toLowerCase().includes("skin type")
-        );
-        const skinToneQ = makeupQuestions.find((q) =>
-          q.title.toLowerCase().includes("skin tone")
-        );
-        const undertoneQ = makeupQuestions.find((q) =>
-          q.title.toLowerCase().includes("undertone")
-        );
+        const skinTypeQ = makeupQuestions.find((q) => q.title.toLowerCase().includes("skin type"));
+        const skinToneQ = makeupQuestions.find((q) => q.title.toLowerCase().includes("skin tone"));
+        const undertoneQ = makeupQuestions.find((q) => q.title.toLowerCase().includes("undertone"));
 
         if (catQ) {
           tabAnswers.makeup[catQ._id] = m.categories || "";
@@ -141,8 +128,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         } else {
           renderGeneric(filteredQuestions);
           // Show save button for haircare and makeup
-          document.getElementById("save-answers").style.display =
-            "inline-block";
+          document.getElementById("save-answers").style.display = "inline-block";
         }
       } else {
         container.innerHTML = "<p>No questions available.</p>";
@@ -177,9 +163,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
       }
 
-      const requiredQuestions = allQuestions.filter(
-        (q) => q.isRequired && activeTab === q.key
-      );
+      const requiredQuestions = allQuestions.filter((q) => q.isRequired && activeTab === q.key);
 
       const answers = tabAnswers[activeTab] || {};
 
@@ -199,10 +183,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         let suggestion = "Suggested products";
         if (val5 === "only_allergy") {
           suggestion = "No suggestion";
-        } else if (
-          (val5 === "only_acne" || val5 === "both_acne_allergy") &&
-          val6 !== "no_itch_pain"
-        ) {
+        } else if ((val5 === "only_acne" || val5 === "both_acne_allergy") && val6 !== "no_itch_pain") {
           suggestion = "No suggestion";
         }
 
@@ -218,7 +199,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (activeTab === "skincare") {
         const ageRange = getAgeRange(Number(ageValue));
 
-        payload.skinCare = {
+        payload.skincare = {
           ageRange,
           skinConcerns: answers[1] || [],
           currentSkinCareProducts: answers[3] || [],
@@ -229,6 +210,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           acneType: answers[7] || "",
           usedWhiteningProduct: answers[8] || "",
           faceImageUploaded: answers[9] === "yes",
+          faceImageUrl: answers.faceImageUrl || "",
           isCompleted: true,
         };
       }
@@ -237,12 +219,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         const ageRange = getAgeRange(Number(ageValue));
         const hairQuestions = allQuestions.filter((q) => q.key === "haircare");
         const hairConcernQuestion = hairQuestions.find(
-          (q) =>
-            q.title.toLowerCase().includes("hair concern") ||
-            q.title.toLowerCase().includes("concern")
+          (q) => q.title.toLowerCase().includes("hair concern") || q.title.toLowerCase().includes("concern")
         );
 
-        payload.hairCare = {
+        payload.haircare = {
           concern: tabAnswers.haircare[hairConcernQuestion?._id] || [],
           ageRange: ageRange,
           isCompleted: true,
@@ -254,19 +234,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         const makeupQuestions = allQuestions.filter((q) => q.key === "makeup");
 
         const categoryQuestion = makeupQuestions.find(
-          (q) =>
-            q.title.toLowerCase().includes("makeup category") ||
-            q.title.toLowerCase().includes("category")
+          (q) => q.title.toLowerCase().includes("makeup category") || q.title.toLowerCase().includes("category")
         );
-        const skinTypeQuestion = makeupQuestions.find((q) =>
-          q.title.toLowerCase().includes("skin type")
-        );
-        const skinToneQuestion = makeupQuestions.find((q) =>
-          q.title.toLowerCase().includes("skin tone")
-        );
-        const skinUndertoneQuestion = makeupQuestions.find((q) =>
-          q.title.toLowerCase().includes("undertone")
-        );
+        const skinTypeQuestion = makeupQuestions.find((q) => q.title.toLowerCase().includes("skin type"));
+        const skinToneQuestion = makeupQuestions.find((q) => q.title.toLowerCase().includes("skin tone"));
+        const skinUndertoneQuestion = makeupQuestions.find((q) => q.title.toLowerCase().includes("undertone"));
 
         const selectedSkinTone = skinToneQuestion?.options.find(
           (opt) => opt.value === makeupAnswers[skinToneQuestion?._id]
@@ -311,9 +283,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       wrapper.dataset.order = q.order;
 
       const title = document.createElement("p");
-      title.innerHTML = `<strong>${q.title}</strong>${
-        q.isRequired ? " *" : ""
-      }`;
+      title.innerHTML = `<strong>${q.title}</strong>${q.isRequired ? " *" : ""}`;
       wrapper.appendChild(title);
 
       if (q.order === 4) {
@@ -330,10 +300,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           // Preselect based on existing answers
           if (answers[q.order]) {
             if (input.type === "checkbox") {
-              if (
-                Array.isArray(answers[q.order]) &&
-                answers[q.order].includes(opt.value)
-              ) {
+              if (Array.isArray(answers[q.order]) && answers[q.order].includes(opt.value)) {
                 input.checked = true;
               }
             } else {
@@ -361,10 +328,7 @@ document.addEventListener("DOMContentLoaded", async function () {
               // For question 3, combine checkbox values with text field value
               updateQuestion3Answers(wrapper, answers, q);
             } else {
-              answers[q.order] =
-                input.type === "checkbox"
-                  ? getCheckedValues(form, q._id)
-                  : input.value;
+              answers[q.order] = input.type === "checkbox" ? getCheckedValues(form, q._id) : input.value;
             }
 
             handleConditionals();
@@ -408,8 +372,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       const firstGroupDiv = document.createElement("div");
       firstGroupDiv.className = "question-group";
-      firstGroupDiv.innerHTML =
-        "<p><strong>Select specific products:</strong></p>";
+      firstGroupDiv.innerHTML = "<p><strong>Select specific products:</strong></p>";
 
       firstGroup.forEach((opt) => {
         const label = document.createElement("label");
@@ -454,8 +417,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           if (Array.isArray(answers[q.order])) {
             // If it's an array, check if this option is in the array AND belongs to second group
             shouldCheck =
-              answers[q.order].includes(opt.value) &&
-              secondGroup.some((option) => option.value === opt.value);
+              answers[q.order].includes(opt.value) && secondGroup.some((option) => option.value === opt.value);
           } else {
             // If it's a string, check direct match
             shouldCheck = answers[q.order] === opt.value;
@@ -486,9 +448,7 @@ document.addEventListener("DOMContentLoaded", async function () {
               g2Input.disabled = true;
             });
           } else {
-            const anyGroup1Selected = Array.from(group1Inputs).some(
-              (inp) => inp.checked
-            );
+            const anyGroup1Selected = Array.from(group1Inputs).some((inp) => inp.checked);
             if (!anyGroup1Selected) {
               group2Inputs.forEach((g2Input) => {
                 g2Input.disabled = false;
@@ -507,9 +467,7 @@ document.addEventListener("DOMContentLoaded", async function () {
               g1Input.disabled = true;
             });
           } else {
-            const anyGroup2Selected = Array.from(group2Inputs).some(
-              (inp) => inp.checked
-            );
+            const anyGroup2Selected = Array.from(group2Inputs).some((inp) => inp.checked);
             if (!anyGroup2Selected) {
               group1Inputs.forEach((g1Input) => {
                 g1Input.disabled = false;
@@ -521,12 +479,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
 
       // FIXED: Set initial state based on preloaded data
-      const anyGroup1Selected = Array.from(group1Inputs).some(
-        (inp) => inp.checked
-      );
-      const anyGroup2Selected = Array.from(group2Inputs).some(
-        (inp) => inp.checked
-      );
+      const anyGroup1Selected = Array.from(group1Inputs).some((inp) => inp.checked);
+      const anyGroup2Selected = Array.from(group2Inputs).some((inp) => inp.checked);
 
       if (anyGroup1Selected) {
         group2Inputs.forEach((g2Input) => {
@@ -634,13 +588,46 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (existing) existing.remove();
     };
 
+    // Helper function to render the image preview
+    function renderImagePreview(wrapper, imageUrl) {
+      // Clear any existing preview first
+      const existingPreview = wrapper.querySelector(".image-preview-wrapper");
+      if (existingPreview) existingPreview.remove();
+
+      // If no imageUrl, do nothing else
+      if (!imageUrl) return;
+
+      const previewWrapper = document.createElement("div");
+      previewWrapper.className = "image-preview-wrapper";
+      previewWrapper.style.marginBottom = "10px";
+
+      const previewImage = document.createElement("img");
+      previewImage.src = imageUrl;
+      previewImage.alt = "Uploaded photo";
+      previewImage.style.maxWidth = "100px";
+      previewImage.style.maxHeight = "100px";
+      previewImage.style.borderRadius = "8px";
+
+      previewWrapper.appendChild(previewImage);
+      wrapper.appendChild(previewWrapper);
+    }
+
+    // The main function, now updated and complete
     const showFileInput = (wrapper) => {
-      removeFileInput(wrapper);
+      removeFileInput(wrapper); // Clear old elements
+
+      // Render the existing image preview first, if a URL exists
+      renderImagePreview(wrapper, tabAnswers.skincare.faceImageUrl);
+
       const fileInputWrapper = document.createElement("div");
       fileInputWrapper.className = "file-input-wrapper";
+      fileInputWrapper.style.display = "flex";
+      fileInputWrapper.style.alignItems = "center";
 
       const fileLabel = document.createElement("label");
-      fileLabel.textContent = "Upload your face photo:";
+      fileLabel.textContent = tabAnswers.skincare.faceImageUrl
+        ? "Upload a different photo:"
+        : "Upload your face photo:";
       fileLabel.htmlFor = "face-photo-upload";
 
       const fileInput = document.createElement("input");
@@ -649,12 +636,52 @@ document.addEventListener("DOMContentLoaded", async function () {
       fileInput.id = "face-photo-upload";
       fileInput.name = "face_photo";
 
+      fileInput.addEventListener("change", async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const spinner = document.createElement("div");
+        spinner.className = "face-image_upload-spinner";
+        fileInputWrapper.appendChild(spinner);
+        fileInput.disabled = true;
+
+        const formData = new FormData();
+        formData.append("face_photo", file);
+
+        try {
+          const response = await fetch(`${apiURL}/image-upload`, {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.message || "Upload failed.");
+
+          alert("Image uploaded successfully!");
+          tabAnswers.skincare.faceImageUrl = result.faceImageUrl; // Store the new URL
+
+          // Update the UI with the new image
+          renderImagePreview(wrapper, result.faceImageUrl);
+          fileLabel.textContent = "Upload a different photo:"; // Update label text
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          alert(error.message);
+        } finally {
+          spinner.remove();
+          fileInput.disabled = false;
+        }
+      });
+
       fileInputWrapper.appendChild(fileLabel);
       fileInputWrapper.appendChild(fileInput);
       wrapper.appendChild(fileInputWrapper);
     };
 
+    // Updated remove function to clean up both preview and input
     const removeFileInput = (wrapper) => {
+      const existingPreview = wrapper.querySelector(".image-preview-wrapper");
+      if (existingPreview) existingPreview.remove();
+
       const existingInput = wrapper.querySelector(".file-input-wrapper");
       if (existingInput) existingInput.remove();
     };
@@ -716,9 +743,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function getCheckedValues(form, name) {
-    return Array.from(
-      form.querySelectorAll(`input[name="${name}"]:checked`)
-    ).map((input) => input.value);
+    return Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map((input) => input.value);
   }
 
   function getAgeRange(age) {
@@ -742,9 +767,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       wrapper.className = "question-block";
 
       const title = document.createElement("p");
-      title.innerHTML = `<strong>${q.title}</strong>${
-        q.isRequired ? " *" : ""
-      }`;
+      title.innerHTML = `<strong>${q.title}</strong>${q.isRequired ? " *" : ""}`;
       wrapper.appendChild(title);
 
       q.options.forEach((opt) => {
@@ -758,10 +781,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Preselect based on existing answers
         if (answers[q._id]) {
           if (input.type === "checkbox") {
-            if (
-              Array.isArray(answers[q._id]) &&
-              answers[q._id].includes(opt.value)
-            ) {
+            if (Array.isArray(answers[q._id]) && answers[q._id].includes(opt.value)) {
               input.checked = true;
             }
           } else {
@@ -785,10 +805,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         input.addEventListener("change", () => {
-          answers[q._id] =
-            input.type === "checkbox"
-              ? getCheckedValues(form, q._id)
-              : input.value;
+          answers[q._id] = input.type === "checkbox" ? getCheckedValues(form, q._id) : input.value;
 
           removeSubCategory(wrapper);
           if (opt.sub_category && input.checked) {
@@ -806,10 +823,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (answers[`sub_${q._id}`] && Array.isArray(answers[`sub_${q._id}`])) {
         const selectedOption = q.options.find((opt) => {
           if (q.type === "multi_choice") {
-            return (
-              Array.isArray(answers[q._id]) &&
-              answers[q._id].includes(opt.value)
-            );
+            return Array.isArray(answers[q._id]) && answers[q._id].includes(opt.value);
           } else {
             return answers[q._id] === opt.value;
           }
@@ -819,9 +833,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           showSubCategory(selectedOption, wrapper, q._id);
           // Preselect subcategory options
           setTimeout(() => {
-            const subInputs = wrapper.querySelectorAll(
-              `input[name="sub_${q._id}"]`
-            );
+            const subInputs = wrapper.querySelectorAll(`input[name="sub_${q._id}"]`);
             subInputs.forEach((subInput) => {
               if (answers[`sub_${q._id}`].includes(subInput.value)) {
                 subInput.checked = true;

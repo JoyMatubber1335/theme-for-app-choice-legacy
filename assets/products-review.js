@@ -95,7 +95,6 @@
           uploadedImageUrl = null;
           return;
         }
-        console.log("Selected file:", file);
 
         // ... (validation and UI updates) ...
 
@@ -378,20 +377,16 @@
 
         reviewItem.innerHTML = `
                     <div class="review-header">
-                        <span class="reviewer-name">${escapeHTML(
-                          review.customerName || "Anonymous"
-                        )}</span>
+                        <span class="reviewer-name">${escapeHTML(review.customerName || "Anonymous")}</span>
                         <span class="review-date">${reviewDate}</span>
                     </div>
                     <div class="review-rating">${ratingStarsHTML}</div>
-                    ${reviewImageHTML} <p class="review-text">${escapeHTML(
-          review.reviewText || ""
-        )}</p>
+                    ${reviewImageHTML} <p class="review-text">${escapeHTML(review.reviewText || "")}</p>
                     ${
                       review.reviewImage
-                        ? `<p class="review-image"><img src="${escapeHTML(
-                            review.reviewImage
-                          )}" alt="Review Image" class="review-uploaded-image"></p>`
+                        ? `<a href="${review.reviewImage}" target="_blank" rel="noopener noreferrer" class="review-image-link">
+         <img src="${review.reviewImage}" alt="Review Image" class="review-uploaded-image" loading="lazy">
+       </a>`
                         : ""
                     }
                 `;
