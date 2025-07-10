@@ -190,7 +190,7 @@
     const otpMessage = document.getElementById('otp-message');
     const otpMessageSendFail = document.getElementById('otp-message-send-fail');
     const submitButton = document.getElementById('register-submit-button');
-    const API_BASE_URL = '/apps/generic-name/customer/account';
+    const API_BASE_URL = `/apps/${APP_SUB_PATH}/customer/account`;
 
     let correctOtpCode = null;
     let isOtpMatched = false;
