@@ -213,6 +213,19 @@
                     </span>
                 </div>
               {%- endif -%}
+
+              <button
+  type="button"
+  class="btn btn--secondary mt-2 request-return-btn"
+  data-order-id="{{ order.id }}"
+>
+  Request Return: {{ line_item.fulfillment.fulfillment_line_items.first.id }}
+</button>
+              
+          {% for item in line_item.fulfillment.fulfillment_line_items %}
+          <h1>F: {{ item.line_item.id }}</h1>
+              {% endfor %}
+
             </td>
             <td class="order-detail__qty text-center" data-label="{{ 'customer.order.quantity' | t }}:">
               {{ line_item.quantity }}
@@ -303,3 +316,41 @@
     </div>
   </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const buttons = document.querySelectorAll(".request-return-btn");
+
+  buttons.forEach(button => {
+    button.addEventListener("click", async () => {
+      const orderId = button.dataset.orderId;
+
+      const payload = {
+        orderId,
+      };
+
+      try {
+        const response = await fetch(`/apps/${APP_SUB_PATH}/order/return`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+        if (response.ok && result.success) {
+          alert("Return request submitted!");
+        } else {
+          alert("Failed to submit return: " + (result.message || "Unknown error"));
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Return submission failed.");
+      }
+    });
+  });
+});
+</script>
+
+
