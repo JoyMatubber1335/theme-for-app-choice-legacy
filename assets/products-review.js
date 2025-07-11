@@ -14,8 +14,7 @@
     const starColorEmpty = container.dataset.starEmptyColor || "#CCCCCC";
     const showEmptyReviewsSetting = container.dataset.showEmpty === "true";
 
-    const API_BASE_URL = "/apps/generic-name/customer/product-review";
-    // const IMAGE_UPLOAD_URL = "/apps/generic-name/image-upload"; // New API endpoint for image upload
+    const API_BASE_URL = `/apps/${APP_SUB_PATH}/customer/product-review`;
 
     const reviewForm = container.querySelector(
       `#review-submission-form-${sectionId}`

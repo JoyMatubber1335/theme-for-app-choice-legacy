@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // If this file is named 'career-management.js.liquid', you can use:
-  // const API_BASE_URL = "{{ routes.root_url | append: 'apps/generic-name/career-management' }}";
-  const API_BASE_URL = "/apps/generic-name/customer/career-management"; // Using hardcoded path as per your last JS version
+  const API_BASE_URL = `/apps/${APP_SUB_PATH}/customer/career-management`;
 
   const careerManagementSection = document.getElementById(
     "career-management-section"

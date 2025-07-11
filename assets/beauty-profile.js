@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  const apiURL = "/apps/generic-name/customer/beauty-profile";
+  const apiURL = `/apps/${APP_SUB_PATH}/customer/beauty-profile`;
   const container = document.getElementById("questions-container");
   const tabsWrapper = document.getElementById("beauty-tabs");
   const ageInput = document.getElementById("customer-age");
@@ -115,9 +115,77 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const tabs = tabsWrapper.querySelectorAll("button");
 
+  // Function to fetch and display suggested products
+  async function fetchAndDisplaySuggestions(profileType) {
+    const suggestionBlock = document.getElementById("suggestion-output");
+    suggestionBlock.innerHTML = "<p>Loading suggestions...</p>";
+
+    try {
+      const response = await fetch(
+        `${apiURL}/suggestionProducts/${profileType}`
+      );
+      const data = await response.json();
+
+      if (
+        response.ok &&
+        data.success &&
+        data.data &&
+        Array.isArray(data.data.edges)
+      ) {
+        const products = data.data.edges.map((edge) => edge.node);
+
+        if (products.length > 0) {
+          const productList = products
+            .map((product) => {
+              const img = product.featuredImage?.url || "";
+              const alt = product.featuredImage?.altText || product.title;
+              const title = product.title;
+              const handle = product.handle;
+              const productType = product.productType || "N/A";
+              const inventory = product.totalInventory;
+              const inventoryStatus =
+                inventory > 0
+                  ? `<span style="color:green;">In stock</span>`
+                  : `<span style="color:red;">Out of stock</span>`;
+
+              return `
+              <li style="display: flex; gap: 15px; margin-bottom: 10px; align-items: center;">
+                <img src="${img}" alt="${alt}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;" />
+                <div>
+                  <a href="/products/${handle}" target="_blank" style="font-weight: bold; color: #007bff; text-decoration: none;">
+                    ${title}
+                  </a>
+                  <div>Type: ${productType}</div>
+                  <div>${inventoryStatus}</div>
+                </div>
+              </li>
+            `;
+            })
+            .join("");
+
+          suggestionBlock.innerHTML = `
+          <p><strong>Suggested Products:</strong></p>
+          <ul style="list-style: none; padding-left: 0;">${productList}</ul>
+        `;
+        } else {
+          suggestionBlock.innerHTML = "<p>No suggestions available.</p>";
+        }
+      } else {
+        throw new Error(data.message || "Failed to fetch suggestions");
+      }
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      suggestionBlock.innerHTML = "<p>Failed to load suggestions.</p>";
+    }
+  }
+
   tabs.forEach((button) => {
     button.addEventListener("click", () => {
       activeTab = button.getAttribute("data-type");
+      // Remove 'active' class from all tabs and add to the clicked one
+      tabs.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+
       container.innerHTML = "<p>Loading...</p>";
 
       const filteredQuestions = allQuestions.filter((q) => q.key === activeTab);
@@ -130,9 +198,12 @@ document.addEventListener("DOMContentLoaded", async function () {
           // Show save button for haircare and makeup
           document.getElementById("save-answers").style.display = "inline-block";
         }
+        // Fetch and display suggestions for the active tab
+        fetchAndDisplaySuggestions(activeTab);
       } else {
         container.innerHTML = "<p>No questions available.</p>";
         document.getElementById("save-answers").style.display = "none";
+        document.getElementById("suggestion-output").innerHTML = ""; // Clear suggestions
       }
     });
   });
@@ -151,7 +222,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const renderedOrders = new Set();
     const suggestionBlock = document.getElementById("suggestion-output");
-    suggestionBlock.innerHTML = "";
+    // suggestionBlock.innerHTML = ""; // This will be handled by fetchAndDisplaySuggestions
 
     const saveButton = document.getElementById("save-answers");
     saveButton.style.display = "inline-block";
@@ -176,6 +247,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
       }
 
+      // The suggestion logic below is for client-side display and should be kept separate
+      // from the API call for suggestions, which will now happen on tab change.
+      // If you still want this client-side logic to update the suggestion block,
+      // consider if it conflicts with the API-driven suggestions.
+      // For now, I'm commenting it out as the new API call will manage suggestions.
+      /*
       if (activeTab === "skincare") {
         const val5 = answers[5];
         const val6 = answers[6];
@@ -191,13 +268,14 @@ document.addEventListener("DOMContentLoaded", async function () {
       } else {
         suggestionBlock.innerHTML = "";
       }
+      */
 
       const payload = {
         customerAge: Number(ageValue),
       };
 
       if (activeTab === "skincare") {
-        const ageRange = getAgeRange(Number(ageValue));
+        const ageRange = getAgeRangeForSkinCare(Number(ageValue));
 
         payload.skincare = {
           ageRange,
@@ -216,7 +294,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
 
       if (activeTab === "haircare") {
-        const ageRange = getAgeRange(Number(ageValue));
+        const ageRange = getAgeRangeForHairCare(Number(ageValue));
         const hairQuestions = allQuestions.filter((q) => q.key === "haircare");
         const hairConcernQuestion = hairQuestions.find(
           (q) => q.title.toLowerCase().includes("hair concern") || q.title.toLowerCase().includes("concern")
@@ -270,6 +348,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (!res.ok) throw new Error(result.message || "Submission failed");
 
         alert("Profile submitted successfully!");
+        // After successful submission, re-fetch suggestions based on the updated profile
+        fetchAndDisplaySuggestions(activeTab);
       } catch (err) {
         console.error(err);
         alert("Failed to submit profile.");
@@ -687,6 +767,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
 
     const handleConditionals = () => {
+      // First, remove all conditionally rendered questions to re-render them correctly
       skippedOrders.forEach((order) => {
         const el = form.querySelector(`.question-block[data-order='${order}']`);
         if (el) {
@@ -699,19 +780,13 @@ document.addEventListener("DOMContentLoaded", async function () {
       const q6Val = answers[6];
       const getQ = (order) => questions.find((q) => q.order === order);
 
-      if (q5Val === "neither_acne_allergy") {
-        return;
-      }
-
+      // Re-render questions based on conditions
       if (q5Val === "only_allergy") {
         [7, 8, 9, 10, 11].forEach((order) => {
           const q = getQ(order);
           if (q) renderQuestion(q);
         });
-        return;
-      }
-
-      if (q5Val === "only_acne" || q5Val === "both_acne_allergy") {
+      } else if (q5Val === "only_acne" || q5Val === "both_acne_allergy") {
         const q6 = getQ(6);
         if (q6) renderQuestion(q6);
 
@@ -720,13 +795,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             const q = getQ(order);
             if (q) renderQuestion(q);
           });
-          return;
         } else if (q6Val === "no_itch_pain") {
           [7, 8, 9, 10, 11].forEach((order) => {
             const q = getQ(order);
             if (q) renderQuestion(q);
           });
-          return;
         }
       }
     };
@@ -746,12 +819,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     return Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map((input) => input.value);
   }
 
-  function getAgeRange(age) {
-    if (age >= 0 && age <= 0.5) return "Newborn – 6 months";
-    if (age > 0.5 && age <= 9) return "6 months- 9 years";
-    if (age >= 10 && age <= 17) return "10–17 years";
-    if (age >= 18 && age <= 25) return "18–25 years";
-    return "25+ years";
+  function getAgeRangeForSkinCare(age) {
+    if (age >= 0 && age <= 0.5) return "Newborn_6_months";
+    if (age > 0.5 && age <= 9) return "6_months_9 years";
+    if (age >= 10 && age <= 17) return "10_17_years";
+    if (age >= 18 && age <= 25) return "18_25_years";
+    return "25_years";
+  }
+
+  function getAgeRangeForHairCare(age) {
+    if (age >= 0 && age <= 11) return "Newborn_11_years";
+    if (age > 11 && age <= 17) return "12–17_years";
+    return "18_years";
   }
 
   function renderGeneric(questions) {
