@@ -7,26 +7,27 @@
   "location": [],
   "market": [],
   "order": [],
-  "page": [],
+  "page": [
+    {
+      "key": "product_desctiption",
+      "namespace": "custom",
+      "name": "product desctiption",
+      "description": "",
+      "type": {
+        "name": "rich_text_field",
+        "category": "TEXT"
+      }
+    }
+  ],
   "product": [
     {
-      "key": "rating",
-      "namespace": "reviews",
-      "name": "Product rating",
-      "description": "Average rating from customers",
+      "key": "description",
+      "namespace": "custom",
+      "name": "description",
+      "description": "",
       "type": {
-        "name": "rating",
-        "category": "RATING"
-      }
-    },
-    {
-      "key": "rating_count",
-      "namespace": "reviews",
-      "name": "Product rating count",
-      "description": "Total number of ratings from customers",
-      "type": {
-        "name": "number_integer",
-        "category": "NUMBER"
+        "name": "rich_text_field",
+        "category": "TEXT"
       }
     },
     {
@@ -70,130 +71,100 @@
       }
     },
     {
-      "key": "care_guide",
-      "namespace": "descriptors",
-      "name": "Care guide",
-      "description": "Instructions for taking care of a product or apparel",
-      "type": {
-        "name": "multi_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
-      "key": "material",
-      "namespace": "custom",
-      "name": "Material",
-      "description": "Materials used in the product",
-      "type": {
-        "name": "multi_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
-      "key": "subtitle",
-      "namespace": "descriptors",
-      "name": "Product subtitle",
-      "description": "Used as a shorthand for a product name",
-      "type": {
-        "name": "single_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
-      "key": "productLabel",
-      "namespace": "product-label",
-      "name": "Product Label",
-      "description": null,
-      "type": {
-        "name": "multi_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
-      "key": "json-ld",
-      "namespace": "bs-23-seo-app",
-      "name": "SEO app metafield",
-      "description": "Metafield for generating json-ld for SEO",
-      "type": {
-        "name": "json",
-        "category": "JSON"
-      }
-    },
-    {
-      "key": "sleeve-length-type",
+      "key": "product-form",
       "namespace": "shopify",
-      "name": "Sleeve length type",
-      "description": "Specifies the style of sleeves on clothing items, such as short or sleeveless",
+      "name": "Product form",
+      "description": "Defines the format or presentation of a product, typically for health and beauty; e.g. lotion, serum",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
     },
     {
-      "key": "meat-type",
+      "key": "suitable-for-skin-type",
       "namespace": "shopify",
-      "name": "Meat type",
-      "description": "Identifies the source of meat items, e.g. plant-based, chicken",
+      "name": "Suitable for skin type",
+      "description": "Specifies products for specific skin conditions, such as dry, aging, or sensitive",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
     },
     {
-      "key": "color-pattern",
+      "key": "skin-care-effect",
       "namespace": "shopify",
-      "name": "Color",
-      "description": "Defines the primary color or pattern, such as blue or striped",
+      "name": "Skin care effect",
+      "description": "Defines the intended benefits of skin care products, e.g. anti-aging, plumping",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
     },
     {
-      "key": "material",
+      "key": "package-type",
       "namespace": "shopify",
-      "name": "Material",
-      "description": "Defines a product's primary material, such as cotton or wool",
+      "name": "Package type",
+      "description": "Defines the type of packaging for a product, e.g. jar, pump",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
     },
     {
-      "key": "food-product-form",
+      "key": "dispenser-type",
       "namespace": "shopify",
-      "name": "Food product form",
-      "description": "Specifies the form in which the food product is presented, such as dried or frozen",
+      "name": "Dispenser type",
+      "description": "Specifies the format for dispensing the product, typically in health and beauty; e.g. stick, jar",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
     },
     {
-      "key": "allergen-information",
+      "key": "skin-care-features",
       "namespace": "shopify",
-      "name": "Allergen information",
-      "description": "Indicates potential allergens present in food or beverages, such as wheat or peanuts",
+      "name": "Skin care features",
+      "description": "Identifies the benefits of skin care items, such as long lasting or UVA/UVB protection",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
     },
     {
-      "key": "dietary-preferences",
+      "key": "fragrance-level",
       "namespace": "shopify",
-      "name": "Dietary preferences",
-      "description": "Helps identify products suitable for specific diets, e.g. vegan, nut free",
+      "name": "Fragrance level",
+      "description": "Specifies the scent intensity of a product, e.g. unscented, lightly scented",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
     },
     {
-      "key": "fabric",
+      "key": "product-certifications-standards",
       "namespace": "shopify",
-      "name": "Fabric",
-      "description": "Identifies the type of fabric used in a product, for example, cotton or denim",
+      "name": "Product certifications & standards",
+      "description": "Indicates the certifications or standards a product meets, such as organic or cruelty free",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "constitutive-ingredients",
+      "namespace": "shopify",
+      "name": "Constitutive ingredients",
+      "description": "Specifies the main components used in a product's formulation, e.g. beeswax, rosehip oil",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "application-area",
+      "namespace": "shopify",
+      "name": "Application area",
+      "description": "Specifies the body part or area where the product is applied, e.g. lips, full body",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
@@ -210,97 +181,96 @@
       }
     },
     {
-      "key": "target-gender",
+      "key": "color-pattern",
       "namespace": "shopify",
-      "name": "Target gender",
-      "description": "Identifies the intended gender for a product, such as female, male or unisex",
+      "name": "Color",
+      "description": "Defines the primary color or pattern, such as blue or striped",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
     },
     {
-      "key": "care-instructions",
+      "key": "makeup-features",
       "namespace": "shopify",
-      "name": "Care instructions",
-      "description": "Provides guidance for product upkeep, such as hand wash or dry clean only",
+      "name": "Makeup features",
+      "description": "Highlights key characteristics of cosmetics, such as high pigmentation or fragrance-free",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
     },
     {
-      "key": "skirt-dress-length-type",
+      "key": "lipstick-effect",
       "namespace": "shopify",
-      "name": "Skirt/Dress length type",
-      "description": "Defines the length of skirts or dresses, such as mini or maxi",
+      "name": "Lipstick effect",
+      "description": "Describes the effect or finish a lipstick provides, e.g. smoothing, plumping",
       "type": {
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
     },
     {
-      "key": "movie",
+      "key": "cosmetic-finish",
+      "namespace": "shopify",
+      "name": "Cosmetic finish",
+      "description": "Defines the cosmetic finish of a product, e.g. matte, natural",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "shop_concern",
       "namespace": "custom",
-      "name": "Movie",
+      "name": "Shop concern",
       "description": "",
       "type": {
-        "name": "date_time",
-        "category": "DATE_TIME"
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "bra-style",
+      "namespace": "shopify",
+      "name": "Bra style",
+      "description": "Identifies the design or style of a bra, such as push-up or strapless",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "fabric",
+      "namespace": "shopify",
+      "name": "Fabric",
+      "description": "Identifies the type of fabric used in a product, for example, cotton or denim",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "bra-closure-type",
+      "namespace": "shopify",
+      "name": "Bra closure type",
+      "description": "Identifies how bras are fastened or opened, e.g. front, pull-on (no closure)",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "cup-size",
+      "namespace": "shopify",
+      "name": "Cup size",
+      "description": "Specifies bust size of bras, such as AA or L",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
       }
     }
   ],
   "variant": [],
-  "shop": [
-    {
-      "key": "database",
-      "namespace": "bs-23-mystery-box",
-      "name": "Mystery Box Database",
-      "description": "A custom JSON database for Mystery Box app",
-      "type": {
-        "name": "json",
-        "category": "JSON"
-      }
-    },
-    {
-      "key": "json-ld-saved-history",
-      "namespace": "bs-23-seo-app",
-      "name": "SEO app metafield",
-      "description": "Metafield to save code snippets of the original theme file before adding json-ld snippets",
-      "type": {
-        "name": "json",
-        "category": "JSON"
-      }
-    },
-    {
-      "key": "subscription_tier",
-      "namespace": "bs-23-mystery-box",
-      "name": "Mystery Box App subscription status",
-      "description": "A single line text depicting is the shop has subscribed to the app or not and the tier of subscription",
-      "type": {
-        "name": "single_line_text_field",
-        "category": "TEXT"
-      }
-    },
-    {
-      "key": "image-optimizer",
-      "namespace": "bs-23-seo-app",
-      "name": "SEO app metafield",
-      "description": "Metafield for storing image optimizer settings",
-      "type": {
-        "name": "json",
-        "category": "JSON"
-      }
-    },
-    {
-      "key": "json-ld",
-      "namespace": "bs-23-seo-app",
-      "name": "SEO app metafield",
-      "description": "Metafield for generating json-ld for SEO",
-      "type": {
-        "name": "json",
-        "category": "JSON"
-      }
-    }
-  ]
+  "shop": []
 }
