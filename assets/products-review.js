@@ -1,8 +1,6 @@
 // products-review.js
 (function () {
-  const reviewAppContainers = document.querySelectorAll(
-    ".review-extension-container"
-  );
+  const reviewAppContainers = document.querySelectorAll(".review-extension-container");
   reviewAppContainers.forEach((container) => {
     const sectionId = container.dataset.sectionId;
     const productId = container.dataset.productId;
@@ -13,34 +11,19 @@
     const starColorFilled = container.dataset.starFilledColor || "#FFD700";
     const starColorEmpty = container.dataset.starEmptyColor || "#CCCCCC";
     const showEmptyReviewsSetting = container.dataset.showEmpty === "true";
+    const APP_SUB_PATH = "generic-name";
 
     const API_BASE_URL = `/apps/${APP_SUB_PATH}/customer/product-review`;
 
-    const reviewForm = container.querySelector(
-      `#review-submission-form-${sectionId}`
-    );
-    const reviewListContainer = container.querySelector(
-      `#reviews-list-${sectionId}`
-    );
+    const reviewForm = container.querySelector(`#review-submission-form-${sectionId}`);
+    const reviewListContainer = container.querySelector(`#reviews-list-${sectionId}`);
     const formMessage = container.querySelector(`#form-message-${sectionId}`);
-    const submitButton = container.querySelector(
-      `#submit-review-btn-${sectionId}`
-    );
-    const ratingStarsContainer = container.querySelector(
-      `#form-star-rating-${sectionId}`
-    );
-    const ratingValueInput = container.querySelector(
-      `#rating-value-${sectionId}`
-    );
-    const reviewsSpinner = container.querySelector(
-      `#reviews-spinner-${sectionId}`
-    );
-    const reviewSummaryContainer = container.querySelector(
-      `#review-summary-${sectionId}`
-    );
-    const reviewImageInput = container.querySelector(
-      `#reviewImage-${sectionId}`
-    ); // Get the image input
+    const submitButton = container.querySelector(`#submit-review-btn-${sectionId}`);
+    const ratingStarsContainer = container.querySelector(`#form-star-rating-${sectionId}`);
+    const ratingValueInput = container.querySelector(`#rating-value-${sectionId}`);
+    const reviewsSpinner = container.querySelector(`#reviews-spinner-${sectionId}`);
+    const reviewSummaryContainer = container.querySelector(`#review-summary-${sectionId}`);
+    const reviewImageInput = container.querySelector(`#reviewImage-${sectionId}`); // Get the image input
 
     let currentRating = 0;
     let uploadedImageUrl = null; // Variable to store the S3 URL after upload
@@ -48,9 +31,7 @@
     let allProductReviews = [];
 
     if (ratingStarsContainer) {
-      ratingStarsContainer
-        .querySelectorAll(".star")
-        .forEach((s) => (s.style.color = starColorEmpty));
+      ratingStarsContainer.querySelectorAll(".star").forEach((s) => (s.style.color = starColorEmpty));
     }
 
     // Star Rating Logic for Form
@@ -63,8 +44,7 @@
           stars.forEach((s) => {
             const sValue = parseInt(s.dataset.value);
             s.innerHTML = sValue <= currentRating ? "&#9733;" : "&#9734;";
-            s.style.color =
-              sValue <= currentRating ? starColorFilled : starColorEmpty;
+            s.style.color = sValue <= currentRating ? starColorFilled : starColorEmpty;
           });
         });
         star.addEventListener("mouseover", function () {
@@ -72,8 +52,7 @@
           stars.forEach((s) => {
             const sValue = parseInt(s.dataset.value);
             s.innerHTML = sValue <= hoverValue ? "&#9733;" : "&#9734;";
-            s.style.color =
-              sValue <= hoverValue ? starColorFilled : starColorEmpty;
+            s.style.color = sValue <= hoverValue ? starColorFilled : starColorEmpty;
           });
         });
       });
@@ -81,8 +60,7 @@
         stars.forEach((s) => {
           const sValue = parseInt(s.dataset.value);
           s.innerHTML = sValue <= currentRating ? "&#9733;" : "&#9734;";
-          s.style.color =
-            sValue <= currentRating ? starColorFilled : starColorEmpty;
+          s.style.color = sValue <= currentRating ? starColorFilled : starColorEmpty;
         });
       });
     }
@@ -112,9 +90,7 @@
             const errorData = await response.json().catch(() => ({
               message: "Image upload failed with status: " + response.status,
             }));
-            throw new Error(
-              errorData.message || `HTTP error! status: ${response.status}`
-            );
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
           }
 
           const result = await response.json();
@@ -150,8 +126,7 @@
         if (isUploadingImage) {
           if (formMessage) {
             formMessage.style.display = "block";
-            formMessage.textContent =
-              "Please wait, image is still uploading...";
+            formMessage.textContent = "Please wait, image is still uploading...";
             formMessage.style.color = "orange";
           }
           return; // Prevent submission while image is uploading
@@ -184,14 +159,9 @@
         };
 
         // Validate if image is required and uploaded
-        if (
-          reviewImageInput &&
-          reviewImageInput.hasAttribute("required") &&
-          !uploadedImageUrl
-        ) {
+        if (reviewImageInput && reviewImageInput.hasAttribute("required") && !uploadedImageUrl) {
           if (formMessage) {
-            formMessage.textContent =
-              "Please upload an image before submitting.";
+            formMessage.textContent = "Please upload an image before submitting.";
             formMessage.style.color = "red";
           }
           if (submitButton) submitButton.disabled = false;
@@ -211,15 +181,12 @@
             const errorData = await response.json().catch(() => ({
               message: "Submission failed with status: " + response.status,
             }));
-            throw new Error(
-              errorData.message || `HTTP error! status: ${response.status}`
-            );
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
           }
 
           const result = await response.json();
           if (formMessage) {
-            formMessage.textContent =
-              result.message || "Review submitted successfully!";
+            formMessage.textContent = result.message || "Review submitted successfully!";
             formMessage.style.color = "green";
           }
           this.reset();
@@ -236,9 +203,7 @@
         } catch (error) {
           console.error("Error submitting review:", error);
           if (formMessage) {
-            formMessage.textContent = `Error: ${
-              error.message || "Could not submit review."
-            }`;
+            formMessage.textContent = `Error: ${error.message || "Could not submit review."}`;
             formMessage.style.color = "red";
           }
         } finally {
@@ -267,9 +232,7 @@
           const errorData = await response.json().catch(() => ({
             message: "Failed to fetch reviews with status: " + response.status,
           }));
-          throw new Error(
-            errorData.message || `HTTP error! status: ${response.status}`
-          );
+          throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
         }
         const reviewResponse = await response?.json();
         console.log("Product review data:", reviewResponse?.data);
@@ -297,10 +260,7 @@
       }
 
       const totalReviews = reviewsArray.length;
-      const sumOfRatings = reviewsArray.reduce(
-        (sum, review) => sum + (review.rating || 0),
-        0
-      );
+      const sumOfRatings = reviewsArray.reduce((sum, review) => sum + (review.rating || 0), 0);
       const averageRating = totalReviews > 0 ? sumOfRatings / totalReviews : 0;
 
       const fullStars = Math.floor(averageRating);
@@ -341,8 +301,7 @@
 
       if (!reviewsArray || reviewsArray.length === 0) {
         if (showEmptyReviewsSetting) {
-          reviewListContainer.innerHTML =
-            '<p class="no-reviews">Be the first to review this product!</p>';
+          reviewListContainer.innerHTML = '<p class="no-reviews">Be the first to review this product!</p>';
         } else {
           reviewListContainer.innerHTML = "";
         }
@@ -357,21 +316,17 @@
           .fill(0)
           .map((_, i) => {
             const isFilled = i < review.rating;
-            return `<span class="star" style="color:${
-              isFilled ? starColorFilled : starColorEmpty
-            };">${isFilled ? "&#9733;" : "&#9734;"}</span>`;
+            return `<span class="star" style="color:${isFilled ? starColorFilled : starColorEmpty};">${
+              isFilled ? "&#9733;" : "&#9734;"
+            }</span>`;
           })
           .join("");
 
-        const reviewDate = review.reviewPlacedAt
-          ? new Date(review.reviewPlacedAt).toLocaleDateString()
-          : "N/A";
+        const reviewDate = review.reviewPlacedAt ? new Date(review.reviewPlacedAt).toLocaleDateString() : "N/A";
 
         // Add image display if imageUrl exists
         const reviewImageHTML = review.imageUrl
-          ? `<img src="${escapeHTML(
-              review.imageUrl
-            )}" alt="Review Image" class="review-uploaded-image">`
+          ? `<img src="${escapeHTML(review.imageUrl)}" alt="Review Image" class="review-uploaded-image">`
           : "";
 
         reviewItem.innerHTML = `
@@ -407,15 +362,12 @@
     if (productId && shopDomain) {
       fetchReviews();
     } else {
-      console.warn(
-        `[Product Reviews App ${sectionId}]: Missing productId or shopDomain. Cannot fetch reviews.`
-      );
+      console.warn(`[Product Reviews App ${sectionId}]: Missing productId or shopDomain. Cannot fetch reviews.`);
       if (reviewListContainer)
         reviewListContainer.innerHTML =
           '<p class="reviews-message">Configuration error (missing product/store data).</p>';
       if (reviewSummaryContainer)
-        reviewSummaryContainer.innerHTML =
-          "<p>Could not load review summary due to configuration error.</p>";
+        reviewSummaryContainer.innerHTML = "<p>Could not load review summary due to configuration error.</p>";
       if (reviewsSpinner) reviewsSpinner.style.display = "none";
     }
   });
