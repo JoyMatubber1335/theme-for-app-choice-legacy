@@ -1,1 +1,1 @@
-const APP_SUB_PATH = "choice-legacy-app";
+const APP_SUB_PATH = "generic-name";
