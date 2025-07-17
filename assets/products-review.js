@@ -40,12 +40,120 @@
     );
     const reviewImageInput = container.querySelector(
       `#reviewImage-${sectionId}`
-    ); // Get the image input
+    );
+    const reviewTextInput = container.querySelector(`#reviewText-${sectionId}`);
+
+    // Error display elements
+    const imageErrorDiv = container.querySelector(
+      `#reviewImage-error-${sectionId}`
+    );
+    const ratingErrorDiv = container.querySelector(
+      `#rating-error-${sectionId}`
+    );
+    const reviewTextErrorDiv = container.querySelector(
+      `#reviewText-error-${sectionId}`
+    );
 
     let currentRating = 0;
-    let uploadedImageUrl = null; // Variable to store the S3 URL after upload
-    let isUploadingImage = false; // Flag to prevent multiple uploads or early submission
+    let uploadedImageUrl = null;
+    let isUploadingImage = false;
     let allProductReviews = [];
+
+    // Validation functions
+    function showFieldError(fieldName, message) {
+      const errorDiv = container.querySelector(
+        `#${fieldName}-error-${sectionId}`
+      );
+      const formGroup = errorDiv?.closest(".form-group");
+
+      if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = "block";
+        formGroup?.classList.add("has-error");
+      }
+    }
+
+    function hideFieldError(fieldName) {
+      const errorDiv = container.querySelector(
+        `#${fieldName}-error-${sectionId}`
+      );
+      const formGroup = errorDiv?.closest(".form-group");
+
+      if (errorDiv) {
+        errorDiv.style.display = "none";
+        formGroup?.classList.remove("has-error");
+      }
+    }
+
+    function hideAllFieldErrors() {
+      ["reviewImage", "rating", "reviewText"].forEach((fieldName) => {
+        hideFieldError(fieldName);
+      });
+    }
+
+    function validateForm() {
+      let isValid = true;
+      hideAllFieldErrors();
+
+      // Validate rating
+      if (currentRating === 0) {
+        showFieldError("rating", "Please select a rating");
+        isValid = false;
+      }
+
+      // Validate review text
+      if (!reviewTextInput || reviewTextInput.value.trim() === "") {
+        showFieldError("reviewText", "Review text is required");
+        isValid = false;
+      }
+      console.log(reviewImageInput, uploadedImageUrl);
+      // Validate image (if required)
+      if (!reviewImageInput || !uploadedImageUrl) {
+        showFieldError("reviewImage", "Please upload an image");
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    function parseBackendErrors(errorDetails) {
+      if (!errorDetails || !Array.isArray(errorDetails)) return;
+
+      errorDetails.forEach((error) => {
+        // Parse error format: "\"fieldName\": "Error message"
+        const match = error.match(/^"([^"]+)": "?(.+)"?$/);
+        if (match) {
+          const fieldName = match[1];
+          const message = match[2].replace(/^"|"$/g, ""); // Remove quotes from message
+
+          // Map backend field names to frontend field names
+          const fieldMap = {
+            rating: "rating",
+            reviewText: "reviewText",
+            reviewImage: "reviewImage",
+          };
+
+          if (fieldMap[fieldName]) {
+            showFieldError(fieldMap[fieldName], message);
+          }
+        }
+      });
+    }
+
+    // Real-time validation
+    if (reviewTextInput) {
+      reviewTextInput.addEventListener("input", function () {
+        if (this.value.trim() !== "") {
+          hideFieldError("reviewText");
+        }
+      });
+
+      reviewTextInput.addEventListener("blur", function () {
+        if (this.value.trim() === "") {
+          showFieldError("reviewText", "Review text is required");
+        }
+      });
+    }
 
     if (ratingStarsContainer) {
       ratingStarsContainer
@@ -60,6 +168,8 @@
         star.addEventListener("click", function () {
           currentRating = parseInt(this.dataset.value);
           if (ratingValueInput) ratingValueInput.value = currentRating;
+          hideFieldError("rating"); // Hide error when rating is selected
+
           stars.forEach((s) => {
             const sValue = parseInt(s.dataset.value);
             s.innerHTML = sValue <= currentRating ? "&#9733;" : "&#9734;";
@@ -95,15 +205,39 @@
           return;
         }
 
-        // ... (validation and UI updates) ...
+        // Frontend validation for image
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        const allowedTypes = [
+          "image/jpeg",
+          "image/jpg",
+          "image/png",
+          "image/gif",
+        ];
+
+        if (file.size > maxSize) {
+          showFieldError("reviewImage", "Image size must be less than 5MB");
+          this.value = "";
+          return;
+        }
+
+        if (!allowedTypes.includes(file.type)) {
+          showFieldError(
+            "reviewImage",
+            "Only JPEG, PNG, and GIF images are allowed"
+          );
+          this.value = "";
+          return;
+        }
+
+        hideFieldError("reviewImage");
+        isUploadingImage = true;
+        if (submitButton) submitButton.disabled = true;
 
         const imageFormData = new FormData();
         imageFormData.append("reviewImage", file);
-        console.log("Image FormData prepared:", imageFormData);
 
         try {
           const response = await fetch(`${API_BASE_URL}/image-upload`, {
-            // This is the call
             method: "POST",
             body: imageFormData,
           });
@@ -118,23 +252,21 @@
           }
 
           const result = await response.json();
-          uploadedImageUrl = result.reviewImage; // Store the URL returned by the backend
+          uploadedImageUrl = result.reviewImage;
+
           if (formMessage) {
             formMessage.textContent = "Image uploaded successfully!";
             formMessage.style.color = "green";
+            formMessage.style.display = "block";
             setTimeout(() => {
               if (formMessage) formMessage.style.display = "none";
             }, 3000);
           }
-          console.log("Dummy Image URL:", uploadedImageUrl); // Console log the dummy URL
         } catch (error) {
           console.error("Error uploading image:", error);
-          if (formMessage) {
-            formMessage.style.display = "block";
-            formMessage.textContent = `Image upload failed: ${error.message}`;
-            formMessage.style.color = "red";
-          }
+          showFieldError("reviewImage", `Upload failed: ${error.message}`);
           uploadedImageUrl = null;
+          this.value = "";
         } finally {
           isUploadingImage = false;
           if (submitButton) submitButton.disabled = false;
@@ -147,6 +279,11 @@
       reviewForm.addEventListener("submit", async function (event) {
         event.preventDefault();
 
+        // Frontend validation
+        if (!validateForm()) {
+          return;
+        }
+
         if (isUploadingImage) {
           if (formMessage) {
             formMessage.style.display = "block";
@@ -154,7 +291,7 @@
               "Please wait, image is still uploading...";
             formMessage.style.color = "orange";
           }
-          return; // Prevent submission while image is uploading
+          return;
         }
 
         if (submitButton) submitButton.disabled = true;
@@ -164,75 +301,63 @@
           formMessage.style.color = "blue";
         }
 
-        if (currentRating === 0) {
-          if (formMessage) {
-            formMessage.textContent = "Please select a rating.";
-            formMessage.style.color = "red";
-          }
-          if (submitButton) submitButton.disabled = false;
-          return;
-        }
-
-        // Prepare data for the main review submission
         const reviewData = {
-          reviewText: this.querySelector(`#reviewText-${sectionId}`).value,
+          reviewText: reviewTextInput.value.trim(),
           rating: currentRating,
           productId: productId,
           customerName: customerName,
           customerEmail: customerEmail,
-          reviewImage: uploadedImageUrl, // Include the S3 URL here
+          reviewImage: uploadedImageUrl,
         };
-
-        // Validate if image is required and uploaded
-        if (
-          reviewImageInput &&
-          reviewImageInput.hasAttribute("required") &&
-          !uploadedImageUrl
-        ) {
-          if (formMessage) {
-            formMessage.textContent =
-              "Please upload an image before submitting.";
-            formMessage.style.color = "red";
-          }
-          if (submitButton) submitButton.disabled = false;
-          return;
-        }
 
         try {
           const response = await fetch(`${API_BASE_URL}/add`, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json", // Send as JSON for the main review data
+              "Content-Type": "application/json",
             },
             body: JSON.stringify(reviewData),
           });
 
-          if (!response.ok) {
-            const errorData = await response.json().catch(() => ({
-              message: "Submission failed with status: " + response.status,
-            }));
-            throw new Error(
-              errorData.message || `HTTP error! status: ${response.status}`
-            );
-          }
-
           const result = await response.json();
-          if (formMessage) {
-            formMessage.textContent =
-              result.message || "Review submitted successfully!";
-            formMessage.style.color = "green";
+
+          if (!response.ok) {
+            if (result.details && Array.isArray(result.details)) {
+              // Handle backend validation errors
+              parseBackendErrors(result.details);
+              if (formMessage) {
+                formMessage.textContent =
+                  result.message || "Please fix the errors above";
+                formMessage.style.color = "red";
+              }
+            } else {
+              throw new Error(
+                result.message || `HTTP error! status: ${response.status}`
+              );
+            }
+          } else {
+            // Success
+            if (formMessage) {
+              formMessage.textContent =
+                result.message || "Review submitted successfully!";
+              formMessage.style.color = "green";
+            }
+
+            // Reset form
+            this.reset();
+            currentRating = 0;
+            uploadedImageUrl = null;
+            hideAllFieldErrors();
+
+            if (ratingValueInput) ratingValueInput.value = "";
+            if (ratingStarsContainer) {
+              ratingStarsContainer.querySelectorAll(".star").forEach((s) => {
+                s.innerHTML = "&#9734;";
+                s.style.color = starColorEmpty;
+              });
+            }
+            fetchReviews();
           }
-          this.reset();
-          currentRating = 0;
-          uploadedImageUrl = null; // Clear the uploaded URL after successful submission
-          if (ratingValueInput) ratingValueInput.value = "";
-          if (ratingStarsContainer) {
-            ratingStarsContainer.querySelectorAll(".star").forEach((s) => {
-              s.innerHTML = "&#9734;";
-              s.style.color = starColorEmpty;
-            });
-          }
-          fetchReviews(); // This will also re-calculate and render the summary
         } catch (error) {
           console.error("Error submitting review:", error);
           if (formMessage) {
@@ -308,9 +433,6 @@
       const hasHalfStar = decimalPart >= 0.25 && decimalPart < 0.75;
       const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-      const starColorFilled = "#FFD700";
-      const starColorEmpty = "#CCCCCC";
-
       let starsHTML = "";
 
       for (let i = 0; i < fullStars; i++) {
@@ -367,13 +489,6 @@
           ? new Date(review.reviewPlacedAt).toLocaleDateString()
           : "N/A";
 
-        // Add image display if imageUrl exists
-        const reviewImageHTML = review.imageUrl
-          ? `<img src="${escapeHTML(
-              review.imageUrl
-            )}" alt="Review Image" class="review-uploaded-image">`
-          : "";
-
         reviewItem.innerHTML = `
                     <div class="review-header">
                         <span class="reviewer-name">${escapeHTML(
@@ -382,9 +497,9 @@
                         <span class="review-date">${reviewDate}</span>
                     </div>
                     <div class="review-rating">${ratingStarsHTML}</div>
-                    ${reviewImageHTML} <p class="review-text">${escapeHTML(
-          review.reviewText || ""
-        )}</p>
+                    <p class="review-text">${escapeHTML(
+                      review.reviewText || ""
+                    )}</p>
                     ${
                       review.reviewImage
                         ? `<a href="${review.reviewImage}" target="_blank" rel="noopener noreferrer" class="review-image-link">

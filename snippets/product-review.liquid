@@ -1,3 +1,4 @@
+<!-- Liquid Template Section -->
 {{ 'products-review.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'products-review.js' | asset_url }}" defer></script>
 
@@ -23,7 +24,9 @@
       <div class="form-group">
         <label>Image</label>
         <input type="file" id="reviewImage-{{ section.id }}" name="reviewImage" accept="image/*" required>
+        <div class="field-error" id="reviewImage-error-{{ section.id }}" style="display: none;"></div>
       </div>
+      
       <div class="form-group">
         <label>Rating</label>
         <div class="star-rating" id="form-star-rating-{{ section.id }}">
@@ -32,11 +35,13 @@
           {% endfor %}
         </div>
         <input type="hidden" name="rating" id="rating-value-{{ section.id }}" required>
+        <div class="field-error" id="rating-error-{{ section.id }}" style="display: none;"></div>
       </div>
 
       <div class="form-group">
         <label for="reviewText-{{ section.id }}">Review</label>
         <textarea id="reviewText-{{ section.id }}" name="reviewText" rows="4" required></textarea>
+        <div class="field-error" id="reviewText-error-{{ section.id }}" style="display: none;"></div>
       </div>
 
       <button type="submit" id="submit-review-btn-{{ section.id }}">Submit Review</button>
