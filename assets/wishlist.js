@@ -1,5 +1,5 @@
 let wishlistConfig = {
-  apiUrl: `/apps/generic-name`,
+  apiUrl: `/apps/${APP_SUB_PATH}`,
   shopDomain: window.shopDomain,
   customerId: null,
 };
@@ -294,7 +294,7 @@ function showMessage(message) {
 
 document.addEventListener("DOMContentLoaded", function () {
   initWishlist({
-    apiUrl: `/apps/generic-name`,
+    apiUrl: `/apps/${APP_SUB_PATH}`,
   });
 });
 

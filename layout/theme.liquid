@@ -279,7 +279,6 @@
   -%}
 
   <div class="overlay fixed top-0 right-0 bottom-0 left-0 js-overlay"></div>
-  <script src="{{ 'constants.js' | asset_url }}" defer></script>
   <script>
     window.theme = {
       info: {
@@ -355,7 +354,7 @@
         shippingCalculator: '{{ "shipping-calculator.js" | asset_url }}'
       }
     };
-
+    window.APP_SUB_PATH = "generic-name"
     {% if customer %}
       window.customerLoggedIn = true;
       window.customerId = {{ customer.id }};

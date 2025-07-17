@@ -13,9 +13,8 @@
     const starColorFilled = container.dataset.starFilledColor || "#FFD700";
     const starColorEmpty = container.dataset.starEmptyColor || "#CCCCCC";
     const showEmptyReviewsSetting = container.dataset.showEmpty === "true";
-    const APP_SUB_PATH = "generic-name";
 
-    const API_BASE_URL = `/apps/generic-name/customer/product-review`;
+    const API_BASE_URL = `/apps/${APP_SUB_PATH}/customer/product-review`;
 
     const reviewForm = container.querySelector(
       `#review-submission-form-${sectionId}`
