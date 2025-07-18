@@ -1,11 +1,8 @@
+
 <div class="product-wishlist">
   <button class="wishlist-btn" 
-          data-product-id="{{ product.id }}"
-          data-variant-id="{{ product.selected_or_first_available_variant.id }}"
-          data-product-title="{{ product.title | escape }}"
           data-product-handle="{{ product.handle }}"
-          data-product-image="{{ product.featured_image | image_url }}"
-          data-product-price="{{ product.selected_or_first_available_variant.price | money }}">
+          data-variant-id="{{ product.selected_or_first_available_variant.id }}">
     ♡ Add to Wishlist
   </button>
 </div>
