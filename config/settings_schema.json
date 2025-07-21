@@ -66,44 +66,6 @@
         "default": "nunito_sans_n7"
       },
       {
-        "type": "checkbox",
-        "id": "heading_uppercase",
-        "label": "Make headings uppercase",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "subheading_uppercase",
-        "label": "Make subheadings uppercase",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "button_text_uppercase",
-        "label": "Make button text uppercase",
-        "default": false
-      },
-      {
-        "type": "select",
-        "id": "heading_scale_start",
-        "label": "Heading text scale",
-        "options": [
-          {
-            "value": "2",
-            "label": "Small"
-          },
-          {
-            "value": "4",
-            "label": "Medium"
-          },
-          {
-            "value": "6",
-            "label": "Large"
-          }
-        ],
-        "default": "4"
-      },
-      {
         "type": "header",
         "content": "Body"
       },
@@ -114,14 +76,14 @@
         "default": "nunito_sans_n4"
       },
       {
-        "type": "range",
-        "id": "body_font_size",
-        "min": 15,
-        "max": 20,
-        "step": 1,
-        "unit": "px",
-        "label": "Font size",
-        "default": 16
+        "type": "header",
+        "content": "Navigation"
+      },
+      {
+        "type": "font_picker",
+        "id": "link_font",
+        "label": "Font",
+        "default": "inter_n1"
       }
     ]
   },

@@ -38,6 +38,18 @@
         background: rgb(var(--color-background));
         color: rgb(var(--color-primary-text));
       }
+
+      --heading-font-family: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
+      --heading-font-style: {{ settings.heading_font.style }};
+      --heading-font-weight: {{ settings.heading_font.weight }};
+
+      --body-font-family: {{ settings.body_font.family }}, {{ settings.body_font.fallback_families }};
+      --body-font-style: {{ settings.body_font.style }};
+      --body-font-weight: {{ settings.body_font.weight }};
+
+      --navigation-font-family: {{ settings.link_font.family }}, {{ settings.link_font.fallback_families }};
+      --navigation-font-style: {{ settings.link_font.style }};
+      --navigation-font-weight: {{ settings.link_font.weight }};
     }
      
   {% endstyle -%}

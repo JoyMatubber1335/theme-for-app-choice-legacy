@@ -2101,6 +2101,8 @@ a,
 .product-spec__value a {
   color: rgb(var(--link-color));
   text-decoration: none;
+  font-family: var(--navigation-font-family);
+  font-style: var(--navigation-font-style);
 }
 a[aria-disabled="true"],
 .link[aria-disabled="true"],
