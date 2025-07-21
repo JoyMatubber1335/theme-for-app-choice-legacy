@@ -2061,6 +2061,11 @@ img {
   background-color: #d5d5d5;
 }
 
+.placeholder-svg {
+  width: 100%;
+  height: 100%;
+}
+
 .img-fit,
 .md\:img-fit {
   position: absolute;

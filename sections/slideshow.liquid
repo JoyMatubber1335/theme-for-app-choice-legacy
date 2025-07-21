@@ -5,11 +5,17 @@
     padding: 60px 0;
     overflow: hidden;
   }
-  
-  .slideshow .swiper-slide.swiper-slide-prev,
-  .slideshow .swiper-slide.swiper-slide-next,
-  .slideshow .swiper-slide.swiper-slide-active {
-    margin-right: 16px !important;
+
+  .slideshow-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .slideshow-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
   }
 
   .slideshow-container {
@@ -20,13 +26,14 @@
   .swiper-container {
     width: 100%;
     height: 410px;
-    overflow: visible; /* Allow partial slides to show */
+    overflow: visible;
   }
   
-  .swiper-slide {
+  .slideshow-{{ section.id }} .swiper-slide {
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease;
+    border-radius: {{ section.settings.slide_border_radius }}px;
   }
   
   .slide-image {
@@ -35,7 +42,50 @@
     object-fit: cover;
     display: block;
   }
-  
+
+  .slide-content {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    max-width: 400px;
+    padding: 0 20px;
+  }
+
+  /* Alignment positioning */
+  .slide-content.align-left {
+    left: 40px;
+    text-align: left;
+  }
+
+  .slide-content.align-center {
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .slide-content.align-right {
+    right: 40px;
+    text-align: right;
+  }
+
+  /* Card styling */
+  .slide-content.card {
+    background: rgba(var(--color-background));
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 30px;
+  }
+
+  .slide-title {
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .slide-description {
+    margin-bottom: 20px;
+  }
+
   .swiper-pagination {
     display: none;
   }
@@ -44,19 +94,44 @@
   .swiper-button-next {
     width: 44px;
     height: 44px;
-    background: rgb(var(--color-secondary-brand));
-    color: rgb(var(--color-primary-text));
+    background: rgb(var(--color-secondary-brand, 0, 0, 0));
+    color: rgb(var(--color-primary-text, 255, 255, 255));
     border-radius: 50%;
   }
 
   .swiper-button-prev:after,
   .swiper-button-next:after {
     font-size: 20px;
-    color: rgb(var(--color-primary-text));
+    color: rgb(var(--color-primary-text, 255, 255, 255));
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .slide-content {
+      max-width: 300px;
+      padding: 0 15px;
+    }
+
+    .slide-content.align-left {
+      left: 20px;
+    }
+
+    .slide-content.align-right {
+      right: 20px;
+    }
+
+    .slide-content.card {
+      padding: 20px;
+    }
+
+    .swiper-button-prev:after,
+    .swiper-button-next:after {
+      font-size: 16px;
+    }
   }
 </style>
 
-<image-slideshow class="slideshow">
+<image-slideshow class="slideshow slideshow-{{ section.id }} }}">
   <div class="slideshow-container">
     <div class="swiper-container">
       <div class="swiper-wrapper">
@@ -66,25 +141,17 @@
             {% if block.settings.image != blank %}
               {{ block.settings.image | image_url: width: 800 | image_tag: alt: block.settings.image.alt, class: 'slide-image' }}
             {% else %}
-              <div class="slide-placeholder">
-                {{ block.settings.title | default: 'Image' | truncate: 1, '' }}
-              </div>
+              {{ "lifestyle-1" | placeholder_svg_tag: "placeholder-svg" }}
             {% endif %}
             
             {% if block.settings.title != blank or block.settings.description != blank or block.settings.button_text != blank %}
-              <div class="slide-content">
+              <div class="slide-content {% if block.settings.show_card %}card{% endif %} align-{{ block.settings.content_alignment | default: 'left' }}">
                 {% if block.settings.title != blank %}
                   <h3 class="slide-title">{{ block.settings.title }}</h3>
                 {% endif %}
                 
                 {% if block.settings.description != blank %}
                   <p class="slide-description">{{ block.settings.description }}</p>
-                {% endif %}
-                
-                {% if block.settings.button_text != blank and block.settings.button_url != blank %}
-                  <a href="{{ block.settings.button_url }}" class="slide-button">
-                    {{ block.settings.button_text }}
-                  </a>
                 {% endif %}
               </div>
             {% endif %}
@@ -114,7 +181,21 @@
     },
     {
       "type": "range",
-      "id": "section_padding_top",
+      "id": "slide_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Slide border radius",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
       "min": 0,
       "max": 100,
       "step": 4,
@@ -124,7 +205,7 @@
     },
     {
       "type": "range",
-      "id": "section_padding_bottom",
+      "id": "padding_bottom",
       "min": 0,
       "max": 100,
       "step": 4,
@@ -144,27 +225,44 @@
           "label": "Slide Image"
         },
         {
+          "type": "header",
+          "content": "Content Settings"
+        },
+        {
           "type": "text",
           "id": "title",
-          "label": "Slide Title",
-          "default": "Slide Title"
+          "label": "Slide Title"
         },
         {
           "type": "textarea",
           "id": "description",
-          "label": "Slide Description",
-          "default": "Add your slide description here"
+          "label": "Slide Description"
         },
         {
-          "type": "text",
-          "id": "button_text",
-          "label": "Button Text",
-          "default": "Learn More"
+          "type": "checkbox",
+          "id": "show_card",
+          "label": "Show content in card container",
+          "default": false
         },
         {
-          "type": "url",
-          "id": "button_url",
-          "label": "Button URL"
+          "type": "select",
+          "id": "content_alignment",
+          "label": "Content alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
         }
       ]
     }

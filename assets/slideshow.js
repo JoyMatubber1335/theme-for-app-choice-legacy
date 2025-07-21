@@ -24,23 +24,23 @@ if (!customElements.get("image-slideshow")) {
             nextEl: this.querySelector(".swiper-button-next"),
             prevEl: this.querySelector(".swiper-button-prev"),
           },
-          // --- Key options for partial view ---
-          slidesPerView: 1.2, // Show 1 full slide and 20% of the next/prev
+          // --- Mobile-first approach ---
+          slidesPerView: 1, // Mobile: Show only 1 full slide
           centeredSlides: true, // Center the active slide
-          spaceBetween: 20, // Space between slides in pixels
+          spaceBetween: 0, // Mobile: No space between slides
           // Optional: Loop mode
           loop: true,
-          // Optional: Responsive breakpoints
+          // Responsive breakpoints - mobile first
           breakpoints: {
-            // when window width is >= 768px
-            768: {
-              slidesPerView: 1.5,
-              spaceBetween: 30,
+            // when window width is >= 769px (above mobile)
+            769: {
+              slidesPerView: 1.2, // Show 1 full slide and 20% of next/prev
+              spaceBetween: 20, // Add space between slides
             },
             // when window width is >= 1024px
             1024: {
-              slidesPerView: 1.8,
-              spaceBetween: 40,
+              slidesPerView: 1.32,
+              spaceBetween: 16,
             },
           },
         });
