@@ -3,16 +3,6 @@
     "Default": {}
   },
   "current": {
-    "heading_color": "#2a2b2a",
-    "text_color": "#2a2b2a",
-    "link_color": "#2a2b2a",
-    "star_color": "#ff9f1c",
-    "button_bg_color": "#2a2b2a",
-    "button_text_color": "#ffffff",
-    "button_alt_bg_color": "#ffffff",
-    "button_alt_text_color": "#2a2b2a",
-    "drawer_text_color": "#2a2b2a",
-    "heading_font": "dm_sans_n7",
     "heading_uppercase": false,
     "subheading_uppercase": false,
     "button_text_uppercase": false,

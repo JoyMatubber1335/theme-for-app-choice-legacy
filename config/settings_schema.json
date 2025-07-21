@@ -17,120 +17,38 @@
       {
         "type": "color",
         "id": "bg_color",
-        "label": "Page background",
-        "default": "#ffffff"
-      },
-      {
-        "type": "color",
-        "id": "heading_color",
-        "label": "Headings",
-        "default": "#333333"
-      },
-      {
-        "type": "color",
-        "id": "text_color",
-        "label": "Body text",
-        "default": "#555555"
-      },
-      {
-        "type": "color",
-        "id": "link_color",
-        "label": "Links",
-        "default": "#0000ee"
-      },
-      {
-        "type": "color",
-        "id": "star_color",
-        "label": "Rating stars",
-        "default": "#f7c346"
-      },
-      {
-        "type": "header",
-        "content": "Primary buttons"
-      },
-      {
-        "type": "color",
-        "id": "button_bg_color",
-        "label": "Background",
-        "default": "#333333"
-      },
-      {
-        "type": "color",
-        "id": "button_text_color",
-        "label": "Text",
-        "default": "#ffffff"
-      },
-      {
-        "type": "header",
-        "content": "Secondary buttons"
-      },
-      {
-        "type": "color",
-        "id": "button_alt_bg_color",
         "label": "Background",
         "default": "#ffffff"
       },
       {
         "type": "color",
-        "id": "button_alt_text_color",
-        "label": "Border and text",
-        "default": "#333333"
-      },
-      {
-        "type": "header",
-        "content": "Drawers"
+        "id": "primary_text_color",
+        "label": "Primary text",
+        "default": "#393F41"
       },
       {
         "type": "color",
-        "id": "drawer_bg_color",
-        "label": "Background",
-        "default": "#ffffff"
+        "id": "primary_label_color",
+        "label": "Primary label",
+        "default": "#464C4F"
       },
       {
         "type": "color",
-        "id": "drawer_text_color",
-        "label": "Text",
-        "default": "#555555"
-      },
-      {
-        "type": "header",
-        "content": "Messages"
+        "id": "secondary_text",
+        "label": "Secondary text",
+        "default": "#282E30"
       },
       {
         "type": "color",
-        "id": "error_bg_color",
-        "label": "Error background",
-        "default": "#fcedee"
+        "id": "primary_brand_color",
+        "label": "Primary brand",
+        "default": "#FB6F92"
       },
       {
         "type": "color",
-        "id": "error_text_color",
-        "label": "Error text",
-        "default": "#b40c1c"
-      },
-      {
-        "type": "color",
-        "id": "success_bg_color",
-        "label": "Success background",
-        "default": "#e8f6ea"
-      },
-      {
-        "type": "color",
-        "id": "success_text_color",
-        "label": "Success text",
-        "default": "#2c7e3f"
-      },
-      {
-        "type": "color",
-        "id": "info_bg_color",
-        "label": "Info background",
-        "default": "#E4EDFA"
-      },
-      {
-        "type": "color",
-        "id": "info_text_color",
-        "label": "Info text",
-        "default": "#1A66D2"
+        "id": "secondary_brand_color",
+        "label": "Secondary brand",
+        "default": "#FFE9EE"
       }
     ]
   },
