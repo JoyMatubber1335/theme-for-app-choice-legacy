@@ -1,17 +1,17 @@
-function initScrollingBanners(root = document) {
-  const scrollingBanners = root.querySelectorAll(".scrolling-banner");
+function initScrollingLogos(root = document) {
+  const scrollingLogos = root.querySelectorAll(".scrolling-logo");
 
-  scrollingBanners.forEach((banner) => {
-    const itemsContainers = banner.querySelectorAll(".scrolling-banner__items");
-    const speed = parseInt(banner.getAttribute("data-speed")) || 24;
-    const pausable = banner.getAttribute("data-pausable") === "true";
+  scrollingLogos.forEach((logo) => {
+    const itemsContainers = logo.querySelectorAll(".scrolling-logo__items");
+    const speed = parseInt(logo.getAttribute("data-speed")) || 24;
+    const pausable = logo.getAttribute("data-pausable") === "true";
 
     const firstContainer = itemsContainers[0];
     const containerWidth = firstContainer.offsetWidth;
     const windowWidth = window.innerWidth;
 
     if (containerWidth < windowWidth * 2) {
-      const items = firstContainer.querySelectorAll(".scrolling-banner__item");
+      const items = firstContainer.querySelectorAll(".scrolling-logo__item");
       const itemsArray = Array.from(items);
 
       while (firstContainer.offsetWidth < windowWidth * 2) {
@@ -28,13 +28,13 @@ function initScrollingBanners(root = document) {
     });
 
     if (pausable) {
-      banner.addEventListener("mouseenter", () => {
+      logo.addEventListener("mouseenter", () => {
         itemsContainers.forEach((container) => {
           container.style.animationPlayState = "paused";
         });
       });
 
-      banner.addEventListener("mouseleave", () => {
+      logo.addEventListener("mouseleave", () => {
         itemsContainers.forEach((container) => {
           container.style.animationPlayState = "running";
         });
@@ -45,19 +45,18 @@ function initScrollingBanners(root = document) {
 
 // Initial load
 document.addEventListener("DOMContentLoaded", () => {
-  initScrollingBanners();
+  initScrollingLogos();
 });
 
-// Re-run when the section is loaded in theme editor
+// Shopify section reload
 document.addEventListener("shopify:section:load", (event) => {
-  if (event.target.classList.contains("scrolling-banner")) {
-    initScrollingBanners(event.target);
+  if (event.target.classList.contains("scrolling-logo")) {
+    initScrollingLogos(event.target);
   }
 });
 
-// Re-run when the section is selected in theme editor
 document.addEventListener("shopify:section:select", (event) => {
-  if (event.target.classList.contains("scrolling-banner")) {
-    initScrollingBanners(event.target);
+  if (event.target.classList.contains("scrolling-logo")) {
+    initScrollingLogos(event.target);
   }
 });
