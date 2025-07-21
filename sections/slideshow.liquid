@@ -43,6 +43,43 @@
     display: block;
   }
 
+  /* Mobile image - hidden by default on desktop */
+  .slide-image-mobile {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Show desktop image by default, hide mobile */
+  .slide-image-desktop {
+    display: block;
+  }
+
+  .slide-image-mobile {
+    display: none;
+  }
+
+  /* On mobile screens, show mobile image if available, hide desktop */
+  @media screen and (max-width: 768px) {
+    .slide-image-desktop {
+      display: none;
+    }
+    
+    .slide-image-mobile {
+      display: block;
+    }
+    
+    /* If no mobile image, show desktop as fallback */
+    .slide-no-mobile-image .slide-image-desktop {
+      display: block;
+    }
+    
+    .slide-no-mobile-image .slide-image-mobile {
+      display: none;
+    }
+  }
+
   .slide-content {
     position: absolute;
     top: 50%;
@@ -181,11 +218,22 @@
       <div class="swiper-wrapper">
         
         {% for block in section.blocks %}
-          <div class="swiper-slide">
+          <div class="swiper-slide {% unless block.settings.mobile_image %}slide-no-mobile-image{% endunless %}">
+            {% comment %} Desktop Image {% endcomment %}
             {% if block.settings.image != blank %}
-              {{ block.settings.image | image_url: width: 800 | image_tag: alt: block.settings.image.alt, class: 'slide-image' }}
+              {{ block.settings.image | image_url: width: 800 | image_tag: alt: block.settings.image.alt, class: 'slide-image slide-image-desktop' }}
             {% else %}
-              {{ "lifestyle-1" | placeholder_svg_tag: "placeholder-svg" }}
+              {{ "lifestyle-1" | placeholder_svg_tag: "placeholder-svg slide-image-desktop" }}
+            {% endif %}
+            
+            {% comment %} Mobile Image {% endcomment %}
+            {% if block.settings.mobile_image != blank %}
+              {{ block.settings.mobile_image | image_url: width: 800 | image_tag: alt: block.settings.mobile_image.alt, class: 'slide-image slide-image-mobile' }}
+            {% elsif block.settings.image != blank %}
+              {% comment %} Fallback to desktop image if no mobile image {% endcomment %}
+              {{ block.settings.image | image_url: width: 800 | image_tag: alt: block.settings.image.alt, class: 'slide-image slide-image-mobile' }}
+            {% else %}
+              {{ "lifestyle-1" | placeholder_svg_tag: "placeholder-svg slide-image-mobile" }}
             {% endif %}
             
             {% if block.settings.title != blank or block.settings.description != blank or block.settings.button_text != blank %}
@@ -264,7 +312,12 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Slide Image"
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image"
         },
         {
           "type": "header",
