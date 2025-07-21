@@ -212,7 +212,11 @@
   }
 </style>
 
-<image-slideshow class="slideshow slideshow-{{ section.id }} }}">
+<image-slideshow 
+  class="slideshow slideshow-{{ section.id }}"
+  data-autoplay="{{ section.settings.enable_autoplay }}"
+  data-autoplay-delay="{{ section.settings.autoplay_delay | times: 1000 }}"
+  data-pause-on-hover="{{ section.settings.pause_on_hover }}">
   <div class="slideshow-container">
     <div class="swiper-container">
       <div class="swiper-wrapper">
@@ -278,6 +282,35 @@
       "unit": "px",
       "label": "Desktop slide border radius",
       "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Autoplay Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable autoplay",
+      "default": true,
+      "info": "Automatically advance slides"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "min": 2,
+      "max": 10,
+      "step": 0.5,
+      "unit": "s",
+      "label": "Autoplay delay",
+      "default": 4,
+      "info": "Time between slide transitions"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause autoplay on hover",
+      "default": true,
+      "info": "Pause slideshow when mouse hovers over it"
     },
     {
       "type": "header",

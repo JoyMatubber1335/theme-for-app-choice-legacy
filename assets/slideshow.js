@@ -18,7 +18,12 @@ if (!customElements.get("image-slideshow")) {
     initializeSwiper() {
       const swiperContainer = this.querySelector(".swiper-container");
       if (swiperContainer) {
-        this.swiper = new Swiper(swiperContainer, {
+        // Get autoplay settings from data attributes
+        const autoplayEnabled = this.dataset.autoplay === "true";
+        const autoplayDelay = parseInt(this.dataset.autoplayDelay) || 3000;
+        const pauseOnHover = this.dataset.pauseOnHover === "true";
+
+        const swiperConfig = {
           // Required for navigation buttons to work
           navigation: {
             nextEl: this.querySelector(".swiper-button-next"),
@@ -43,7 +48,18 @@ if (!customElements.get("image-slideshow")) {
               spaceBetween: 16,
             },
           },
-        });
+        };
+
+        // Add autoplay configuration if enabled
+        if (autoplayEnabled) {
+          swiperConfig.autoplay = {
+            delay: autoplayDelay,
+            disableOnInteraction: false, // Continue autoplay after user interactions
+            pauseOnMouseEnter: pauseOnHover, // Pause on hover if enabled
+          };
+        }
+
+        this.swiper = new Swiper(swiperContainer, swiperConfig);
       }
     }
   }
