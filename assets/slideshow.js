@@ -1,4 +1,4 @@
-if (!customElements.get("image-slideshow")) {
+if (!customElements.get("slideshow")) {
   class ImageSlideshow extends HTMLElement {
     constructor() {
       super();
@@ -65,7 +65,7 @@ if (!customElements.get("image-slideshow")) {
   }
 
   // Register the custom element
-  if (!customElements.get("image-slideshow")) {
-    customElements.define("image-slideshow", ImageSlideshow);
+  if (!customElements.get("slideshow")) {
+    customElements.define("slideshow", ImageSlideshow);
   }
 }

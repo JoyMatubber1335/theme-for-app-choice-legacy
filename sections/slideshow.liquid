@@ -212,7 +212,7 @@
   }
 </style>
 
-<image-slideshow 
+<slideshow 
   class="slideshow slideshow-{{ section.id }}"
   data-autoplay="{{ section.settings.enable_autoplay }}"
   data-autoplay-delay="{{ section.settings.autoplay_delay | times: 1000 }}"
@@ -259,7 +259,7 @@
       <div class="swiper-button-prev"></div>
     </div>
   </div>
-</image-slideshow>
+</slideshow>
 
 <script src="{{ 'slideshow.js' | asset_url }}" defer="defer"></script>
 
