@@ -2409,6 +2409,56 @@
       }
     ]
   },
+
+  {
+    "name": "Logo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "brand_logo",
+        "label": "Logo",
+        "info": "180px x 180px .png recommended."
+      },
+
+      {
+        "type": "text",
+        "id": "logo_text",
+        "label": "Logo alt text",
+        "default": "Brand logo",
+        "info": "This is applyed when brand logo is not set. "
+      },
+      // alt
+      {
+        "type": "text",
+        "id": "logo_alt_text",
+        "label": "Logo alt text",
+        "default": "Logo",
+        "info": "This is used for accessibility and SEO purposes. It should describe the logo image."
+      },
+      // height
+      {
+        "type": "range",
+        "id": "logo_height",
+        "label": "Logo height",
+        "min": 40,
+        "max": 100,
+        "step": 5,
+        "unit": "px",
+        "default": 40
+      },
+      //  width
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Logo width",
+        "min": 100,
+        "max": 240,
+        "step": 2,
+        "unit": "px",
+        "default": 140
+      }
+    ]
+  },
   {
     "name": "Advanced",
     "settings": [

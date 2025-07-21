@@ -1,1 +1,194 @@
-<div>{{ shop.name }}</div>
+{% comment %}
+  A custom header section that matches the user's design.
+  - Logo on the left (with upload setting)
+  - Search bar in the center
+  - Account/Cart/Social icons on the right
+{% endcomment %}
+
+<style>
+  .header-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    background-color: rgb(var(--color-background)); /* Or use theme color settings */
+    height: 48px
+  }
+
+  .header-section-{{ section.id }} .header__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    gap: 36px;
+  }
+
+  /* 1. Left Column: Logo */
+  .header-section-{{ section.id }} .header__left {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .header-section-{{ section.id }} .header__logo-link {
+    display: block;
+    max-width: {{ section.settings.logo_width }}px;
+  }
+  .header-section-{{ section.id }} .header__logo-img {
+    width: 100%;
+    height: auto;
+  }
+  .header-section-{{ section.id }} .header__shop-name {
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #e85d92; /* Example color */
+  }
+
+  /* 2. Center Column: Search */
+  .header-section-{{ section.id }} .header__center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .header-section-{{ section.id }} .header__search-form {
+    position: relative;
+    width: 100%;
+    max-width: 311px;
+  }
+  .header-section-{{ section.id }} .header__search-input {
+    width: 100%;
+    height: 48px;
+    padding: 10px 15px 10px 35px;
+    border-radius: 6px;
+    border: 1px solid rgba(var(--color-secondary-text), 0.2);
+
+  }
+  .header-section-{{ section.id }} .header__search-button {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #777;
+  }
+  .header-section-{{ section.id }} .header__search-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* 3. Right Column: Icons */
+  .header-section-{{ section.id }} .header__right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .header-section-{{ section.id }} .header__icon-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .header-section-{{ section.id }} .header__social-icons {
+
+    gap: 10px !important;
+
+  }
+</style>
+
+<header class="header-section header-section-{{ section.id }}">
+  <div class="header__inner">
+    <div class="header__left">
+      <a href="{{ routes.root_url }}" class="header__logo-link">
+        {% if settings.brand_logo != blank %}
+          <img
+            src="{{ settings.brand_logo | image_url: width: settings.logo_width }}"
+            alt="{{ settings.logo_alt_text | default: shop.name | escape }}"
+            loading="lazy"
+            class="header__logo-img"
+            width="{{ settings.logo_width }}"
+            height="{{ settings.logo_height  }}"
+          >
+        {% else %}
+          <span class="header__shop-name">{{ settings.logo_text }}</span>
+        {% endif %}
+      </a>
+    </div>
+
+    <div class="header__center">
+      <form action="{{ routes.search_url }}" method="get" class="header__search-form" role="search">
+        <input
+          type="search"
+          name="q"
+          class="header__search-input"
+          placeholder="Search products, categories"
+          aria-label="Search"
+        >
+        <button type="submit" class="header__search-button" aria-label="Submit search">
+          {% render 'search-icon' %}
+        </button>
+      </form>
+    </div>
+
+    <div class="header__right">
+      <a href="{{ routes.account_url }}" class="header__icon-link">
+        {% render 'accounts-icon' %}
+        <span>My Account</span>
+      </a>
+
+      <a href="{{ routes.cart_url }}" class="header__icon-link">
+        {% render 'cart-icon' %}
+        <span>Cart</span>
+      </a>
+      <div class="header__icon-link header__social-icons">
+        <a href="#" class="header__icon-link" aria-label="Chat on WhatsApp">
+          {% render 'whatsapp-icon' %}
+        </a>
+        <a href="#" class="header__icon-link" aria-label="Chat on Messenger">
+          {% render 'message-icon' %}
+        </a>
+
+        <a href="#" class="header__icon-link" aria-label=" Call us">
+          {% render 'phone-icon' %}
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "header",
+  "class": "shopify-section-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 20,
+      "unit": "px"
+    }
+  ]
+}
+{% endschema %}
