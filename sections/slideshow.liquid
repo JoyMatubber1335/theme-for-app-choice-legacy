@@ -97,12 +97,44 @@
     background: rgb(var(--color-secondary-brand, 0, 0, 0));
     color: rgb(var(--color-primary-text, 255, 255, 255));
     border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+
+  .swiper-button-prev {
+    left: calc(14% - 52px); /* Position in left gap */
+  }
+
+  .swiper-button-next {
+    right: calc(14% - 52px); /* Position in right gap */
   }
 
   .swiper-button-prev:after,
   .swiper-button-next:after {
     font-size: 20px;
     color: rgb(var(--color-primary-text, 255, 255, 255));
+  }
+
+  .swiper-button-prev:after,
+  .swiper-button-next:after {
+    font-size: 20px;
+    color: rgb(var(--color-primary-text, 255, 255, 255));
+  }
+
+  @media screen and (max-width: 1024px) {
+    .swiper-button-prev:after,
+    .swiper-button-next:after {
+      font-size: 18px;
+    }
+
+    .swiper-button-prev {
+      left: calc(11% - 52px); /* Position in left gap */
+    }
+
+    .swiper-button-next {
+      right: calc(11% - 52px); /* Position in right gap */
+    }
   }
 
   /* Responsive adjustments */
@@ -127,6 +159,18 @@
     .swiper-button-prev:after,
     .swiper-button-next:after {
       font-size: 16px;
+    }
+
+    .swiper-button-prev {
+      left: calc(15% - 52px); /* Position in left gap */
+    }
+
+    .swiper-button-next {
+      right: calc(15% - 52px); /* Position in right gap */
+    }
+
+    .slideshow-{{ section.id }} .swiper-slide {
+      border-radius: 0;
     }
   }
 </style>
@@ -165,8 +209,6 @@
   </div>
 </image-slideshow>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
-
 <script src="{{ 'slideshow.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
@@ -186,7 +228,7 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "label": "Slide border radius",
+      "label": "Desktop slide border radius",
       "default": 6
     },
     {
@@ -201,7 +243,7 @@
       "step": 4,
       "unit": "px",
       "label": "Top padding",
-      "default": 60
+      "default": 0
     },
     {
       "type": "range",
@@ -211,7 +253,7 @@
       "step": 4,
       "unit": "px",
       "label": "Bottom padding",
-      "default": 60
+      "default": 0
     }
   ],
   "blocks": [
