@@ -1,5 +1,5 @@
-if (!customElements.get("slideshow")) {
-  class ImageSlideshow extends HTMLElement {
+if (!customElements.get("slideshow-component")) {
+  class SlideshowComponent extends HTMLElement {
     constructor() {
       super();
       this.swiper = null;
@@ -65,7 +65,5 @@ if (!customElements.get("slideshow")) {
   }
 
   // Register the custom element
-  if (!customElements.get("slideshow")) {
-    customElements.define("slideshow", ImageSlideshow);
-  }
+  customElements.define("slideshow-component", SlideshowComponent);
 }
