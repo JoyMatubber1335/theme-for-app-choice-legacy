@@ -2,7 +2,7 @@
 
 <style>
   .scrolling-logo-{{ section.id }} {
-    padding: {{ section.settings.top_padding }}px {{ section.settings.right_padding }}px {{ section.settings.bottom_padding }}px {{ section.settings.left_padding }}px;
+    padding: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px {{ section.settings.padding_right | times: 0.75 | round: 0 }}px {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px {{ section.settings.padding_left | times: 0.75 | round: 0 }}px;
     background-color: rgb(var(--color-primary-brand));
   }
 
@@ -141,7 +141,7 @@
     },
     {
       "type": "range",
-      "id": "top_padding",
+      "id": "padding_bottom",
       "label": "Top padding",
       "min": 0,
       "max": 40,
@@ -151,7 +151,7 @@
     },
     {
       "type": "range",
-      "id": "bottom_padding",
+      "id": "padding_bottom",
       "label": "Bottom padding",
       "min": 0,
       "max": 40,
@@ -161,7 +161,7 @@
     },
     {
       "type": "range",
-      "id": "right_padding",
+      "id": "padding_right",
       "label": "Right padding",
       "min": 0,
       "max": 40,
@@ -171,7 +171,7 @@
     },
     {
       "type": "range",
-      "id": "left_padding",
+      "id": "padding_left",
       "label": "Left padding",
       "min": 0,
       "max": 40,
