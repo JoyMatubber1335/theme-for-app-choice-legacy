@@ -1,0 +1,140 @@
+{{ 'collections-list.css' | asset_url | stylesheet_tag }}
+
+<style>
+  /* -- DESKTOP STYLES (Default) -- */
+  .collections-list-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    /* background-color: rgb(var(--color-background)); */
+  }
+
+  .collections-list__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+    justify-items: center;
+    align-items: stretch;
+  }
+
+  /* -- MOBILE STYLES -- */
+  @media screen and (max-width: 767px) {
+    .collections-list-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+</style>
+
+<section class="collections-list collections-list-{{ section.id }}">
+  <div class="collections-list__container page-width">
+    {% if section.settings.title != blank %}
+      <h2 class="collections-list__title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="collections-list__grid">
+      {% for block in section.blocks %}
+        {% if block.settings.collection %}
+          <div class="collections-list__item" {{ block.shopify_attributes }}>
+            <a href="{{ block.settings.collection.url }}" class="collections-list__link">
+              <div class="collections-list__image-wrapper">
+                {% if block.settings.collection.featured_image %}
+                  <img
+                    src="{{ block.settings.collection.featured_image | image_url: width: 300 }}"
+                    alt="{{ block.settings.collection.featured_image.alt | default: block.settings.collection.title }}"
+                    class="collections-list__image"
+                    loading="lazy"
+                    width="298px"
+                    height="234px"
+                  >
+                {% else %}
+                  <div class="collections-list__image">
+                    {{ 'collection-1' | placeholder_svg_tag: 'collections-list__image' }}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="collections-list__content">
+                <h3 class="collections-list__name">{{ block.settings.collection.title | default: 'Collection' }}</h3>
+              </div>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections List",
+  "tag": "section",
+  "class": "shopify-section-collections-list",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Shop Beauty Product By Category"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_item",
+      "name": "Collection",
+      "limit": 10,
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections List",
+      "blocks": [
+        {
+          "type": "collection_item"
+        },
+        {
+          "type": "collection_item"
+        },
+        {
+          "type": "collection_item"
+        },
+        {
+          "type": "collection_item"
+        },
+        {
+          "type": "collection_item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
