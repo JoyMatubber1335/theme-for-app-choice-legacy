@@ -78,9 +78,9 @@
           {%- else -%}             
             <p class="mb-8">{{ 'customer.orders.none' | t }}</p>           
           {%- endif -%}            
-          {%- if paginate.pages > 1 -%}             
+          {% comment %} {%- if paginate.pages > 1 -%}             
             {% render 'pagination', paginate: paginate %}           
-          {%- endif -%}         
+          {%- endif -%}          {% endcomment %}
         {%- endpaginate -%}       
       </div>        
       <div class="mt-16 text-center">         
