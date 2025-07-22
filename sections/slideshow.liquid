@@ -19,6 +19,47 @@
     transition: transform 0.3s ease;
     border-radius: {{ section.settings.slide_border_radius }}px;
   }
+
+  @media screen and (max-width: 1024px) {
+    .slideshow-nav-button-prev {
+      left: calc(11% - 52px);
+    }
+
+    .slideshow-nav-button-next {
+      right: calc(11% - 52px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .slide-content {
+      max-width: 300px;
+      padding: 0 15px;
+    }
+
+    .slide-content.align-left {
+      left: 20px;
+    }
+
+    .slide-content.align-right {
+      right: 20px;
+    }
+
+    .slide-content.card {
+      padding: 20px;
+    }
+
+    .slideshow-nav-button-prev {
+      left: 8px;
+    }
+
+    .slideshow-nav-button-next {
+      right: 8px;
+    }
+
+    .slideshow-{{ section.id }} .swiper-slide {
+      border-radius: 0;
+    }
+  }
 </style>
 
 <slideshow-component
