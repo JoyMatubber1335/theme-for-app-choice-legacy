@@ -1,0 +1,150 @@
+{{ 'service.css' | asset_url | stylesheet_tag }}
+
+<style>
+  /* -- DESKTOP STYLES (Default) -- */
+  .service-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: rgb(var(--color-background));
+  }
+
+  .service__container {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .service__item {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .service__image {
+    width: {{ section.settings.image_size }}px;
+    height: {{ section.settings.image_size }}px;
+  }
+</style>
+
+<section class="service service-{{ section.id }}">
+  <div class="service__container">
+    {% for block in section.blocks %}
+      <div class="service__item" {{ block.shopify_attributes }}>
+        {% if block.settings.image %}
+          <img
+            src="{{ block.settings.image | image_url: width: section.settings.image_size }}"
+            alt="{{ block.settings.image.alt | default: block.settings.heading }}"
+            class="service__image"
+            loading="lazy"
+            height="{{ section.settings.image_size }}px"
+            width="{{ section.settings.image_size }}px"
+          >
+        {% else %}
+          <div class="service__image">
+            {{ 'collection-1' | placeholder_svg_tag: 'service__image' }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.heading != blank %}
+          <h3 class="service__heading">{{ block.settings.heading }}</h3>
+        {% endif %}
+
+        {% if block.settings.subheading != blank %}
+          <p class="service__subheading">{{ block.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Service",
+  "tag": "section",
+  "class": "shopify-section-service",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Image Settings"
+    },
+    {
+      "type": "range",
+      "id": "image_size",
+      "label": "Image size",
+      "min": 40,
+      "max": 100,
+      "step": 2,
+      "default": 48,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "service_item",
+      "name": "Service Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Service Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Service Heading",
+          "default": "Service Title"
+        },
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "label": "Service Description",
+          "default": "Service description goes here"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Service",
+      "blocks": [
+        {
+          "type": "service_item"
+        },
+        {
+          "type": "service_item"
+        },
+        {
+          "type": "service_item"
+        },
+        {
+          "type": "service_item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
