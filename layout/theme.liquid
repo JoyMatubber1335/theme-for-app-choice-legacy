@@ -36,6 +36,8 @@
       --navigation-font-family: {{ settings.link_font.family }}, {{ settings.link_font.fallback_families }};
       --navigation-font-style: {{ settings.link_font.style }};
       --navigation-font-weight: {{ settings.link_font.weight }};
+
+      --page-width: {{ settings.page_width | divided_by: 10.0 }}rem;
     }
      
   {% endstyle -%}
