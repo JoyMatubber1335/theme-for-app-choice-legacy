@@ -53,41 +53,6 @@
     ]
   },
   {
-    "name": "Typography",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Headings"
-      },
-      {
-        "type": "font_picker",
-        "id": "heading_font",
-        "label": "Font",
-        "default": "nunito_sans_n7"
-      },
-      {
-        "type": "header",
-        "content": "Body"
-      },
-      {
-        "type": "font_picker",
-        "id": "body_font",
-        "label": "Font",
-        "default": "nunito_sans_n4"
-      },
-      {
-        "type": "header",
-        "content": "Navigation"
-      },
-      {
-        "type": "font_picker",
-        "id": "link_font",
-        "label": "Font",
-        "default": "inter_n1"
-      }
-    ]
-  },
-  {
     "name": "Logo",
     "settings": [
       {
@@ -102,9 +67,8 @@
         "id": "logo_text",
         "label": "Logo alt text",
         "default": "Brand logo",
-        "info": "This is applyed when brand logo is not set. "
+        "info": "This is applied when brand logo is not set. "
       },
-      // alt
       {
         "type": "text",
         "id": "logo_alt_text",
@@ -112,7 +76,6 @@
         "default": "Logo",
         "info": "This is used for accessibility and SEO purposes. It should describe the logo image."
       },
-      // height
       {
         "type": "range",
         "id": "logo_height",
@@ -123,7 +86,6 @@
         "unit": "px",
         "default": 40
       },
-      //  width
       {
         "type": "range",
         "id": "logo_width",
@@ -133,6 +95,21 @@
         "step": 2,
         "unit": "px",
         "default": 140
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "min": 1200,
+        "max": 1600,
+        "step": 4,
+        "default": 1264,
+        "unit": "px",
+        "label": "Page width"
       }
     ]
   }
