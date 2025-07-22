@@ -1,124 +1,253 @@
-{% comment %}
-  A custom header section that matches the user's design.
-  - Logo on the left (with upload setting)
-  - Search bar in the center
-  - Account/Cart/Social icons on the right
-{% endcomment %}
-
 <style>
+  /* -- DESKTOP STYLES (Default) -- */
   .header-section-{{ section.id }} {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-    background-color: rgb(var(--color-background)); /* Or use theme color settings */
-    height: 48px
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: rgb(var(--color-background));
   }
-
-  .header-section-{{ section.id }} .header__inner {
+  .header-container {
+    padding: 0 15px;
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+  .header__inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
     gap: 36px;
+    min-height: 48px;
   }
-
-  /* 1. Left Column: Logo */
-  .header-section-{{ section.id }} .header__left {
+  .header__left {
     flex: 1;
-    display: flex;
     justify-content: flex-start;
   }
-  .header-section-{{ section.id }} .header__logo-link {
-    display: block;
-    max-width: {{ section.settings.logo_width }}px;
+  .header__center {
+    flex: 1;
+    text-align: left;
   }
-  .header-section-{{ section.id }} .header__logo-img {
+  .header__right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+    gap: 24px;
+  }
+  .header__logo-link {
+    display: inline-block;
+    max-width: {{ section.settings.logo_width | default: 150 }}px;
+  }
+  .header__logo-img {
     width: 100%;
     height: auto;
   }
-  .header-section-{{ section.id }} .header__shop-name {
+  .header__logo-name {
     font-size: 24px;
     font-weight: bold;
     text-decoration: none;
-    color: #e85d92; /* Example color */
+    color: rgb(var(--color-primary-brand));
+  }
+  .header__search-desktop {
+    display: block;
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .header__icon-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    background: none;
+    width: auto;
+    height: auto;
+    gap: 4px;
+    color: rgb(var(--color-primary-brand));
   }
 
-  /* 2. Center Column: Search */
-  .header-section-{{ section.id }} .header__center {
-    flex: 1;
+  /* .header-item-container {
+    max-width: 326px;
+  } */
+  .header__icon-link-title {
+    display: inline;
+    font-size: 14px;
+  }
+  .header__icon-link svg {
+    width: 22px;
+    height: 22px;
+  }
+  .header__social-icons {
     display: flex;
-    justify-content: center;
+    gap: 10px;
   }
-  .header-section-{{ section.id }} .header__search-form {
-    position: relative;
-    width: 100%;
-    max-width: 311px;
+  .header__social-icons .header__icon-link {
+    background: none;
+    width: auto;
+    height: auto;
   }
-  .header-section-{{ section.id }} .header__search-input {
+  .header__search-input {
     width: 100%;
     height: 48px;
-    padding: 10px 15px 10px 35px;
+    padding: 10px 15px 10px 45px;
     border-radius: 6px;
     border: 1px solid rgba(var(--color-secondary-text), 0.2);
-
   }
-  .header-section-{{ section.id }} .header__search-button {
+  .header__search-button {
     position: absolute;
-    left: 10px;
+    left: 15px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
-    color: #777;
+    color: rgba(var(--color-secondary-text), 0.6);
   }
-  .header-section-{{ section.id }} .header__search-button svg {
+
+  /* -- FIX: Added missing rule to size the search icon SVG -- */
+  .header__search-button svg {
     width: 20px;
     height: 20px;
+    display: block; /* Helps prevent extra space */
   }
 
-  /* 3. Right Column: Icons */
-  .header-section-{{ section.id }} .header__right {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-  }
-  .header-section-{{ section.id }} .header__icon-link {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    text-decoration: none;
-    font-size: 14px;
+  /* Hide Mobile-Only Elements on Desktop */
+  .header__logo-link--mobile,
+  .header__menu-toggle,
+  .header__search-mobile {
+    display: none;
   }
 
-  .header-section-{{ section.id }} .header__social-icons {
+  .header__icon-link svg {
+      width: 32px !important;
+      height: 32px !important ;
+    }
 
-    gap: 10px !important;
+  /* -- MOBILE STYLES (Applied on screens 767px and smaller) -- */
+
+  @media screen and (max-width: 767px) {
+    .header-section-{{ section.id }} {
+      padding: 10px 0; /* Override desktop padding */
+    }
+    .header__inner {
+      gap: 15px;
+    }
+    .header__left {
+      flex: 1 0 0;
+    }
+    .header__center {
+      flex: 1 0 0;
+      text-align: center;
+    }
+    .header__right {
+      flex: 1 0 0;
+      gap: 16px;
+    }
+
+    /* Show mobile elements */
+    .header__logo-link--mobile,
+    .header__menu-toggle,
+    .header__search-mobile {
+      display: block;
+    }
+    .header__menu-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+    .header__search-mobile {
+      margin-top: 15px;
+      position: relative;
+    }
+
+    /* Hide desktop elements */
+    .header__logo-link--desktop,
+    .header__search-desktop,
+    .header__icon-link-title,
+    .header__social-icons {
+      display: none;
+    }
+
+    /* Style mobile icons */
+    .header__icon-link {
+      justify-content: center;
+      border-radius: 50%;
+    }
 
   }
 </style>
 
 <header class="header-section header-section-{{ section.id }}">
-  <div class="header__inner">
-    <div class="header__left">
-      <a href="{{ routes.root_url }}" class="header__logo-link">
-        {% if settings.brand_logo != blank %}
-          <img
-            src="{{ settings.brand_logo | image_url: width: settings.logo_width }}"
-            alt="{{ settings.logo_alt_text | default: shop.name | escape }}"
-            loading="lazy"
-            class="header__logo-img"
-            width="{{ settings.logo_width }}"
-            height="{{ settings.logo_height  }}"
-          >
-        {% else %}
-          <span class="header__shop-name">{{ settings.logo_text }}</span>
-        {% endif %}
-      </a>
+  <div class="header-container">
+    <div class="header__inner">
+      <div class="header__left header-item-container">
+        <button class="header__menu-toggle" aria-label="Open menu">
+          {% render 'menu-icon' %}
+        </button>
+        <a href="{{ routes.root_url }}" class="header__logo-link header__logo-link--desktop">
+          {%- if settings.brand_logo != blank -%}
+            <img
+              src="{{ settings.brand_logo | image_url: width: settings.logo_width }}"
+              alt="{{ settings.logo_alt_text | default: shop.name | escape }}"
+              loading="lazy"
+              class="header__logo-img"
+              width="{{ settings.logo_width }}"
+              height="{{ settings.logo_height }}"
+            >
+          {%- else -%}
+            <span class="header__logo-name">{{ settings.logo_text }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+
+      <div class="header__center header-item-container">
+        <a href="{{ routes.root_url }}" class="header__logo-link header__logo-link--mobile">
+          {%- if settings.brand_logo != blank -%}
+            <img
+              src="{{ settings.brand_logo | image_url: width: settings.logo_width }}"
+              alt="{{ settings.logo_alt_text | default: shop.name | escape }}"
+              loading="lazy"
+              class="header__logo-img"
+              width="{{ settings.logo_width }}"
+              height="{{ settings.logo_height }}"
+            >
+          {%- else -%}
+            <span class="header__logo-name">{{ settings.logo_text }}</span>
+          {%- endif -%}
+        </a>
+        <div class="header__search-desktop">
+          <form action="{{ routes.search_url }}" method="get" class="header__search-form" role="search">
+            <input
+              type="search"
+              name="q"
+              class="header__search-input"
+              placeholder="Search products, categories"
+              aria-label="Search"
+            >
+            <button type="submit" class="header__search-button" aria-label="Submit search">
+              {% render 'search-icon' %}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="header__right header-item-container">
+        <a href="{{ routes.account_url }}" class="header__icon-link">
+          {% render 'accounts-icon' %}
+          <span class="header__icon-link-title">My Account</span>
+        </a>
+        <a href="{{ routes.cart_url }}" class="header__icon-link">
+          {% render 'cart-icon' %}
+          <span class="header__icon-link-title">Cart</span>
+        </a>
+        <div class="header__social-icons">
+          <a href="#" class="header__icon-link" aria-label="Chat on WhatsApp">{% render 'whatsapp-icon' %}</a>
+          <a href="#" class="header__icon-link" aria-label="Chat on Messenger">{% render 'message-icon' %}</a>
+          <a href="#" class="header__icon-link" aria-label="Call us">{% render 'phone-icon' %}</a>
+        </div>
+      </div>
     </div>
 
-    <div class="header__center">
+    <div class="header__search-mobile">
       <form action="{{ routes.search_url }}" method="get" class="header__search-form" role="search">
         <input
           type="search"
@@ -132,30 +261,6 @@
         </button>
       </form>
     </div>
-
-    <div class="header__right">
-      <a href="{{ routes.account_url }}" class="header__icon-link">
-        {% render 'accounts-icon' %}
-        <span>My Account</span>
-      </a>
-
-      <a href="{{ routes.cart_url }}" class="header__icon-link">
-        {% render 'cart-icon' %}
-        <span>Cart</span>
-      </a>
-      <div class="header__icon-link header__social-icons">
-        <a href="#" class="header__icon-link" aria-label="Chat on WhatsApp">
-          {% render 'whatsapp-icon' %}
-        </a>
-        <a href="#" class="header__icon-link" aria-label="Chat on Messenger">
-          {% render 'message-icon' %}
-        </a>
-
-        <a href="#" class="header__icon-link" aria-label=" Call us">
-          {% render 'phone-icon' %}
-        </a>
-      </div>
-    </div>
   </div>
 </header>
 
@@ -167,7 +272,7 @@
   "settings": [
     {
       "type": "header",
-      "content": "Padding"
+      "content": "Desktop Padding"
     },
     {
       "type": "range",
@@ -187,6 +292,37 @@
       "max": 40,
       "step": 2,
       "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Logo Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "brand_logo",
+      "label": "Brand Logo"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo Text (if no image)",
+      "default": "Choice LEGACY"
+    },
+    {
+      "type": "text",
+      "id": "logo_alt_text",
+      "label": "Logo Alt Text",
+      "default": "Choice LEGACY Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo Width",
+      "min": 50,
+      "max": 250,
+      "step": 5,
+      "default": 150,
       "unit": "px"
     }
   ]
