@@ -5,20 +5,9 @@
   .service-{{ section.id }} {
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
-    background-color: rgb(var(--color-background));
+    background-color: rgb(var( --color-primary-brand));
   }
 
-  .service__container {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-  }
-
-  .service__item {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
 
   .service__image {
     width: {{ section.settings.image_size }}px;
@@ -27,7 +16,7 @@
 </style>
 
 <section class="service service-{{ section.id }}">
-  <div class="service__container">
+  <div class="service__container  page-width">
     {% for block in section.blocks %}
       <div class="service__item" {{ block.shopify_attributes }}>
         {% if block.settings.image %}
@@ -61,7 +50,6 @@
 {
   "name": "Service",
   "tag": "section",
-  "class": "shopify-section-service",
   "settings": [
     {
       "type": "header",
@@ -73,8 +61,8 @@
       "label": "Top padding",
       "min": 0,
       "max": 100,
-      "step": 4,
-      "default": 40,
+      "step": 2,
+      "default": 88,
       "unit": "px"
     },
     {
@@ -83,8 +71,8 @@
       "label": "Bottom padding",
       "min": 0,
       "max": 100,
-      "step": 4,
-      "default": 40,
+      "step": 2,
+      "default": 88,
       "unit": "px"
     },
     {
@@ -106,6 +94,7 @@
     {
       "type": "service_item",
       "name": "Service Item",
+      "limit": 4,
       "settings": [
         {
           "type": "image_picker",
