@@ -17,12 +17,12 @@ if (!customElements.get("slideshow-component")) {
 
     initializeSwiper() {
       const swiperContainer = this.querySelector(".swiper-container");
+
       if (swiperContainer) {
         const autoplayEnabled = this.dataset.autoplay === "true";
         const autoplayDelay = parseInt(this.dataset.autoplayDelay) || 3000;
         const pauseOnHover = this.dataset.pauseOnHover === "true";
 
-        // --- Get your custom navigation button elements ---
         const customNextButton = this.querySelector(
           ".custom-swiper-button-next"
         );
@@ -31,15 +31,16 @@ if (!customElements.get("slideshow-component")) {
         );
 
         const swiperConfig = {
-          // --- Update navigation to point to your custom elements ---
           navigation: {
-            nextEl: customNextButton, // Use your custom next button
-            prevEl: customPrevButton, // Use your custom previous button
+            nextEl: customNextButton,
+            prevEl: customPrevButton,
           },
           slidesPerView: 1,
           centeredSlides: true,
           spaceBetween: 0,
+
           loop: true,
+
           breakpoints: {
             769: {
               slidesPerView: 1.2,

@@ -43,12 +43,13 @@
     display: block;
   }
 
-  .slide-image-mobile {
+  /* This rule is redundant if slide-image-mobile and slide-image-desktop are used correctly */
+  /* .slide-image-mobile {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-  }
+  } */
 
   .slide-image-desktop {
     display: block;
@@ -68,7 +69,7 @@
     }
     
     .slide-no-mobile-image .slide-image-desktop {
-      display: block;
+      display: block; 
     }
     
     .slide-no-mobile-image .slide-image-mobile {
@@ -121,49 +122,56 @@
     display: none;
   }
   
-  .swiper-button-prev,
-  .swiper-button-next {
+  .custom-swiper-button-prev,
+  .custom-swiper-button-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
     width: 44px;
     height: 44px;
     background: rgb(var(--color-secondary-brand, 0, 0, 0));
     color: rgb(var(--color-primary-text, 255, 255, 255));
     border-radius: 50%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
   }
 
-  .swiper-button-prev {
+  .custom-swiper-button-prev:hover,
+  .custom-swiper-button-next:hover {
+    background-color: rgba(var(--color-secondary-brand, 0, 0, 0), 0.8);
+  }
+
+  .custom-swiper-button-prev {
     left: calc(14% - 52px);
   }
 
-  .swiper-button-next {
+  .custom-swiper-button-next {
     right: calc(14% - 52px);
   }
 
-  .swiper-button-prev:after,
-  .swiper-button-next:after {
-    font-size: 20px;
-    color: rgb(var(--color-primary-text, 255, 255, 255));
+  .custom-swiper-button-prev svg,
+  .custom-swiper-button-next svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
   }
 
-  .swiper-button-prev:after,
-  .swiper-button-next:after {
-    font-size: 20px;
-    color: rgb(var(--color-primary-text, 255, 255, 255));
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none;
   }
 
   @media screen and (max-width: 1024px) {
-    .swiper-button-prev:after,
-    .swiper-button-next:after {
-      font-size: 18px;
-    }
-
-    .swiper-button-prev {
+    .custom-swiper-button-prev {
       left: calc(11% - 52px);
     }
 
-    .swiper-button-next {
+    .custom-swiper-button-next {
       right: calc(11% - 52px);
     }
   }
@@ -186,16 +194,11 @@
       padding: 20px;
     }
 
-    .swiper-button-prev:after,
-    .swiper-button-next:after {
-      font-size: 16px;
-    }
-
-    .swiper-button-prev {
+    .custom-swiper-button-prev {
       left: calc(15% - 52px);
     }
 
-    .swiper-button-next {
+    .custom-swiper-button-next {
       right: calc(15% - 52px);
     }
 
@@ -209,7 +212,8 @@
   class="slideshow slideshow-{{ section.id }}"
   data-autoplay="{{ section.settings.enable_autoplay }}"
   data-autoplay-delay="{{ section.settings.autoplay_delay | times: 1000 }}"
-  data-pause-on-hover="{{ section.settings.pause_on_hover }}">
+  data-pause-on-hover="{{ section.settings.pause_on_hover }}"
+>
   <div class="slideshow-container">
     <div class="swiper-container">
       <div class="swiper-wrapper">
@@ -245,9 +249,6 @@
           </div>
         {% endfor %}
       </div>
-      
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
     </div>
 
     <button class="custom-swiper-button-prev" aria-label="Previous slide">
