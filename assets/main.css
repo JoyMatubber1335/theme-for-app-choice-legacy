@@ -133,31 +133,16 @@ mark {
 }
 
 .page-width {
-  width: var(--page-width, 1320px);
-  max-width: var(--page-width, 1320px);
+  max-width: var(--page-width);
   margin-right: auto;
   margin-left: auto;
 }
 
-.reading-width {
-  max-width: var(--reading-width, 48em);
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.reading-width--inline {
-  max-width: var(--reading-width, 48em);
-}
-
-.form-width {
-  max-width: 26em;
-}
-
-.screen-height {
-  min-height: var(--viewport-height, 100vh);
-}
-.shopify-section:first-child .screen-height {
-  min-height: calc(var(--viewport-height, 100vh) - var(--content-start, 200px));
+@media screen and (max-width: 768px) {
+  .page-width {
+    margin: 0 1rem;
+    max-width: 100%;
+  }
 }
 
 @media (min-width: 600px) {

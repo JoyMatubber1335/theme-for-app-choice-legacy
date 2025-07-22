@@ -6,7 +6,6 @@
 <!doctype html>
 <html class="no-js" lang="{{ request.locale.iso_code }}">
 <head>
-  <link rel="preload" href="{{ 'main.css' | asset_url }}" as="style">
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css">
 
@@ -36,6 +35,8 @@
       --navigation-font-family: {{ settings.link_font.family }}, {{ settings.link_font.fallback_families }};
       --navigation-font-style: {{ settings.link_font.style }};
       --navigation-font-weight: {{ settings.link_font.weight }};
+
+      --page-width: {{ settings.page_width | divided_by: 10.0 }}rem;
     }
      
   {% endstyle -%}
