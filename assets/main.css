@@ -146,11 +146,6 @@ h6,
   font-family: "Inter", sans-serif;
 }
 
-/* font size */
-:root {
-  --font-unit: 0.1rem; /* 1px */
-}
-
 /* Desktop styles */
 .fs-12-lh-16-ls-0_6pct {
   font-size: calc(12 * var(--font-unit));
@@ -285,6 +280,27 @@ h6,
     line-height: calc(24 * var(--font-unit));
     letter-spacing: 1.2%;
   }
+}
+
+/* font weight */
+.fw-500 {
+  font-weight: 500;
+}
+
+.fw-600 {
+  font-weight: 600;
+}
+
+.fw-700 {
+  font-weight: 700;
+}
+
+.fw-800 {
+  font-weight: 800;
+}
+
+.fw-900 {
+  font-weight: 900;
 }
 
 hr {
