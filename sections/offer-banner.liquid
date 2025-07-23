@@ -72,7 +72,7 @@
               {% if block.settings.link != blank %}
                 <a href="{{ block.settings.link }}"{% if block.settings.link_target %} target="_blank" rel="noopener"{% endif %}>
               {% endif %}
-              {{ block.settings.image | image_url: width: 1400 | image_tag: alt: block.settings.image.alt, class: 'slide-image slide-image-desktop' }}
+              {% render 'image', image: block.settings.image, width: 1400, css_classes: 'slide-image slide-image-desktop' %}
               {% if block.settings.link != blank %}</a>{% endif %}
             {% else %}
              {% assign image_number = forloop.index0 | modulo: 2 | plus: 1 %}
@@ -84,13 +84,13 @@
               {% if block.settings.link != blank %}
                 <a href="{{ block.settings.link }}"{% if block.settings.link_target %} target="_blank" rel="noopener"{% endif %}>
               {% endif %}
-              {{ block.settings.mobile_image | image_url: width: 800 | image_tag: alt: block.settings.mobile_image.alt, class: 'slide-image slide-image-mobile' }}
+              {% render 'image', image: block.settings.mobile_image, width: 800, css_classes: 'slide-image slide-image-mobile' %}
               {% if block.settings.link != blank %}</a>{% endif %}
             {% elsif block.settings.image != blank %}
               {% if block.settings.link != blank %}
                 <a href="{{ block.settings.link }}"{% if block.settings.link_target %} target="_blank" rel="noopener"{% endif %}>
               {% endif %}
-              {{ block.settings.image | image_url: width: 800 | image_tag: alt: block.settings.image.alt, class: 'slide-image slide-image-mobile' }}
+              {% render 'image', image: block.settings.image, width: 800, css_classes: 'slide-image slide-image-mobile' %}
               {% if block.settings.link != blank %}</a>{% endif %}
             {% else %}
               {{ "lifestyle-1" | placeholder_svg_tag: "placeholder-svg slide-image-mobile" }}

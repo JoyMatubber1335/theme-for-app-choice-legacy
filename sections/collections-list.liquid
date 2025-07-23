@@ -69,14 +69,14 @@
           <div class="collections-list__item" {{ block.shopify_attributes }}>
             <a href="{{ block.settings.collection.url }}" class="collections-list__link">
               {% if block.settings.collection.featured_image %}
-                <img
-                  src="{{ block.settings.collection.featured_image | image_url: width: 300 }}"
-                  alt="{{ block.settings.collection.featured_image.alt | default: block.settings.collection.title }}"
-                  class="collections-list__image"
-                  loading="lazy"
-                  width="298px"
-                  height="234px"
-                >
+                {% render 'image', 
+                  image: block.settings.collection.featured_image,
+                  width: 300,
+                  alt_text: block.settings.collection.title,
+                  css_classes: 'collections-list__image',
+                  width_attr: '298px',
+                  height_attr: '234px'
+                %}
               {% else %}
                 <div class="collections-list__image">
                   {{ 'collection-1' | placeholder_svg_tag: 'collections-list__image' }}
@@ -106,14 +106,14 @@
                 <div class="swiper-slide collections-list__item" {{ block.shopify_attributes }}>
                   <a href="{{ block.settings.collection.url }}" class="collections-list__link">
                     {% if block.settings.collection.featured_image %}
-                      <img
-                        src="{{ block.settings.collection.featured_image | image_url: width: 300 }}"
-                        alt="{{ block.settings.collection.featured_image.alt | default: block.settings.collection.title }}"
-                        class="collections-list__image"
-                        loading="lazy"
-                        width="298px"
-                        height="234px"
-                      >
+                     {% render 'image', 
+                        image: block.settings.collection.featured_image,
+                        width: 300,
+                        alt_text: block.settings.collection.title,
+                        css_classes: 'collections-list__image',
+                        width_attr: '298px',
+                        height_attr: '234px' 
+                      %}
                     {% else %}
                       <div class="collections-list__image">
                         {{ 'collection-1' | placeholder_svg_tag: 'collections-list__image' }}
