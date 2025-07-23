@@ -1,3 +1,146 @@
-<div>
-  Footer
-</div>
+<style>
+  .footer {
+    padding-top: {{ section.settings.padding_top | default: 40 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 40 }}px;
+  }
+
+  .footer__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  .footer__left-content {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .footer_mobile-app--icon {
+    display: flex;
+    gap: 8px;
+  }
+  .footer__menu,
+  .footer__social-icon {
+    flex: 1;
+  }
+</style>
+
+<footer
+  class="footer"
+>
+  <div class="footer__container page-width">
+    <div class="footer__left-content">
+      {% if settings.brand_logo != blank %}
+        <img
+          src="{{ settings.brand_logo | asset_url }}"
+          alt="{{ settings.logo_alt_text }}"
+          class="footer__logo"
+          loading="lazy"
+          height="40"
+          width="40"
+        >
+      {% else %}
+        <h1 class="footer__title">{{ settings.logo_text }}</h1>
+      {% endif %}
+
+      <div class="footer_mobile-app--icon">
+        {% render 'google-play-icon' %}
+        {% render 'app-store-icon' %}
+      </div>
+    </div>
+
+    {% for block in section.blocks %}
+      {% if block.type == 'link_list' %}
+        <div class="footer__menu">
+          <h3 class="footer__menu-title">{{ block.settings.menu.title }}</h3>
+          <ul class="footer__menu-list">
+            {% for link in block.settings.menu.links %}
+              <li class="footer__menu-item">
+                <a href="{{ link.url }}" class="footer__menu-link">{{ link.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <div class="footer__social-icon">
+      <h2 class="footer__social-title">{{ 'sections.footer.social_media' | t }}</h2>
+      <ul class="footer__social-list">
+        {% for social in settings.social_media %}
+          {% if social.url != blank %}
+            <li class="footer__social-item">
+              <a href="{{ social.url }}" class="footer__social-link" target="_blank" rel="noopener noreferrer">
+                <span class="icon icon-{{ social.icon }}"></span>
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        {
+          "type": "link_list"
+        },
+        {
+          "type": "link_list"
+        },
+        {
+          "type": "link_list"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
