@@ -14,6 +14,100 @@
       padding: 10px 0;
     }
   }
+
+  /* -- MEGA MENU STYLES -- */
+  .mega-menu {
+    position: relative;
+    z-index: 1000;
+    background: rgb(var(--color-primary-brand));
+  }
+  
+  .mega-menu__container {
+    padding: 20px 0;
+  }
+
+  .mega-menu__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .mega-menu__item {
+    position: relative;
+  }
+  
+  .mega-menu__link {
+    color: rgb(var(--color-background));
+    text-decoration: none;
+  }
+
+  /* Mega Menu Dropdown */
+  .mega-menu__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1134px;
+    background: white;
+    border-radius: 6px;
+    {% comment %} opacity: 0; {% endcomment %}
+    {% comment %} visibility: hidden; {% endcomment %}
+    transition: all 0.3s ease;
+    z-index: 1001;
+    margin-top: 8px;
+    padding: 24px 40px;
+    box-shadow: 0px 2px 14px 0px rgba(3, 11, 26, 0.10);
+  }
+
+  .mega-menu__item:hover .mega-menu__dropdown {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mega-menu__dropdown-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 400px;
+  }
+
+  .mega-menu__column:last-child {
+    padding-right: 0;
+  }
+
+  .mega-menu__column-title {
+    color: rgb(var(--color-primary-text))
+  }
+
+  .mega-menu__column-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mega-menu__column-link {
+    transition: color 0.3s ease;
+    display: block;
+  }
+
+  .mega-menu__column-link:hover {
+    color: rgb(var(--color-primary-brand));
+  }
+
+  /* Mobile Mega Menu */
+  @media screen and (max-width: 767px) {
+    .mega-menu__nav {
+      display: none;
+    }
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    .mega-menu__dropdown {
+      width: 700px;
+    }
+    
+    .mega-menu__dropdown-inner gap-16 {
+      grid-template-columns: 1fr 1fr 250px;
+    }
+  }
 </style>
 
 <header class="header header-{{ section.id }}">
@@ -104,6 +198,48 @@
   </div>
 </header>
 
+<!-- Mega Menu Navigation -->
+<nav class="mega-menu">
+  <div class="mega-menu__nav page-width">
+    <div class="mega-menu__container">
+      <ul class="mega-menu__list flex items-center justify-center gap-24">
+        {%- if section.settings.main_menu != blank -%}
+          {%- for link in linklists[section.settings.main_menu].links -%}
+            <li class="mega-menu__item">
+              <a href="{{ link.url }}" class="mega-menu__link fw-600 fs-14-lh-100pct-ls-2pct uppercase">
+                {{ link.title }}
+              </a>
+              
+              {%- if link.links != blank -%}
+                <div class="mega-menu__dropdown">
+                  <div class="mega-menu__dropdown-inner gap-16">
+                    {%- assign column_count = 0 -%}
+                    {%- for child_link in link.links -%}
+                      {%- if child_link.links != blank and column_count < 3 -%}
+                        <div class="mega-menu__column flex flex-col gap-16">
+                          <h3 class="mega-menu__column-title uppercase fs-21-lh-24-ls-1_2pct fw-400">{{ child_link.title }}</h3>
+                          <ul class="mega-menu__column-list flex flex-col gap-16">
+                            {%- for grandchild_link in child_link.links -%}
+                              <li class="mega-menu__column-item">
+                                <a href="{{ grandchild_link.url }}" class="mega-menu__column-link fs-14-lh-20-ls-0_1 fw-500">{{ grandchild_link.title }}</a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                        {%- assign column_count = column_count | plus: 1 -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+    </div>
+  </div>
+</nav>
+
 {% schema %}
 {
   "name": "Header",
@@ -164,6 +300,16 @@
       "step": 5,
       "default": 150,
       "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Mega Menu Settings"
+    },
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Main Menu",
+      "info": "Select the menu to display in the mega menu navigation"
     }
   ]
 }
