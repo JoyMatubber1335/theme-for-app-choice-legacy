@@ -48,10 +48,10 @@
     left: 50%;
     transform: translateX(-50%);
     width: 1134px;
-    background: white;
+    background: rgb(var(--color-background));
     border-radius: 6px;
-    {% comment %} opacity: 0; {% endcomment %}
-    {% comment %} visibility: hidden; {% endcomment %}
+    opacity: 0;
+    visibility: hidden;
     transition: all 0.3s ease;
     z-index: 1001;
     margin-top: 8px;
@@ -65,8 +65,21 @@
   }
 
   .mega-menu__dropdown-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 400px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .mega-menu__columns-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mega-menu__column {
+    width: 198px;  
   }
 
   .mega-menu__column:last-child {
@@ -92,20 +105,34 @@
     color: rgb(var(--color-primary-brand));
   }
 
-  /* Mobile Mega Menu */
-  @media screen and (max-width: 767px) {
-    .mega-menu__nav {
-      display: none;
+  .mega-menu__image-column {
+    padding: 24px 0;
+    flex-shrink: 0;
+  }
+
+  .mega-menu__image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  @media screen and (min-width: 1024px) and (max-width: 1280px) {
+    .mega-menu__dropdown {
+      width: 950px;
+      padding: 20px 32px;
     }
   }
 
-  @media screen and (min-width: 768px) and (max-width: 1024px) {
+  @media screen and (min-width: 769px) and (max-width: 1023px) {
     .mega-menu__dropdown {
       width: 700px;
+      padding: 16px;
     }
-    
-    .mega-menu__dropdown-inner gap-16 {
-      grid-template-columns: 1fr 1fr 250px;
+
+    .mega-menu__image {
+      width: 250px;
+      height: 150px;
+      object-fit: cover;
     }
   }
 </style>
@@ -211,24 +238,78 @@
               </a>
               
               {%- if link.links != blank -%}
+                {%- comment -%} Count columns for dynamic layout {%- endcomment -%}
+                {%- assign column_count = 0 -%}
+                {%- assign has_2level_items = false -%}
+                {%- for child_link in link.links -%}
+                  {%- if child_link.links != blank -%}
+                    {%- assign column_count = column_count | plus: 1 -%}
+                  {%- else -%}
+                    {%- assign has_2level_items = true -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                
+                {%- comment -%} If we have 2-level items, they count as one column {%- endcomment -%}
+                {%- if has_2level_items -%}
+                  {%- assign column_count = column_count | plus: 1 -%}
+                {%- endif -%}
+                
+                {%- comment -%} Determine if we should show image (2+ columns) {%- endcomment -%}
+                {%- assign show_image = false -%}
+                {%- if column_count >= 2 -%}
+                  {%- assign show_image = true -%}
+                {%- endif -%}
+                
                 <div class="mega-menu__dropdown">
-                  <div class="mega-menu__dropdown-inner gap-16">
-                    {%- assign column_count = 0 -%}
-                    {%- for child_link in link.links -%}
-                      {%- if child_link.links != blank and column_count < 3 -%}
-                        <div class="mega-menu__column flex flex-col gap-16">
-                          <h3 class="mega-menu__column-title uppercase fs-21-lh-24-ls-1_2pct fw-400">{{ child_link.title }}</h3>
-                          <ul class="mega-menu__column-list flex flex-col gap-16">
-                            {%- for grandchild_link in child_link.links -%}
-                              <li class="mega-menu__column-item">
-                                <a href="{{ grandchild_link.url }}" class="mega-menu__column-link fs-14-lh-20-ls-0_1 fw-500">{{ grandchild_link.title }}</a>
-                              </li>
-                            {%- endfor -%}
-                          </ul>
-                        </div>
-                        {%- assign column_count = column_count | plus: 1 -%}
+                  <div class="mega-menu__dropdown-inner">
+                    <div class="mega-menu__columns-wrapper">
+                      {%- assign column_rendered = false -%}
+                      {%- for child_link in link.links -%}
+                        {%- if child_link.links != blank -%}
+                          <!-- 3-level menu: child has grandchildren -->
+                          <div class="mega-menu__column flex flex-col gap-16">
+                            <h3 class="mega-menu__column-title uppercase fs-21-lh-24-ls-1_2pct fw-400">{{ child_link.title }}</h3>
+                            <ul class="mega-menu__column-list flex flex-col gap-16">
+                              {%- for grandchild_link in child_link.links -%}
+                                <li class="mega-menu__column-item">
+                                  <a href="{{ grandchild_link.url }}" class="mega-menu__column-link fs-14-lh-20-ls-0_1 fw-500">{{ grandchild_link.title }}</a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          </div>
+                        {%- else -%}
+                          <!-- 2-level menu: child has no grandchildren -->
+                          {%- unless column_rendered -%}
+                            <div class="mega-menu__column flex flex-col gap-16">
+                              <ul class="mega-menu__column-list flex flex-col gap-16">
+                            {%- assign column_rendered = true -%}
+                          {%- endunless -%}
+                                <li class="mega-menu__column-item">
+                                  <a href="{{ child_link.url }}" class="mega-menu__column-link fs-14-lh-20-ls-0_1 fw-500">{{ child_link.title }}</a>
+                                </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                      
+                      {%- comment -%} Close the column if we had 2-level items {%- endcomment -%}
+                      {%- if has_2level_items -%}
+                              </ul>
+                            </div>
                       {%- endif -%}
-                    {%- endfor -%}
+                    </div>
+                    
+                    <!-- Image Column - Only show when column count >= 2 -->
+                    {%- if section.settings.mega_menu_image != blank and show_image -%}
+                      <div class="mega-menu__image-column flex flex-start">
+                        <img
+                          src="{{ section.settings.mega_menu_image | image_url: width: 400 }}"
+                          alt="{{ section.settings.mega_menu_image_alt | default: 'Featured products' | escape }}"
+                          loading="lazy"
+                          class="mega-menu__image"
+                          width="400"
+                          height="300"
+                        />
+                      </div>
+                    {%- endif -%}
                   </div>
                 </div>
               {%- endif -%}
@@ -310,6 +391,18 @@
       "id": "main_menu",
       "label": "Main Menu",
       "info": "Select the menu to display in the mega menu navigation"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_menu_image",
+      "label": "Mega Menu Image",
+      "info": "Image displayed in the right column of the mega menu dropdown (shown only when 2+ columns)"
+    },
+    {
+      "type": "text",
+      "id": "mega_menu_image_alt",
+      "label": "Mega Menu Image Alt Text",
+      "default": "Featured products"
     }
   ]
 }
