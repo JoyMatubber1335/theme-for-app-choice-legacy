@@ -1,7 +1,8 @@
 {
   "sections": {
     "footer": {
-      "social_media": "Social media"
+      "social_media": "Social media",
+      "payment_methods_alt": "Payment methods"
     }
   }
 }

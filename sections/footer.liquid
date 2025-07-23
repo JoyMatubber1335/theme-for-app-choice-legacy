@@ -1,110 +1,83 @@
+{{ 'footer.css' | asset_url | stylesheet_tag }}
+
 <style>
   .footer {
     padding-top: {{ section.settings.padding_top | default: 40 }}px;
     padding-bottom: {{ section.settings.padding_bottom | default: 40 }}px;
   }
-
-  .footer__container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 32px;
-  }
-
-  .footer__left-content {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
-  .footer_mobile-app--icon {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .footer__menu,
-  .footer__social-icon {
-    flex: 1;
-  }
-
-  .footer__menu {
-    margin :0 !important;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .footer__menu-title,
-  .footer__social-title{
-    margin: 0 !important;
-    color:rgba(var(--color-primary-text), 0.7);
-  }
-
-  .footer__menu-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin: 0 !important;
-
-  }
 </style>
 
-<footer
-  class="footer"
->
+<footer class="footer">
   <div class="footer__container page-width">
-    <div class="footer__left-content">
-      {% if settings.brand_logo != blank %}
-        <img
-          src="{{ settings.brand_logo | image_url: width: settings.logo_width }}"
-          alt="{{ settings.logo_alt_text | default: shop.name | escape }}"
-          loading="lazy"
-          class="footer_logo-img"
-          width="{{ settings.logo_width }}"
-          height="{{ settings.logo_height }}"
-        >
-      {% else %}
-        <h1 class="footer__title">{{ settings.logo_text }}</h1>
-      {% endif %}
+    <div class="footer__top">
+      <div class="footer__brand">
+        {% if settings.brand_logo != blank %}
+          <img
+            src="{{ settings.brand_logo | image_url: width: settings.logo_width }}"
+            alt="{{ settings.logo_alt_text | default: shop.name | escape }}"
+            loading="lazy"
+            class="footer__brand-logo"
+            width="{{ settings.logo_width }}"
+            height="{{ settings.logo_height }}"
+          >
+        {% else %}
+          <h1 class="footer__brand-title">{{ settings.logo_text }}</h1>
+        {% endif %}
 
-      <div class="footer_mobile-app--icon">
-        {% render 'google-play-icon' %}
-        {% render 'app-store-icon' %}
+        <div class="footer__app-icons">
+          {% render 'google-play-icon' %}
+          {% render 'app-store-icon' %}
+        </div>
       </div>
-    </div>
 
-    {% for block in section.blocks %}
-      {% if block.type == 'link_list' %}
-        <div class="footer__menu">
-          <h3 class="footer__menu-title fs-16-lh-24-ls-0 ff-general-sans fw-400">{{ block.settings.menu.title }}</h3>
-          <div class="footer__menu-list">
-            {% for link in block.settings.menu.links %}
-              <h2 class="footer__menu-item">
-                <a href="{{ link.url }}" class="footer__menu-link ff-inter fs-16-lh-24-ls-0 fw-500 ">
-                  {{- link.title -}}
-                </a>
-              </h2>
-            {% endfor %}
+      {% for block in section.blocks %}
+        {% if block.type == 'link_list' %}
+          <div class="footer__menu">
+            <h3 class="footer__menu-title fs-16-lh-24-ls-0 ff-general-sans fw-400">
+              {{ block.settings.menu.title }}
+            </h3>
+            <div class="footer__menu-list">
+              {% for link in block.settings.menu.links %}
+                <h2 class="footer__menu-item">
+                  <a href="{{ link.url }}" class="footer__menu-link ff-inter fs-16-lh-24-ls-0 fw-500">
+                    {{- link.title -}}
+                  </a>
+                </h2>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      {% if settings.social_facebook != blank
+        or settings.social_instagram != blank
+        or settings.social_linkedin != blank
+        or settings.social_youtube != blank
+        or settings.social_tiktok != blank
+        or settings.social_twitter != blank
+        or settings.social_snapchat != blank
+        or settings.social_pinterest != blank
+      %}
+        <div class="footer__social">
+          <h2 class="footer__social-title fs-16-lh-24-ls-0 ff-general-sans fw-400">
+            {{ 'sections.footer.social_media' | t }}
+          </h2>
+          <div class="footer__social-list">
+            {%- render 'social-icons' -%}
           </div>
         </div>
       {% endif %}
-    {% endfor %}
+    </div>
 
-    <div class="footer__social-icon">
-      <h2 class="footer__social-title fs-16-lh-24-ls-0 ff-general-sans fw-400">
-        {{ 'sections.footer.social_media' | t }}
-      </h2>
-      <ul class="footer__social-list">
-        {% for social in settings.social_media %}
-          {% if social.url != blank %}
-            <li class="footer__social-item">
-              <a href="{{ social.url }}" class="footer__social-link" target="_blank" rel="noopener noreferrer">
-                <span class="icon icon-{{ social.icon }}"></span>
-              </a>
-            </li>
-          {% endif %}
-        {% endfor %}
-      </ul>
+    <div class="footer__bottom">
+      <img
+        src="{{ 'ssl-payment.png' | asset_url }}"
+        alt="{{ 'sections.footer.payment_methods_alt' | t }}"
+        class="footer__payment-image"
+        loading="lazy"
+        width="100%"
+        height="auto"
+      >
     </div>
   </div>
 </footer>
