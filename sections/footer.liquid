@@ -31,12 +31,18 @@
       </div>
 
       {% for block in section.blocks %}
-        {% if block.type == 'link_list' %}
+        {% if block.type == 'link_list' and block.settings.menu != blank %}
           <div class="footer__menu">
-            <h3 class="footer__menu-title fs-16-lh-24-ls-0 ff-general-sans fw-400">
-              {{ block.settings.menu.title }}
-            </h3>
-            <div class="footer__menu-list">
+            <div class="footer__menu-header">
+              <h3 class="footer__menu-title fs-16-lh-24-ls-0 ff-general-sans fw-400">
+                {{ block.settings.menu.title }}
+              </h3>
+              <button class="footer__menu-toggle" aria-expanded="false" aria-controls="menu-{{ forloop.index }}">
+                {% render 'icon-plus' %}
+                {% render 'icon-minus' %}
+              </button>
+            </div>
+            <div class="footer__menu-list" id="menu-{{ forloop.index }}">
               {% for link in block.settings.menu.links %}
                 <h2 class="footer__menu-item">
                   <a href="{{ link.url }}" class="footer__menu-link ff-inter fs-16-lh-24-ls-0 fw-500">
@@ -58,11 +64,13 @@
         or settings.social_snapchat != blank
         or settings.social_pinterest != blank
       %}
-        <div class="footer__social">
-          <h2 class="footer__social-title fs-16-lh-24-ls-0 ff-general-sans fw-400">
-            {{ 'sections.footer.social_media' | t }}
-          </h2>
-          <div class="footer__social-list">
+        <div class="footer__social footer__social-desktop">
+          <div class="footer__social-header">
+            <h2 class="footer__social-title fs-16-lh-24-ls-0 ff-general-sans fw-400">
+              {{ 'sections.footer.social_media' | t }}
+            </h2>
+          </div>
+          <div class="footer__social-list" id="social-menu">
             {%- render 'social-icons' -%}
           </div>
         </div>
@@ -82,6 +90,8 @@
   </div>
 </footer>
 
+<script src="{{ 'footer.js' | asset_url }}" defer></script>
+
 {% schema %}
 {
   "name": "Footer",
@@ -98,7 +108,7 @@
       "step": 4,
       "unit": "px",
       "label": "Top padding",
-      "default": 40
+      "default": 0
     },
     {
       "type": "range",
@@ -108,7 +118,7 @@
       "step": 4,
       "unit": "px",
       "label": "Bottom padding",
-      "default": 40
+      "default": 0
     }
   ],
   "blocks": [
