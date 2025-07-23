@@ -41,13 +41,12 @@
     text-decoration: none;
   }
 
-  /* Mega Menu Dropdown */
+  /* Mega Menu Dropdown - Base styles */
   .mega-menu__dropdown {
     position: absolute;
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    width: 1134px;
     background: rgb(var(--color-background));
     border-radius: 6px;
     opacity: 0;
@@ -57,6 +56,33 @@
     margin-top: 8px;
     padding: 24px 40px;
     box-shadow: 0px 2px 14px 0px rgba(3, 11, 26, 0.10);
+    white-space: nowrap;
+    width: max-content;
+    max-width: 1134px;
+    min-width: 200px;
+  }
+
+  /* Column-specific width adjustments */
+  .mega-menu__dropdown--1-column {
+    width: auto;
+    min-width: 100px;
+    max-width: 400px;
+    padding: 16px 20px;
+  }
+
+  .mega-menu__dropdown--2-columns {
+    width: auto;
+    min-width: 430px;
+    max-width: 600px;
+  }
+
+  .mega-menu__dropdown--3-columns {
+    width: auto;
+    min-width: 1134px;
+  }
+
+  .mega-menu__dropdown--4-plus-columns {
+    width: 1134px;
   }
 
   .mega-menu__item:hover .mega-menu__dropdown {
@@ -79,7 +105,11 @@
   }
 
   .mega-menu__column {
-    width: 198px;  
+    min-width: 198px;  
+  }
+
+  .mega-menu__dropdown--1-column .mega-menu__column {
+    min-width: 100px;  
   }
 
   .mega-menu__column:last-child {
@@ -118,15 +148,51 @@
 
   @media screen and (min-width: 1024px) and (max-width: 1280px) {
     .mega-menu__dropdown {
-      width: 950px;
+      max-width: 950px;
       padding: 20px 32px;
+      left: 100%;
+    }
+
+    .mega-menu__dropdown--3-columns {
+      min-width: 950px;
+    }
+
+    .mega-menu__dropdown--4-plus-columns {
+      width: 950px;
+    }
+
+    .mega-menu__column {
+      min-width: 150px;  
+    }
+
+    .mega-menu__dropdown--1-column {
+      width: auto;
+      min-width: 100px;
+      max-width: 400px;
+      padding: 10px 16px;
     }
   }
 
   @media screen and (min-width: 769px) and (max-width: 1023px) {
     .mega-menu__dropdown {
-      width: 700px;
+      max-width: 700px;
       padding: 16px;
+    }
+
+    .mega-menu__dropdown--4-plus-columns {
+      width: 700px;
+    }
+
+    .mega-menu__dropdown--1-column {
+      max-width: 300px;
+    }
+
+    .mega-menu__dropdown--2-columns {
+      max-width: 450px;
+    }
+
+    .mega-menu__dropdown--3-columns {
+      max-width: 600px;
     }
 
     .mega-menu__image {
@@ -259,8 +325,20 @@
                 {%- if column_count >= 2 -%}
                   {%- assign show_image = true -%}
                 {%- endif -%}
+
+                {%- comment -%} Determine dropdown width class based on column count {%- endcomment -%}
+                {%- assign dropdown_class = 'mega-menu__dropdown' -%}
+                {%- if column_count == 1 -%}
+                  {%- assign dropdown_class = dropdown_class | append: ' mega-menu__dropdown--1-column' -%}
+                {%- elsif column_count == 2 -%}
+                  {%- assign dropdown_class = dropdown_class | append: ' mega-menu__dropdown--2-columns' -%}
+                {%- elsif column_count == 3 -%}
+                  {%- assign dropdown_class = dropdown_class | append: ' mega-menu__dropdown--3-columns' -%}
+                {%- else -%}
+                  {%- assign dropdown_class = dropdown_class | append: ' mega-menu__dropdown--4-plus-columns' -%}
+                {%- endif -%}
                 
-                <div class="mega-menu__dropdown">
+                <div class="{{ dropdown_class }}">
                   <div class="mega-menu__dropdown-inner">
                     <div class="mega-menu__columns-wrapper">
                       {%- assign column_rendered = false -%}
