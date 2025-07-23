@@ -19,11 +19,33 @@
   }
   .footer_mobile-app--icon {
     display: flex;
+    flex-direction: column;
     gap: 8px;
   }
   .footer__menu,
   .footer__social-icon {
     flex: 1;
+  }
+
+  .footer__menu {
+    margin :0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .footer__menu-title,
+  .footer__social-title{
+    margin: 0 !important;
+    color:rgba(var(--color-primary-text), 0.7);
+  }
+
+  .footer__menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0 !important;
+
   }
 </style>
 
@@ -34,12 +56,12 @@
     <div class="footer__left-content">
       {% if settings.brand_logo != blank %}
         <img
-          src="{{ settings.brand_logo | asset_url }}"
-          alt="{{ settings.logo_alt_text }}"
-          class="footer__logo"
+          src="{{ settings.brand_logo | image_url: width: settings.logo_width }}"
+          alt="{{ settings.logo_alt_text | default: shop.name | escape }}"
           loading="lazy"
-          height="40"
-          width="40"
+          class="footer_logo-img"
+          width="{{ settings.logo_width }}"
+          height="{{ settings.logo_height }}"
         >
       {% else %}
         <h1 class="footer__title">{{ settings.logo_text }}</h1>
@@ -54,20 +76,24 @@
     {% for block in section.blocks %}
       {% if block.type == 'link_list' %}
         <div class="footer__menu">
-          <h3 class="footer__menu-title">{{ block.settings.menu.title }}</h3>
-          <ul class="footer__menu-list">
+          <h3 class="footer__menu-title fs-16-lh-24-ls-0 ff-general-sans fw-400">{{ block.settings.menu.title }}</h3>
+          <div class="footer__menu-list">
             {% for link in block.settings.menu.links %}
-              <li class="footer__menu-item">
-                <a href="{{ link.url }}" class="footer__menu-link">{{ link.title }}</a>
-              </li>
+              <h2 class="footer__menu-item">
+                <a href="{{ link.url }}" class="footer__menu-link ff-inter fs-16-lh-24-ls-0 fw-500 ">
+                  {{- link.title -}}
+                </a>
+              </h2>
             {% endfor %}
-          </ul>
+          </div>
         </div>
       {% endif %}
     {% endfor %}
 
     <div class="footer__social-icon">
-      <h2 class="footer__social-title">{{ 'sections.footer.social_media' | t }}</h2>
+      <h2 class="footer__social-title fs-16-lh-24-ls-0 ff-general-sans fw-400">
+        {{ 'sections.footer.social_media' | t }}
+      </h2>
       <ul class="footer__social-list">
         {% for social in settings.social_media %}
           {% if social.url != blank %}
