@@ -25,7 +25,61 @@
         }
       },
       "block_order": ["slide-1", "slide-2", "slide-3"]
+    },
+    "offer_banner_section_1": {
+      "type": "offer-banner",
+      "settings": {
+        "slide_border_radius": 6,
+        "enable_autoplay": false,
+        "autoplay_delay": 4,
+        "pause_on_hover": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "banner_height_desktop": "508",
+        "banner_height_mobile": "164",
+        "show_navigation": false
+      },
+      "blocks": {
+        "block_one_slide": {
+          "type": "banner",
+          "settings": {}
+        }
+      },
+      "block_order": ["block_one_slide"]
+    },
+    "offer_banner_section_2": {
+      "type": "offer-banner",
+      "settings": {
+        "slide_border_radius": 6,
+        "enable_autoplay": true,
+        "autoplay_delay": 4,
+        "pause_on_hover": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "banner_height_desktop": "225",
+        "banner_height_mobile": "164",
+        "show_navigation": true
+      },
+      "blocks": {
+        "block_multi_slide_1": {
+          "type": "banner",
+          "settings": {}
+        },
+        "block_multi_slide_2": {
+          "type": "banner",
+          "settings": {}
+        },
+        "block_multi_slide_3": {
+          "type": "banner",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "block_multi_slide_1",
+        "block_multi_slide_2",
+        "block_multi_slide_3"
+      ]
     }
   },
-  "order": ["slideshow"]
+  "order": ["slideshow", "offer_banner_section_1", "offer_banner_section_2"]
 }
