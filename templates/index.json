@@ -1,4 +1,31 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "slideshow": {
+      "type": "slideshow",
+      "settings": {
+        "slide_border_radius": 6,
+        "enable_autoplay": true,
+        "autoplay_delay": 4,
+        "pause_on_hover": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      },
+      "blocks": {
+        "slide-1": {
+          "type": "slide",
+          "settings": {}
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {}
+        },
+        "slide-3": {
+          "type": "slide",
+          "settings": {}
+        }
+      },
+      "block_order": ["slide-1", "slide-2", "slide-3"]
+    }
+  },
+  "order": ["slideshow"]
 }
