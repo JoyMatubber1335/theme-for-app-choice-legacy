@@ -10,10 +10,9 @@
   .collections-list-{{ section.id }} {
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
-    /* background-color: rgb(var(--color-background)); */
   }
 
-   .collections-list__grid {
+  .collections-list__grid {
     display: grid;
     grid-template-columns: repeat({{ minShown }}, 1fr);
     gap: 24px;
@@ -21,12 +20,40 @@
     align-items: stretch;
   }
 
+  /* Hide Swiper container on desktop by default */
+  .collections-list__swiper-wrapper {
+    display: none;
+  }
+
   /* -- MOBILE STYLES -- */
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 768px) {
     .collections-list-{{ section.id }} {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
+
+    /* Hide grid on mobile */
+    .collections-list__grid {
+      display: none;
+    }
+
+    /* Show Swiper container on mobile */
+    .collections-list__swiper-wrapper {
+      display: block;
+    }
+
+    .collections-list__swiper-wrapper .swiper-container {
+      position: relative;
+      padding-bottom: 20px;
+    }
+
+    .collections-list__swiper-wrapper .swiper-slide {
+      box-sizing: border-box;
+    }
+     .collections-list__swiper-wrapper .swiper-slide:last-child {
+      margin-right: 0;
+    }
+
   }
 </style>
 
@@ -63,6 +90,47 @@
           </div>
         {% endif %}
       {% endfor %}
+    </div>
+
+    <div class="collections-list__swiper-wrapper">
+      <slideshow-component
+        data-autoplay="false"
+        data-show-progress-bar="true"
+        data-slides-per-view-desktop="3"
+        data-single-slide-view="true"
+      >
+        <div class="swiper-container flex flex-col gap-24">
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              {% if block.settings.collection %}
+                <div class="swiper-slide collections-list__item" {{ block.shopify_attributes }}>
+                  <a href="{{ block.settings.collection.url }}" class="collections-list__link">
+                    {% if block.settings.collection.featured_image %}
+                      <img
+                        src="{{ block.settings.collection.featured_image | image_url: width: 300 }}"
+                        alt="{{ block.settings.collection.featured_image.alt | default: block.settings.collection.title }}"
+                        class="collections-list__image"
+                        loading="lazy"
+                        width="298px"
+                        height="234px"
+                      >
+                    {% else %}
+                      <div class="collections-list__image">
+                        {{ 'collection-1' | placeholder_svg_tag: 'collections-list__image' }}
+                      </div>
+                    {% endif %}
+
+                    <div class="collections-list__content">
+                      <h3 class="collections-list__name">{{ block.settings.collection.title | default: 'Collection' }}</h3>
+                    </div>
+                  </a>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% render "slideshow-progress-bar" %}
+        </div>
+      </slideshow-component>
     </div>
   </div>
 </section>

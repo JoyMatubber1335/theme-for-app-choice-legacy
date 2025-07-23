@@ -83,29 +83,3 @@
     gap: 20px;
   }
 }
-
-@media screen and (max-width: 767px) {
-  .collections-list__container {
-    gap: 32px;
-  }
-
-  .collections-list__title {
-    font-size: 1.5rem;
-  }
-
-  .collections-list__grid {
-    gap: 16px;
-  }
-
-  .collections-list__item {
-    flex: 1 1 calc(50% - 8px);
-    min-width: 150px;
-  }
-}
-
-@media screen and (max-width: 479px) {
-  .collections-list__item {
-    flex: 1 1 100%;
-    max-width: 300px;
-  }
-}
