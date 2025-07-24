@@ -19,7 +19,6 @@
     transition: transform 0.3s ease;
     width: 268px;
     height: 412px;
-    box-shadow: 0 2px 14px 0 rgba(3, 11, 26, 0.10);
   }
 
   .product-video-carousel-{{ section.id }} .product-video-container {
@@ -62,7 +61,7 @@
               {% endif %}
               
               <div class="swiper-slide">
-                <div class="product-video-item{% if has_video %} has-video{% endif %}" data-block-id="{{ block.id }}">
+                <div class="product-video-item box-shadow{% if has_video %} has-video{% endif %}" data-block-id="{{ block.id }}">
                   <div class="product-video-container">
                     {% if block.settings.video_type == 'youtube' and block.settings.youtube_url != blank %}
                       {% assign youtube_id = block.settings.youtube_url | split: 'v=' | last | split: '&' | first %}
