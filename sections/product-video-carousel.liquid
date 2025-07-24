@@ -34,7 +34,7 @@
 <div class="product-video-carousel product-video-carousel-{{ section.id }}">
   <div class="product-video-carousel__container page-width gap-24">
     {% if section.settings.heading != blank %}
-      <h2 class="product-video-carousel__title fw-400 fs-36-lh-40-ls-0pct text-center">{{ section.settings.heading }}</h2>
+      <h2 class="product-video-carousel__title fw-400 fs-36-lh-40-ls-0pct mobile-fs-21-lh-24-ls-1_2pct text-center">{{ section.settings.heading }}</h2>
     {% endif %}
 
     <slideshow-component 
@@ -87,7 +87,6 @@
                         loop 
                         playsinline
                         preload="metadata"
-                        {% if block.settings.video_poster != blank %}poster="{{ block.settings.video_poster | image_url: width:268, height:340 }}"{% endif %}
                         data-video-type="mp4">
                         <source src="{{ block.settings.video_url }}" type="video/mp4">
                       </video>
@@ -374,12 +373,6 @@ document.addEventListener('DOMContentLoaded', function() {
           "id": "video_url",
           "label": "Video URL",
           "info": "Direct link to video file (MP4 recommended)"
-        },
-        {
-          "type": "image_picker",
-          "id": "video_poster",
-          "label": "Video poster image",
-          "info": "Shown before video loads"
         },
         {
           "type": "text",

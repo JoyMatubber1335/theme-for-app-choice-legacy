@@ -180,3 +180,9 @@
   height: 340px !important;
   object-fit: cover;
 }
+
+@media screen and (max-width: 768px) {
+  .product-video-carousel__title {
+    text-align: left !important;
+  }
+}
