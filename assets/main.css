@@ -142,7 +142,6 @@ h5,
 h6,
 .h6,
 .font-heading {
-  margin: 0 0 0.5em;
   font-family: "Bebas Neue", sans-serif;
 }
 
@@ -623,6 +622,9 @@ address {
 }
 .gap-8 {
   gap: calc(8 * var(--space-unit));
+}
+.gap-9 {
+  gap: calc(9 * var(--space-unit));
 }
 .gap-10 {
   gap: calc(10 * var(--space-unit));
