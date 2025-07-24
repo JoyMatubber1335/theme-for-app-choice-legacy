@@ -89,20 +89,16 @@
 }
 
 .product-video-item__product-details {
-  flex: 1;
-  min-width: 0;
-  height: 56px;
+  min-height: 56px;
+  width: 100%;
 }
 
 .product-video-item__product-title {
-  text-overflow: ellipsis;
+  margin: 0;
 }
 
 .product-video-item__product-price {
   margin: 0;
-}
-
-.product-video-item__product-main-price {
   color: rgb(var(--color-primary-brand));
 }
 

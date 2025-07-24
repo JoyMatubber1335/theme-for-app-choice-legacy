@@ -32,7 +32,7 @@
 {%- endstyle -%}
 
 <div class="product-video-carousel product-video-carousel-{{ section.id }}">
-  <div class="product-video-carousel__container page-width gap-24">
+  <div class="product-video-carousel__container page-width flex gap-24 flex-col mobile-gap-16">
     {% if section.settings.heading != blank %}
       <h2 class="product-video-carousel__title fw-400 fs-36-lh-40-ls-0pct mobile-fs-21-lh-24-ls-1_2pct text-center">{{ section.settings.heading }}</h2>
     {% endif %}
@@ -145,10 +145,10 @@
                         width_attr: 100
                       %}
                     {% endif %}
-                    <div class="product-video-item__product-details flex flex-col gap-8 fw-600 fs-16-lh-16-ls-0">
+                    <div class="product-video-item__product-details flex flex-col justify-center gap-4">
                       {% if product.price %}
-                        <p class="product-video-item__product-price">
-                          <span class="product-video-item__product-main-price">{{ product.price | money }}</span>
+                        <p class="product-video-item__product-price fw-600 fs-16-lh-16-ls-0">
+                          {{ product.price | money }}
                         </p>
                       {% endif %}
 
@@ -174,9 +174,9 @@
                     <div class="product-video-item__product-image">
                       {{  "product-1" | placeholder_svg_tag: "placeholder-svg" }}
                     </div>
-                    <div class="product-video-item__product-details flex flex-col gap-8 fw-600 fs-16-lh-16-ls-0">
+                    <div class="product-video-item__product-details flex flex-col gap-4 fw-600 fs-16-lh-16-ls-0">
                       <p class="product-video-item__product-price">
-                        <span class="product-video-item__product-main-price">{{ 'sections.product_video_carousel.placeholder.price' | t | default: '$0.00' }}</span>
+                        {{ 'sections.product_video_carousel.placeholder.price' | t | default: '$0.00' }}
                       </p>
                       <h3 class="product-video-item__product-title fw-400 fs-12-lh-16-ls-0_6pct">{{ 'sections.product_video_carousel.placeholder.product_title' | t | default: 'Product Title' }}</h3>
                     </div>
