@@ -131,7 +131,19 @@
     }
 
     fetchReviews();
-  });
+    document.addEventListener("shopify:section:load", (event) => {
+      if (event.target.classList.contains("homepage-product-review__section")) {
+        fetchReviews();
+      }
+    });
+
+    document.addEventListener("shopify:section:select", (event) => {
+      if (event.target.classList.contains("homepage-product-review__section")) {
+        fetchReviews();
+      }
+    });
+
+ });
 </script>
 
 {% schema %}
