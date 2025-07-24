@@ -24,10 +24,10 @@ if (!customElements.get("slideshow-component")) {
         const pauseOnHover = this.dataset.pauseOnHover === "true";
 
         const customNextButton = this.querySelector(
-          ".custom-swiper-button-next"
+          ".slideshow-nav-button-next"
         );
         const customPrevButton = this.querySelector(
-          ".custom-swiper-button-prev"
+          ".slideshow-nav-button-prev"
         );
 
         const swiperConfig = {
