@@ -25,7 +25,46 @@
         }
       },
       "block_order": ["slide-1", "slide-2", "slide-3"]
+    },
+    "promotional-banner": {
+      "type": "promotional-banner",
+      "settings": {},
+      "blocks": {
+        "banner-1": {
+          "type": "banner_item",
+          "settings": {
+            "banner_image": "",
+            "mobile_banner_image": "",
+            "link": ""
+          }
+        },
+        "banner-2": {
+          "type": "banner_item",
+          "settings": {
+            "banner_image": "",
+            "mobile_banner_image": "",
+            "link": ""
+          }
+        },
+        "banner-3": {
+          "type": "banner_item",
+          "settings": {
+            "banner_image": "",
+            "mobile_banner_image": "",
+            "link": ""
+          }
+        },
+        "banner-4": {
+          "type": "banner_item",
+          "settings": {
+            "banner_image": "",
+            "mobile_banner_image": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": ["banner-1", "banner-2", "banner-3", "banner-4"]
     }
   },
-  "order": ["slideshow"]
+  "order": ["slideshow", "promotional-banner"]
 }
