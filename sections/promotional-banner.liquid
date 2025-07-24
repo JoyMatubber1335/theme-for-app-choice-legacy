@@ -1,52 +1,4 @@
-{{ 'section-promotional-banner.css' | asset_url | stylesheet_tag }}
-
-<div class="promotional-banner-section">
-  <div class="promotional-banner-container">
-    {%- for block in section.blocks -%}
-      <div class="promotional-banner-item" {{ block.shopify_attributes }}>
-        {%- if block.settings.link != blank -%}
-          <a href="{{ block.settings.link }}" class="promotional-banner-link">
-        {%- endif -%}
-        
-        <div class="promotional-banner-content" style="background-color: {{ block.settings.background_color }};">
-          {%- if block.settings.background_image != blank -%}
-            <div class="promotional-banner-bg">
-              <img src="{{ block.settings.background_image | image_url: width: 600 }}" 
-                   alt="{{ block.settings.background_image.alt | escape }}"
-                   loading="lazy">
-            </div>
-          {%- endif -%}
-          
-          <div class="promotional-banner-text">
-            {%- if block.settings.title != blank -%}
-              <h3 class="promotional-banner-title" style="color: {{ block.settings.text_color }};">
-                {{ block.settings.title }}
-              </h3>
-            {%- endif -%}
-            
-            {%- if block.settings.discount_text != blank -%}
-              <p class="promotional-banner-discount" style="color: {{ block.settings.text_color }};">
-                {{ block.settings.discount_text }}
-              </p>
-            {%- endif -%}
-          </div>
-          
-          {%- if block.settings.product_image != blank -%}
-            <div class="promotional-banner-product">
-              <img src="{{ block.settings.product_image | image_url: width: 300 }}" 
-                   alt="{{ block.settings.product_image.alt | escape }}"
-                   loading="lazy">
-            </div>
-          {%- endif -%}
-        </div>
-        
-        {%- if block.settings.link != blank -%}
-          </a>
-        {%- endif -%}
-      </div>
-    {%- endfor -%}
-  </div>
-</div>
+{{ 'promotional-banner.css' | asset_url | stylesheet_tag }}
 
 <style>
 .promotional-banner-section {
@@ -55,15 +7,13 @@
 }
 
 .promotional-banner-container {
-  display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0;
-  height: 308px;
 }
 
 .promotional-banner-item {
   position: relative;
   overflow: hidden;
+  height: 308px;
 }
 
 .promotional-banner-link {
@@ -77,8 +27,7 @@
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 20px;
+  justify-content: center;
   transition: transform 0.3s ease;
 }
 
@@ -86,102 +35,66 @@
   transform: scale(1.02);
 }
 
-.promotional-banner-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
+.promotional-banner-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.promotional-banner-bg img {
+.promotional-banner-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.1;
 }
 
-.promotional-banner-text {
-  position: relative;
-  z-index: 2;
-  flex: 1;
-}
-
-.promotional-banner-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0 0 8px 0;
-  line-height: 1.2;
-}
-
-.promotional-banner-discount {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.promotional-banner-product {
-  position: relative;
-  z-index: 2;
-  flex-shrink: 0;
-  max-width: 120px;
-}
-
-.promotional-banner-product img {
+.promotional-banner-placeholder {
   width: 100%;
-  height: auto;
-  max-height: 150px;
-  object-fit: contain;
+  height: 100%;
 }
 
-/* Mobile Styles */
+.promotional-banner-placeholder svg {
+  width: 100%;
+  height: 100%;
+}
+
 @media screen and (max-width: 768px) {
-  .promotional-banner-container {
+  .promotional-banner-item {
     height: 88px;
-  }
-  
-  .promotional-banner-content {
-    padding: 10px 15px;
-  }
-  
-  .promotional-banner-title {
-    font-size: 14px;
-    margin: 0 0 4px 0;
-  }
-  
-  .promotional-banner-discount {
-    font-size: 12px;
-  }
-  
-  .promotional-banner-product {
-    max-width: 60px;
-  }
-  
-  .promotional-banner-product img {
-    max-height: 50px;
-  }
-}
-
-/* Tablet Styles */
-@media screen and (max-width: 990px) and (min-width: 769px) {
-  .promotional-banner-title {
-    font-size: 20px;
-  }
-  
-  .promotional-banner-discount {
-    font-size: 16px;
-  }
-  
-  .promotional-banner-product {
-    max-width: 100px;
-  }
-  
-  .promotional-banner-product img {
-    max-height: 120px;
   }
 }
 </style>
+
+
+<div class="promotional-banner-section">
+  <div class="promotional-banner-container grid gap-16 page-width">
+    {%- for block in section.blocks -%}
+      <div class="promotional-banner-item" {{ block.shopify_attributes }}>
+        {%- if block.settings.link != blank -%}
+          <a href="{{ block.settings.link }}" class="promotional-banner-link">
+        {%- endif -%}
+        
+        <div class="promotional-banner-content">
+          <div class="promotional-banner-image">
+            {%- if block.settings.banner_image != blank -%}
+              {% render 'image', 
+                 image: block.settings.banner_image, 
+                 width: 600, 
+                 css_classes: 'promotional-banner-img' %}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'promotional-banner-img promotional-banner-placeholder' }}
+            {%- endif -%}
+          </div>
+        </div>
+        
+        {%- if block.settings.link != blank -%}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
 
 {% schema %}
 {
@@ -200,38 +113,9 @@
       "name": "Banner Item",
       "settings": [
         {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "UPTO"
-        },
-        {
-          "type": "text",
-          "id": "discount_text",
-          "label": "Discount Text",
-          "default": "50% OFF"
-        },
-        {
-          "type": "color",
-          "id": "background_color",
-          "label": "Background Color",
-          "default": "#ff6b6b"
-        },
-        {
-          "type": "color",
-          "id": "text_color",
-          "label": "Text Color",
-          "default": "#ffffff"
-        },
-        {
           "type": "image_picker",
-          "id": "background_image",
-          "label": "Background Image (Optional)"
-        },
-        {
-          "type": "image_picker",
-          "id": "product_image",
-          "label": "Product Image"
+          "id": "banner_image",
+          "label": "Banner Image"
         },
         {
           "type": "url",
@@ -247,21 +131,15 @@
       "blocks": [
         {
           "type": "banner_item",
-          "settings": {
-            "title": "UPTO",
-            "discount_text": "50% OFF",
-            "background_color": "#4ecdc4",
-            "text_color": "#ffffff"
-          }
         },
         {
           "type": "banner_item",
-          "settings": {
-            "title": "UPTO",
-            "discount_text": "50% OFF",
-            "background_color": "#45b7d1",
-            "text_color": "#ffffff"
-          }
+        },
+        {
+          "type": "banner_item",
+        },
+        {
+          "type": "banner_item",
         }
       ]
     }

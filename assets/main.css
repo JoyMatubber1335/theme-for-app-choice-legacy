@@ -96,7 +96,6 @@ mark {
   max-width: var(--page-width);
   margin-right: auto;
   margin-left: auto;
-  padding: 0 5rem;
 }
 
 @media screen and (max-width: 768px) {
