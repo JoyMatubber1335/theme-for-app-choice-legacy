@@ -44,14 +44,14 @@
               {% else %}
                 <div class="scrolling-logo__image flex-row">
               {% endif %}
-              <img
-                src="{{ block.settings.image | image_url: width: img_width }}"
-                alt="{{ block.settings.image.alt | escape }}"
-                loading="lazy"
-                height="{{ img_height }}"
-                width="{{ img_width }}"
-                class="scrolling-logo__image-img"
-              >
+              {% render 'image',
+                image: block.settings.image,
+                width: img_width,
+                alt_text: block.settings.image.alt,
+                height_attr: img_height,
+                width_attr: img_width,
+                css_classes: 'scrolling-logo__image-img'
+              %}
 
               {% if block.settings.link != blank %}
                 </a>
