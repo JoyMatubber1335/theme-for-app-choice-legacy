@@ -60,3 +60,40 @@ document.addEventListener("shopify:section:select", (event) => {
     initScrollingLogos(event.target);
   }
 });
+
+document.addEventListener("shopify:block:select", (event) => {
+  const blockId = event.detail?.blockId;
+  const block = document.getElementById(`block-${blockId}`);
+  if (!block) return;
+
+  const scrollingLogo = block.closest(".scrolling-logo");
+  const itemsContainers = scrollingLogo?.querySelectorAll(".scrolling-logo__items");
+
+  // Pause scrolling
+  itemsContainers?.forEach((container) => {
+    container.style.animationPlayState = "paused";
+  });
+
+  // Scroll selected block into view
+  block.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+    inline: "center",
+  });
+
+  block.classList.add("scrolling-logo__item--selected");
+});
+document.addEventListener("shopify:block:deselect", (event) => {
+  const blockId = event.detail?.blockId;
+  const block = document.getElementById(`block-${blockId}`);
+  if (!block) return;
+
+  const scrollingLogo = block.closest(".scrolling-logo");
+  const itemsContainers = scrollingLogo?.querySelectorAll(".scrolling-logo__items");
+
+  itemsContainers?.forEach((container) => {
+    container.style.animationPlayState = "running";
+  });
+
+  block.classList.remove("scrolling-logo__item--selected");
+});

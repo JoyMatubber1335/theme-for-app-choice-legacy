@@ -27,3 +27,9 @@
 .scrolling-logo__items--normal {
   animation: scroll-normal linear infinite;
 }
+
+@media screen and (max-width: 768px) {
+  .scrolling-logo__items {
+    gap: 0px !important;
+  }
+}
