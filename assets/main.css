@@ -94,14 +94,28 @@ mark {
 
 .page-width {
   max-width: var(--page-width);
-  margin-right: auto;
-  margin-left: auto;
+  margin: 0 auto;
+  padding: 0 16px; /* default padding for mobile or small screens */
 }
 
-@media screen and (max-width: 768px) {
+/* Tablet: 768px to 1023px */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
   .page-width {
-    padding: 0 1rem;
-    max-width: 100%;
+    padding: 0 32px;
+  }
+}
+
+/* Small desktop: 1024px to 1439px */
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+  .page-width {
+    padding: 0 48px;
+  }
+}
+
+/* Large desktop: 1440px and above */
+@media screen and (min-width: 1440px) {
+  .page-width {
+    padding: 0;
   }
 }
 
