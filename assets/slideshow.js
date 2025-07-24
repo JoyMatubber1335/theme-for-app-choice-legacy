@@ -22,6 +22,7 @@ if (!customElements.get("slideshow-component")) {
         const autoplayEnabled = this.dataset.autoplay === "true";
         const autoplayDelay = parseInt(this.dataset.autoplayDelay) || 3000;
         const pauseOnHover = this.dataset.pauseOnHover === "true";
+        const isSingleSlideView = this.dataset.singleSlideView === "true";
 
         const customNextButton = this.querySelector(
           ".slideshow-nav-button-next"
@@ -38,10 +39,25 @@ if (!customElements.get("slideshow-component")) {
           slidesPerView: 1,
           centeredSlides: true,
           spaceBetween: 0,
-
           loop: true,
+        };
 
-          breakpoints: {
+        // Different breakpoint configurations based on view type
+        if (isSingleSlideView) {
+          // Single slide view: Always show only 1 slide at a time
+          swiperConfig.breakpoints = {
+            769: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+            },
+            1024: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+            },
+          };
+        } else {
+          // Multi slide view: Show partial slides
+          swiperConfig.breakpoints = {
             769: {
               slidesPerView: 1.2,
               spaceBetween: 20,
@@ -50,8 +66,8 @@ if (!customElements.get("slideshow-component")) {
               slidesPerView: 1.32,
               spaceBetween: 16,
             },
-          },
-        };
+          };
+        }
 
         if (autoplayEnabled) {
           swiperConfig.autoplay = {

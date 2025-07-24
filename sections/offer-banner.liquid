@@ -1,77 +1,66 @@
-{{ "slideshow.css" | asset_url | stylesheet_tag }}
+{{ "offer-banner.css" | asset_url | stylesheet_tag }}
 
 <style>
-  .slideshow-{{ section.id }} {
+  .offer-banner-{{ section.id }} {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    position: relative;
   }
 
   @media screen and (min-width: 750px) {
-    .slideshow-{{ section.id }} {
+    .offer-banner-{{ section.id }} {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
   
-  .slideshow-{{ section.id }} .swiper-slide {
+  .offer-banner-{{ section.id }} .swiper-slide {
     position: relative;
-    overflow: hidden;
     transition: transform 0.3s ease;
     border-radius: {{ section.settings.slide_border_radius }}px;
+    height: {{ section.settings.banner_height_mobile }}px;
   }
 
-  @media screen and (max-width: 1024px) {
-    .slideshow .slideshow-nav-button-prev {
-      left: calc(11% - 52px);
+  @media screen and (min-width: 768px) {
+    .offer-banner-{{ section.id }} .swiper-slide {
+      height: {{ section.settings.banner_height_desktop }}px;
+    }
+  }
+
+  @media screen and (min-width: 769px) {
+    .offer-banner .slide-image-desktop {
+      display: block;
     }
 
-    .slideshow .slideshow-nav-button-next {
-      right: calc(11% - 52px);
+    .offer-banner .slide-image-mobile {
+      display: none;
     }
   }
 
   @media (max-width: 768px) {
-    .slideshow .slide-content {
-      max-width: 300px;
-      padding: 0 15px;
-    }
-
-    .slideshow .slide-content.align-left {
-      left: 20px;
-    }
-
-    .slideshow .slide-content.align-right {
-      right: 20px;
-    }
-
-    .slideshow .slide-content.card {
-      padding: 20px;
-    }
-
-    .slideshow .slideshow-nav-button-prev {
-      left: 8px !important;
-    }
-
-    .slideshow .slideshow-nav-button-next {
-      right: 8px !important;
-    }
-
-    .slideshow .slideshow-{{ section.id }} .swiper-slide {
+    .offer-banner-{{ section.id }} .swiper-slide {
       border-radius: 0;
     }
   }
+
+  {% unless section.settings.show_navigation %}
+    .offer-banner-{{ section.id }} .slideshow-nav-button-prev,
+    .offer-banner-{{ section.id }} .slideshow-nav-button-next {
+      display: none !important;
+    }
+  {% endunless %}
 </style>
 
 <slideshow-component
-  class="slideshow slideshow-{{ section.id }}"
+  class="offer-banner offer-banner-{{ section.id }}"
   data-autoplay="{{ section.settings.enable_autoplay }}"
   data-autoplay-delay="{{ section.settings.autoplay_delay | times: 1000 }}"
   data-pause-on-hover="{{ section.settings.pause_on_hover }}"
+  data-single-slide-view="true"
 >
   <div class="slideshow-container">
     <div class="swiper-container">
       <div class="swiper-wrapper">
-        
         {% for block in section.blocks %}
           <div class="swiper-slide {% unless block.settings.mobile_image %}slide-no-mobile-image{% endunless %}" 
                {{ block.shopify_attributes }}
@@ -83,7 +72,7 @@
               {% if block.settings.link != blank %}
                 <a href="{{ block.settings.link }}"{% if block.settings.link_target %} target="_blank" rel="noopener"{% endif %}>
               {% endif %}
-              {{ block.settings.image | image_url: width: 1200 | image_tag: alt: block.settings.image.alt, class: 'slide-image slide-image-desktop' }}
+              {{ block.settings.image | image_url: width: 1400 | image_tag: alt: block.settings.image.alt, class: 'slide-image slide-image-desktop' }}
               {% if block.settings.link != blank %}</a>{% endif %}
             {% else %}
              {% assign image_number = forloop.index0 | modulo: 2 | plus: 1 %}
@@ -106,27 +95,15 @@
             {% else %}
               {{ "lifestyle-1" | placeholder_svg_tag: "placeholder-svg slide-image-mobile" }}
             {% endif %}
-            
-            {% comment %} Slide Content {% endcomment %}
-            {% if block.settings.title != blank or block.settings.description != blank or block.settings.button_text != blank %}
-              <div class="slide-content {% if block.settings.show_card %}card{% endif %} align-{{ block.settings.content_alignment | default: 'left' }}">
-                {% if block.settings.title != blank %}
-                  <h3 class="slide-title fs-36-lh-40-ls-0pct mobile-fs-21-lh-24-ls-1_2pct">{{ block.settings.title }}</h3>
-                {% endif %}
-                
-                {% if block.settings.description != blank %}
-                  <p class="slide-description fs-16-lh-24-ls-0">{{ block.settings.description }}</p>
-                {% endif %}
-              </div>
-            {% endif %}
           </div>
         {% endfor %}
       </div>
     </div>
 
-    {% render "nav-button", cls: "slideshow-nav-button-prev", icon_cls: "icon-arrow-left" %}
-
-    {% render "nav-button", cls: "slideshow-nav-button-next" %}
+    {% if section.settings.show_navigation %}
+      {% render "nav-button", cls: "slideshow-nav-button-prev", icon_cls: "icon-arrow-left" %}
+      {% render "nav-button", cls: "slideshow-nav-button-next" %}
+    {% endif %}
   </div>
 </slideshow-component>
 
@@ -134,7 +111,7 @@
 
 {% schema %}
 {
-  "name": "Image Slideshow",
+  "name": "Offer Banner",
   "tag": "section",
   "class": "section",
   "disabled_on": {
@@ -143,7 +120,53 @@
   "settings": [
     {
       "type": "header",
-      "content": "Slideshow Settings"
+      "content": "Banner Height Settings"
+    },
+    {
+      "type": "select",
+      "id": "banner_height_desktop",
+      "label": "Desktop banner height",
+      "default": "508",
+      "info": "Height of banner on desktop devices",
+      "options": [
+        {
+          "value": "225",
+          "label": "Small (225px)"
+        },
+        {
+          "value": "400",
+          "label": "Medium (400px)"
+        },
+        {
+          "value": "508",
+          "label": "Large (508px)"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "banner_height_mobile",
+      "label": "Mobile banner height",
+      "default": "164",
+      "info": "Height of banner on mobile devices",
+      "options": [
+        {
+          "value": "150",
+          "label": "Small (150px)"
+        },
+        {
+          "value": "164",
+          "label": "Medium (164px)"
+        },
+        {
+          "value": "180",
+          "label": "Large (180px)"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Visual Settings"
     },
     {
       "type": "range",
@@ -152,8 +175,16 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "label": "Desktop slide border radius",
-      "default": 6
+      "label": "Desktop border radius",
+      "default": 0,
+      "info": "Rounded corners for desktop view (mobile is always 0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show navigation arrows",
+      "default": true,
+      "info": "Display left/right arrow buttons"
     },
     {
       "type": "header",
@@ -163,7 +194,7 @@
       "type": "checkbox",
       "id": "enable_autoplay",
       "label": "Enable autoplay",
-      "default": true,
+      "default": false,
       "info": "Automatically advance slides"
     },
     {
@@ -174,7 +205,7 @@
       "step": 0.5,
       "unit": "s",
       "label": "Autoplay delay",
-      "default": 4,
+      "default": 5,
       "info": "Time between slide transitions"
     },
     {
@@ -186,7 +217,7 @@
     },
     {
       "type": "header",
-      "content": "Padding"
+      "content": "Spacing"
     },
     {
       "type": "range",
@@ -211,25 +242,25 @@
   ],
   "blocks": [
     {
-      "type": "slide",
-      "name": "Slide",
-      "limit": 10,
+      "type": "banner",
+      "name": "Banner Image",
+      "limit": 8,
       "settings": [
         {
           "type": "header",
-          "content": "Images"
+          "content": "Banner Images"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Desktop Image",
-          "info": "Recommended size: 1200x400px"
+          "label": "Desktop Banner Image",
+          "info": "Recommended size: 1400x400px or larger"
         },
         {
           "type": "image_picker",
           "id": "mobile_image",
-          "label": "Mobile Image (Optional)",
-          "info": "Recommended size: 800x300px. If not provided, desktop image will be used."
+          "label": "Mobile Banner Image (Optional)",
+          "info": "Recommended size: 800x250px. If not provided, desktop image will be used."
         },
         {
           "type": "header",
@@ -238,77 +269,24 @@
         {
           "type": "url",
           "id": "link",
-          "label": "Slide Link (Optional)",
-          "info": "Makes the entire slide clickable"
+          "label": "Banner Link (Optional)",
+          "info": "Makes the entire banner clickable"
         },
         {
           "type": "checkbox",
           "id": "link_target",
           "label": "Open link in new tab",
           "default": false
-        },
-        {
-          "type": "header",
-          "content": "Content Settings"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Slide Title",
-          "placeholder": "Enter slide title..."
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Slide Description",
-          "placeholder": "Enter slide description..."
-        },
-        {
-          "type": "checkbox",
-          "id": "show_card",
-          "label": "Show content in card container",
-          "default": false,
-          "info": "Adds a semi-transparent background behind the content"
-        },
-        {
-          "type": "select",
-          "id": "content_alignment",
-          "label": "Content alignment",
-          "options": [
-            {
-              "value": "left",
-              "label": "Left"
-            },
-            {
-              "value": "center",
-              "label": "Center"
-            },
-            {
-              "value": "right",
-              "label": "Right"
-            }
-          ],
-          "default": "left"
-        },
+        }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Image Slideshow",
+      "name": "Offer Banner",
       "blocks": [
         {
-          "type": "slide",
-          "settings": {
-          }
-        },
-        {
-          "type": "slide",
-          "settings": {
-          }
-        },
-        {
-          "type": "slide",
+          "type": "banner",
           "settings": {
           }
         }
