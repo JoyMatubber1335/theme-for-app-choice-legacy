@@ -1,5 +1,77 @@
 {
   "sections": {
+    "recommended-products": {
+      "type": "recommended-products",
+      "settings": {
+        "heading": "RECOMMENDED FOR YOU",
+        "products_to_show": 8,
+        "autoplay": false,
+        "autoplay_delay": 5000,
+        "pause_on_hover": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      },
+      "blocks": {
+        "product_1": {
+          "type": "product",
+          "settings": {
+            "product": null
+          }
+        },
+        "product_2": {
+          "type": "product",
+          "settings": {
+            "product": null
+          }
+        },
+        "product_3": {
+          "type": "product",
+          "settings": {
+            "product": null
+          }
+        },
+        "product_4": {
+          "type": "product",
+          "settings": {
+            "product": null
+          }
+        },
+        "product_5": {
+          "type": "product",
+          "settings": {
+            "product": null
+          }
+        },
+        "product_6": {
+          "type": "product",
+          "settings": {
+            "product": null
+          }
+        },
+        "product_7": {
+          "type": "product",
+          "settings": {
+            "product": null
+          }
+        },
+        "product_8": {
+          "type": "product",
+          "settings": {
+            "product": null
+          }
+        }
+      },
+      "block_order": [
+        "product_1",
+        "product_2",
+        "product_3",
+        "product_4",
+        "product_5",
+        "product_6",
+        "product_7",
+        "product_8"
+      ]
+    },
     "slideshow": {
       "type": "slideshow",
       "settings": {
@@ -147,6 +219,7 @@
     }
   },
   "order": [
+    "recommended-products",
     "slideshow",
     "offer_banner_section_1",
     "offer_banner_section_2",
