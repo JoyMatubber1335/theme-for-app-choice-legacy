@@ -7,6 +7,9 @@
         "price": "$0.00",
         "product_title": "Product Title"
       }
+    },
+    "collections_list": {
+      "default_title": "Collections"
     }
   }
 }
