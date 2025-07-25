@@ -3,10 +3,12 @@ if (!customElements.get("slideshow-component")) {
     constructor() {
       super();
       this.swiper = null;
+      this.customBullets = [];
     }
 
     connectedCallback() {
       this.initializeSwiper();
+      this.initializeCustomBullets();
     }
 
     disconnectedCallback() {
@@ -37,14 +39,20 @@ if (!customElements.get("slideshow-component")) {
         );
 
         const swiperConfig = {
+          loop: true,
           navigation: {
             nextEl: customNextButton,
             prevEl: customPrevButton,
           },
-          loop: true,
+          pagination: false,
+          on: {
+            slideChange: (swiper) => {
+              this.updateCustomBullets(swiper.realIndex);
+            },
+          },
         };
 
-        if (showProgressBar) {
+        if (showProgressBar && this.querySelector(".custom-pagination")) {
           swiperConfig.pagination = {
             el: ".custom-pagination",
             type: "progressbar",
@@ -53,7 +61,6 @@ if (!customElements.get("slideshow-component")) {
 
         // Carousel mode configuration
         if (carouselMode) {
-          // Free mode allows continuous scrolling based on drag distance
           swiperConfig.freeMode = {
             enabled: true,
             sticky: false,
@@ -62,21 +69,13 @@ if (!customElements.get("slideshow-component")) {
             momentumBounceRatio: 1,
           };
 
-          // Disable loop for carousel mode as it interferes with free scrolling
           swiperConfig.loop = false;
-
-          // Enable grabCursor for better UX
           swiperConfig.grabCursor = true;
-
-          // Set resistance for better feel when reaching edges
           swiperConfig.resistanceRatio = 0.85;
-
-          // Configure slides per view as 'auto' for dynamic widths
           swiperConfig.slidesPerView = "auto";
-          swiperConfig.spaceBetween = 16; // Consistent spacing between slides
+          swiperConfig.spaceBetween = 16;
           swiperConfig.centeredSlides = false;
 
-          // Responsive breakpoints for carousel mode
           swiperConfig.breakpoints = {
             320: {
               slidesPerView: "auto",
@@ -92,12 +91,10 @@ if (!customElements.get("slideshow-component")) {
             },
           };
 
-          // Get slide widths from data attributes for different devices
           const slideWidthMobile = this.dataset.slideWidthMobile || "220px";
           const slideWidthTablet = this.dataset.slideWidthTablet || "240px";
           const slideWidthDesktop = this.dataset.slideWidthDesktop || "268px";
 
-          // Add custom CSS to handle dynamic widths and remove margin-right
           if (!document.querySelector("#carousel-mode-styles")) {
             const style = document.createElement("style");
             style.id = "carousel-mode-styles";
@@ -127,7 +124,6 @@ if (!customElements.get("slideshow-component")) {
             document.head.appendChild(style);
           }
 
-          // Set the CSS custom properties for different device widths
           swiperContainer.style.setProperty(
             "--slide-width-mobile",
             slideWidthMobile
@@ -140,11 +136,8 @@ if (!customElements.get("slideshow-component")) {
             "--slide-width-desktop",
             slideWidthDesktop
           );
-
-          // Mark the container for carousel mode styling
           swiperContainer.setAttribute("data-carousel-mode", "true");
         } else {
-          // Original slideshow behavior
           swiperConfig.slidesPerView = slidesPerViewForFullSlides;
           swiperConfig.spaceBetween = 16;
           swiperConfig.centeredSlides = false;
@@ -159,7 +152,6 @@ if (!customElements.get("slideshow-component")) {
             },
           };
 
-          // Remove carousel mode attribute if not in carousel mode
           swiperContainer.removeAttribute("data-carousel-mode");
         }
 
@@ -173,6 +165,30 @@ if (!customElements.get("slideshow-component")) {
 
         this.swiper = new Swiper(swiperContainer, swiperConfig);
       }
+    }
+
+    initializeCustomBullets() {
+      this.customBullets = this.querySelectorAll(".custom-bullet");
+
+      this.customBullets.forEach((bullet, index) => {
+        bullet.addEventListener("click", () => {
+          if (this.swiper) {
+            this.swiper.slideToLoop(index);
+          }
+        });
+      });
+
+      this.updateCustomBullets(0);
+    }
+
+    updateCustomBullets(activeIndex) {
+      this.customBullets.forEach((bullet, index) => {
+        if (index === activeIndex) {
+          bullet.classList.add("active");
+        } else {
+          bullet.classList.remove("active");
+        }
+      });
     }
   }
 
