@@ -43,12 +43,45 @@
     }
   }
 
-  {% unless section.settings.show_navigation %}
-    .offer-banner-{{ section.id }} .slideshow-nav-button-prev,
-    .offer-banner-{{ section.id }} .slideshow-nav-button-next {
-      display: none !important;
-    }
-  {% endunless %}
+  /* Desktop Navigation Controls */
+  @media screen and (min-width: 769px) {
+    {% if section.settings.desktop_nav == 'none' %}
+      .offer-banner-{{ section.id }} .slideshow-nav-button-prev,
+      .offer-banner-{{ section.id }} .slideshow-nav-button-next,
+      .offer-banner-{{ section.id }} .custom-pagination {
+        display: none !important;
+      }
+    {% elsif section.settings.desktop_nav == 'nav' %}
+      .offer-banner-{{ section.id }} .custom-pagination {
+        display: none !important;
+      }
+    {% elsif section.settings.desktop_nav == 'dots' %}
+      .offer-banner-{{ section.id }} .slideshow-nav-button-prev,
+      .offer-banner-{{ section.id }} .slideshow-nav-button-next {
+        display: none !important;
+      }
+    {% endif %}
+  }
+
+  /* Mobile Navigation Controls */
+  @media screen and (max-width: 768px) {
+    {% if section.settings.mobile_nav == 'none' %}
+      .offer-banner-{{ section.id }} .slideshow-nav-button-prev,
+      .offer-banner-{{ section.id }} .slideshow-nav-button-next,
+      .offer-banner-{{ section.id }} .custom-pagination {
+        display: none !important;
+      }
+    {% elsif section.settings.mobile_nav == 'nav' %}
+      .offer-banner-{{ section.id }} .custom-pagination {
+        display: none !important;
+      }
+    {% elsif section.settings.mobile_nav == 'dots' %}
+      .offer-banner-{{ section.id }} .slideshow-nav-button-prev,
+      .offer-banner-{{ section.id }} .slideshow-nav-button-next {
+        display: none !important;
+      }
+    {% endif %}
+  }
 </style>
 
 <slideshow-component
@@ -98,12 +131,13 @@
           </div>
         {% endfor %}
       </div>
+      
+      {% render "dot-buttons", items: section.blocks %}      
     </div>
 
-    {% if section.settings.show_navigation %}
-      {% render "nav-button", cls: "slideshow-nav-button-prev", icon_cls: "icon-arrow-left" %}
-      {% render "nav-button", cls: "slideshow-nav-button-next" %}
-    {% endif %}
+    <!-- Navigation arrows -->
+    {% render "nav-button", cls: "slideshow-nav-button-prev", icon_cls: "icon-arrow-left" %}
+    {% render "nav-button", cls: "slideshow-nav-button-next" %}
   </div>
 </slideshow-component>
 
@@ -166,6 +200,60 @@
     },
     {
       "type": "header",
+      "content": "Navigation Settings"
+    },
+    {
+      "type": "select",
+      "id": "desktop_nav",
+      "label": "Desktop navigation",
+      "default": "both",
+      "info": "Choose navigation style for desktop devices",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "nav",
+          "label": "Arrows only"
+        },
+        {
+          "value": "dots",
+          "label": "Dots only"
+        },
+        {
+          "value": "both",
+          "label": "Arrows + Dots"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_nav",
+      "label": "Mobile navigation",
+      "default": "dots",
+      "info": "Choose navigation style for mobile devices",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "nav",
+          "label": "Arrows only"
+        },
+        {
+          "value": "dots",
+          "label": "Dots only"
+        },
+        {
+          "value": "both",
+          "label": "Arrows + Dots"
+        }
+      ]
+    },
+    {
+      "type": "header",
       "content": "Visual Settings"
     },
     {
@@ -178,13 +266,6 @@
       "label": "Desktop border radius",
       "default": 0,
       "info": "Rounded corners for desktop view (mobile is always 0)"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_navigation",
-      "label": "Show navigation arrows",
-      "default": true,
-      "info": "Display left/right arrow buttons"
     },
     {
       "type": "header",
@@ -287,8 +368,6 @@
       "blocks": [
         {
           "type": "banner",
-          "settings": {
-          }
         }
       ]
     }
