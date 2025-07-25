@@ -39,7 +39,7 @@
     .swiper-slide:last-child {
       margin-right: 0;
     }
-    
+
     .blog-section__content-swiper .swiper-container .swiper-wrapper {
       gap:16px !important
     }
@@ -64,14 +64,14 @@
         <div class="blog-card gap-16">
           <div class="blog-card__image">
             {% if article.image %}
-              <img
-                src="{{ article.image | image_url: width: 533 }}"
-                alt="{{ article.title | escape }}"
-                loading="lazy"
-                width="533"
-                height="154px"
-                class="blog-card__image"
-              >
+              {% render 'image',
+                image: article.image,
+                width: 800,
+                alt_text: article.image.alt,
+                css_classes: 'blog-card__image',
+                width_attr: '800',
+                height_attr: '154',
+              %}
             {% else %}
               {{ 'image' | placeholder_svg_tag: 'blog-card__image' }}
             {% endif %}
