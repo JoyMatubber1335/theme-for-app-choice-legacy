@@ -1,5 +1,16 @@
 {
   "sections": {
+    "product_video_carousel": {
+      "placeholder": {
+        "no_product": "Select a product to display",
+        "no_image": "No image",
+        "price": "$0.00",
+        "product_title": "Product Title"
+      }
+    },
+    "collections_list": {
+      "default_title": "Collections"
+    },
     "product_review": {
       "by": "by",
       "product_title": "Title not found",
