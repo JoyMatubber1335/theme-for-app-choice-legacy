@@ -133,8 +133,9 @@
 </style>
 
 {% assign product = product | default: null %}
-{% assign show_type = settings.show_product_type | default: true %}
-{% assign show_rating = settings.show_product_rating | default: true %}
+{% assign show_type = settings.show_product_type %}
+{% assign show_rating = settings.show_product_rating %}
+{% assign show_weight = settings.show_product_weight %}
 {% assign image_width = image_width | default: 268 %}
 {% assign image_height = image_height | default: 268 %}
 {% assign css_classes = css_classes | default: '' %}
@@ -160,21 +161,23 @@
       {% endif %}
       
       <!-- Product Weight Display -->
-      {% if product.variants.first.weight %}
-        {% assign weight_unit = product.variants.first.weight_unit %}
-        {% assign weight_value = product.variants.first.weight %}
-        {% if weight_unit == 'g' and weight_value >= 1000 %}
-          {% assign display_weight = weight_value | divided_by: 1000.0 | round: 1 %}
-          <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ display_weight }}{{ "sections.product.placeholder.kg" | t }}</div>
-        {% elsif weight_unit == 'kg' %}
-          <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ weight_value | round: 1 }}{{ "sections.product.placeholder.kg" | t }}</div>
-        {% elsif weight_unit == 'oz' and weight_value >= 16 %}
-          {% assign display_weight = weight_value | divided_by: 16.0 | round: 1 %}
-          <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ display_weight }}{{ "sections.product.placeholder.lb" | t }}</div>
-        {% elsif weight_unit == 'lb' %}
-          <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ weight_value | round: 1 }}{{ "sections.product.placeholder.lb" | t }}</div>
-        {% else %}
-          <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ weight_value }}{{ weight_unit }}</div>
+      {% if show_weight %}
+        {% if product.variants.first.weight %}
+          {% assign weight_unit = product.variants.first.weight_unit %}
+          {% assign weight_value = product.variants.first.weight %}
+          {% if weight_unit == 'g' and weight_value >= 1000 %}
+            {% assign display_weight = weight_value | divided_by: 1000.0 | round: 1 %}
+            <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ display_weight }}{{ "sections.product.placeholder.kg" | t }}</div>
+          {% elsif weight_unit == 'kg' %}
+            <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ weight_value | round: 1 }}{{ "sections.product.placeholder.kg" | t }}</div>
+          {% elsif weight_unit == 'oz' and weight_value >= 16 %}
+            {% assign display_weight = weight_value | divided_by: 16.0 | round: 1 %}
+            <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ display_weight }}{{ "sections.product.placeholder.lb" | t }}</div>
+          {% elsif weight_unit == 'lb' %}
+            <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ weight_value | round: 1 }}{{ "sections.product.placeholder.lb" | t }}</div>
+          {% else %}
+            <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ weight_value }}{{ weight_unit }}</div>
+          {% endif %}
         {% endif %}
       {% endif %}
     {% else %}
@@ -182,7 +185,9 @@
         {{ 'product-1' | placeholder_svg_tag: "placeholder-svg" }}
       </div>
       <!-- Placeholder weight -->
-      <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ "sections.product.placeholder.weight" | t }}</div>
+      {% if show_weight %}
+        <div class="product-card__weight fw-500 fs-14-lh-16-ls-0">{{ "sections.product.placeholder.weight" | t }}</div>
+      {% endif %}
     {% endif %}
   </div>
 
