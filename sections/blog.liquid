@@ -1,0 +1,156 @@
+{% assign minShown = 4 %}
+{% assign articleCount = section.settings.blog.articles.size %}
+{% if articleCount < minShown %}
+  {% assign minShown = articleCount %}
+{% endif %}
+
+<style>
+  .blog-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .blog-section__container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-section__title {
+    text-align: center;
+  }
+
+  .blog-section__content {
+    display: grid;
+    grid-template-columns: repeat({{minShown}}, 1fr);
+  }
+
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-card__image {
+    width: 100%;
+    height: 154px;
+    overflow: hidden;
+  }
+
+  .blog-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .blog-card__title {
+   margin:0 !important
+  }
+
+  .blog-card__excerpt {
+    color: rgba(var( --color-primary-label), 0.7);
+    margin: 0 !important;
+  }
+
+  .blog-card__image {
+    height: 154px;
+    width: 100%;
+
+  }
+
+  .blog-card__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media screen and (max-width: 768px) {
+
+  }
+</style>
+
+<article class="blog-section blog-section-{{ section.id }}">
+  <div class="blog-section__container page-width gap-48">
+    <div class="blog-section__title fs-36-lh-40-ls-0pct ff-bebas-neue fw-400">
+      {{ section.settings.blog_title }}
+    </div>
+    <div class="blog-section__content gap-16">
+      {% for article in section.settings.blog.articles limit: section.settings.blog_post_limit %}
+        <div class="blog-card gap-16">
+          <div class="blog-card__image">
+            {% if article.image %}
+              <img
+                src="{{ article.image | image_url: width: 533 }}"
+                alt="{{ article.title | escape }}"
+                loading="lazy"
+                class="blog-card__image"
+                width="533"
+                height="154px"
+              >
+            {% else %}
+              {{ 'image' | placeholder_svg_tag: 'blog-card__image' }}
+            {% endif %}
+          </div>
+          <div class="blog-card__content gap-8">
+            <h3 class="blog-card__title ff-general-sans fs-23-lh-24-ls-0 fw-500">{{ article.title }}</h3>
+            <p class="blog-card__excerpt ff-general-sans fs-14-lh-20-ls-0 fw-400 ">
+              {{ article.content | strip_html | truncatewords: 20 }}
+            </p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": [
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Select Blog"
+    },
+    {
+      "type": "text",
+      "id": "blog_title",
+      "label": "Section Title",
+      "default": "Our Blog"
+    },
+    {
+      "type": "range",
+      "id": "blog_post_limit",
+      "label": "Number of blog posts to show",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 88,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog",
+      "category": "Content"
+    }
+  ]
+}
+{% endschema %}
