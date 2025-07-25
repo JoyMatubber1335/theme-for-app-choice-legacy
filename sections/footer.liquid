@@ -8,9 +8,9 @@
 </style>
 
 <footer class="footer">
-  <div class="footer__container page-width">
-    <div class="footer__top">
-      <div class="footer__brand">
+  <div class="footer__container page-width gap-16">
+    <div class="footer__top gap-32">
+      <div class="footer__brand gap-32">
         {% if settings.brand_logo != blank %}
           <img
             src="{{ settings.brand_logo | image_url: width: settings.logo_width }}"
@@ -24,7 +24,7 @@
           <h1 class="footer__brand-title">{{ settings.logo_text }}</h1>
         {% endif %}
 
-        <div class="footer__app-icons">
+        <div class="footer__app-icons gap-8">
           {% render 'google-play-icon' %}
           {% render 'app-store-icon' %}
         </div>
@@ -32,7 +32,7 @@
 
       {% for block in section.blocks %}
         {% if block.type == 'link_list' and block.settings.menu != blank %}
-          <div class="footer__menu">
+          <div class="footer__menu gap-16">
             <div class="footer__menu-header">
               <h3 class="footer__menu-title fs-16-lh-24-ls-0 ff-general-sans fw-400">
                 {{ block.settings.menu.title }}
@@ -42,7 +42,7 @@
                 {% render 'icon-minus' %}
               </button>
             </div>
-            <div class="footer__menu-list" id="menu-{{ forloop.index }}">
+            <div class="footer__menu-list gap-16" id="menu-{{ forloop.index }}">
               {% for link in block.settings.menu.links %}
                 <h2 class="footer__menu-item">
                   <a href="{{ link.url }}" class="footer__menu-link ff-inter fs-16-lh-24-ls-0 fw-500">
@@ -64,13 +64,13 @@
         or settings.social_snapchat != blank
         or settings.social_pinterest != blank
       %}
-        <div class="footer__social footer__social-desktop">
+        <div class="footer__social footer__social-desktop gap-16">
           <div class="footer__social-header">
             <h2 class="footer__social-title fs-16-lh-24-ls-0 ff-general-sans fw-400">
               {{ 'sections.footer.social_media' | t }}
             </h2>
           </div>
-          <div class="footer__social-list" id="social-menu">
+          <div class="footer__social-list gap-16" id="social-menu">
             {%- render 'social-icons' -%}
           </div>
         </div>
@@ -108,7 +108,7 @@
       "step": 4,
       "unit": "px",
       "label": "Top padding",
-      "default": 0
+      "default": 36
     },
     {
       "type": "range",
@@ -118,7 +118,7 @@
       "step": 4,
       "unit": "px",
       "label": "Bottom padding",
-      "default": 0
+      "default": 36
     }
   ],
   "blocks": [

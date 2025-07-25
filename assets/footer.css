@@ -1,22 +1,18 @@
-/* Desktop styles - keeping original design */
 .footer__container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 .footer__top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 32px;
 }
 
 .footer__brand {
   flex: 2;
   display: flex;
   flex-direction: column;
-  gap: 32px;
 }
 
 .footer__brand-logo {
@@ -30,7 +26,6 @@
 .footer__app-icons {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .footer__menu,
@@ -38,7 +33,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 .footer__menu {
@@ -55,7 +49,6 @@
 .footer__social-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   margin: 0 !important;
 }
 
@@ -84,11 +77,15 @@
   display: contents;
 }
 
+.footer__bottom {
+  padding: 16px 0 32px 0px;
+}
+
 /* Mobile styles */
 @media screen and (max-width: 768px) {
   .footer__top {
     flex-direction: column;
-    gap: 16px;
+    gap: 16px !important;
   }
 
   .footer__bottom {
@@ -102,7 +99,7 @@
   .footer__menu {
     width: 100%;
     border-bottom: 1px solid rgba(var(--color-primary-text), 0.1);
-    gap: 8px;
+    gap: 8px !important;
   }
 
   .footer__social {
