@@ -12,7 +12,6 @@
   background: rgb(var(--color-background));
   border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(var(--color-primary-text), 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   padding: 16px;
@@ -39,20 +38,21 @@
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 4px;
   background-color: rgb(var(--color-secondary-brand));
   padding: 8px 10px;
   border-radius: 20px;
-  box-shadow: 0 2px 10px rgba(var(--color-primary-text), 0.1);
 }
 
 .homepage-product-review__star {
   color: rgb(var(--color-primary-brand));
   font-size: 20px;
+  line-height: 1;
 }
 
 .homepage-product-review__star--empty {
   color: rgb(var(--color-background));
+  font-size: 20px;
+  line-height: 1;
 }
 
 .homepage-product-review__product-title {
